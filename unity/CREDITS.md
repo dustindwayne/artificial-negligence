@@ -7,3 +7,5 @@
 The enemy and boss atlas includes AI-generated artwork. The retro pixel style and creative direction were specified by the creator. Music was supplied by the creator; no claim is made here about how those recordings were produced.
 
 The VT323 font is distributed under the SIL Open Font License included with the project.
+
+The refreshed GPU/city logo is AI-generated artwork based on the creator’s game and art direction. See the repository’s logo generation record.

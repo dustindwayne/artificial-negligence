@@ -1,100 +1,85 @@
-# Artificial Negligence
+<p align="center">
+  <img src="docs/logo.png" width="440" alt="Artificial Negligence — GPU core, street survivor and a city rebuilding from pixels">
+</p>
 
-Absorb the AI. Keep it public.
+<p align="center"><strong>Absorb the AI. Keep it public.</strong></p>
+<p align="center">An Android pixel platformer where collecting GPUs upgrades the world itself.</p>
+<p align="center">
+  <a href="https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk"><strong>Download APK</strong></a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="ROADMAP.md">Art roadmap</a> ·
+  <a href="CREDITS.md">Credits</a>
+</p>
+<p align="center">v2.1.1 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
 
-**Creative direction, original concept and art-style direction: Dustin (dustindwayne). This is an AI-assisted build, including programming and generated visual assets. [Full credits and disclosure](CREDITS.md).**
+## The game
 
-A neon pixel platformer for Android: collect GPUs, solve changing logic puzzles, defeat corporate security and bosses, and build a character with weapons, armor, modules and permanent upgrades.
+Run across a city as a street survivor collecting GPUs before corporations seize them. Fight through rooftop routes, solve intellect terminals and reach district bosses. Every core helps reclaim public AI—and brings more color, detail and depth to the world.
 
-## Download the latest Android game
+### Features
 
-**[Download latest APK](https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk)**
+- **A connected city:** 30 generated stages across five districts, followed by further city cycles.
+- **Platforming routes:** rooftops, dash, checkpoints, moving lifts and timed hazards.
+- **Enemies with presence:** six enemy classes, animated attacks and three rotating bosses.
+- **Build your survivor:** permanent XP, talents and upgrades; Pulse, Arc, Scatter and Rail weapons with armor and module tradeoffs.
+- **Rare equipment:** Common through Ultra tiers. Ultra equipment has a 0.5% chance in boxes.
+- **Changing logic puzzles:** twelve puzzle families, explanations after answers and no powerup for a wrong answer.
 
-[Browse the APK folder](apk/) · [Latest version details](apk/latest.json)
+## Graphics are progression
 
-Android 8.0 or newer, ARM64. Download the APK, open it on your phone and approve installation. This is a testing build signed with the same key across these published versions. Install over your existing copy to keep local progress.
+Distinct GPUs permanently improve the renderer. Upgrades are automatic; points remain available for character upgrades. Replaying an already credited GPU still awards gameplay rewards, but does not advance graphics again.
 
-## In-app updates
+| GPUs collected | Graphics tier | World resolution |
+| ---: | --- | --- |
+| 0 | Bootstrap | 240 × 135 |
+| 24 | 8-bit | 320 × 180 |
+| 75 | 16-bit | 400 × 225 |
+| 150 | Neon | 480 × 270 |
+| 300 | HD Pixel | 720 × 405 |
+| 600 | Ultra | 960 × 540 |
 
-Version 1.3 introduces **Settings > Check for Updates**. When an update is available, tap Download Update, then Install Update. Android may ask you to allow this game to install updates; after allowing it, return and tap Install Update again.
+The pixel-art style stays consistent as color, scenery, lighting and weather become richer. Menus and controls stay sharp throughout; collision geometry stays consistent.
 
-The updater scans the installed APK and reuses matching content chunks. Only missing chunks are downloaded, so unchanged music and artwork can be reused. Resumable chunk downloads and SHA-256 checks verify the reconstructed APK before Android verifies its signing key and asks you to install it. Download size depends on what changed; this is not a promise of zero music bytes for every build. Version 1.2 and earlier require one full download to gain this updater.
+## Screenshots
 
-## Art direction roadmap
+<table>
+<tr><th>Bootstrap graphics</th><th>Ultra graphics</th></tr>
+<tr><td><img src="docs/graphics-tier-0.png" alt="Coarse Bootstrap graphics"></td><td><img src="docs/graphics-tier-5.png" alt="Detailed Ultra graphics"></td></tr>
+<tr><th>City route</th><th>Boss encounter</th></tr>
+<tr><td><img src="docs/city-map.png" alt="Connected city map"></td><td><img src="docs/boss-encounter.png" alt="Boss combat"></td></tr>
+</table>
 
-The planned direction is to replace fully generated visuals with creator-drawn characters and key poses, using AI to assist individual animation frames. [Read the art roadmap](ROADMAP.md).
+Graphics comparison captures use staged GPU totals in the same test scene.
 
-## Gameplay
+## Play on Android
 
-- A connected city map with 30 generated stages across five districts, then further city cycles.
-- Two-tier rooftops, dash, checkpoints, optional moving lifts, timed hazards and mastery stars.
-- Layered city scenery, rain, foreground detail and a new animated enemy/boss atlas.
-- Scouts, gunners, chargers, Aegis shields, swarms and snipers.
-- Rotating Auditor, Harvester and Executor bosses with telegraphed attacks and enraged phases.
-- XP leveling, talents, points, speed, vitality, weapon mastery and defense training.
-- Pulse, Arc, Scatter and Rail weapons; four armor styles; three modules with combat tradeoffs.
-- Common through Ultra gear. Ultra remains exclusive to boxes with exactly a 0.5% chance per box.
-- Twelve logic-puzzle families, interactive circuits and answer explanations; wrong submissions give no powerup.
-- Six compressed music tracks for menus, gameplay, upgrades, bosses, victory and game over.
-- Local progress saving; offline play except update checks and downloads.
+1. [Download the latest APK](https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk).
+2. Open it on an Android 8.0+ ARM64 device and approve installation.
+3. Install over an existing compatible copy to keep local progress.
 
-![City map](docs/city-map.png)
+This is a testing build. Generated route reachability and gameplay rules have automated checks; desktop gameplay has been checked. Physical Android installation and update testing remains outstanding.
 
-![Boss encounter](docs/boss-encounter.png)
+### Updates
 
-![Game preview](docs/game-preview.jpg)
+Open **Settings → Check for Updates**. APK updates reuse matching installed content chunks, reducing downloads when music and artwork are unchanged. Android asks you to approve installation. Small balance updates can download separately without reinstalling the APK.
 
-## Source and publishing updates
+[Update and publishing guide](docs/UPDATES.md) · [APK folder](apk/) · [Current version manifest](apk/latest.json) · [Changelog](CHANGELOG.md)
 
-Open `unity/` with Unity 6000.6.5f1 and Android Build Support. See [Unity project documentation](unity/README.md). Keep the signing key private and use the same key for updates. Increase the Android version code for each release.
+## Creative direction and AI use
 
-After building, run:
+**Dustin (dustindwayne)** created the concept, art-style direction, world, gameplay vision and overall creative direction, and supplied music and visual references. This build uses AI assistance for programming, generated artwork, integration and testing. [Full credits and disclosure](CREDITS.md).
 
-```sh
-python tools/publish_apk.py /path/to/game.apk --version 1.3.0 --code 130
-```
+The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator’s review. [Read the roadmap](ROADMAP.md). The new emblem combines the survivor, GPU collection and the city’s transition from coarse pixels to richer detail. [Logo generation record](docs/logo-generation.md).
 
-Then commit and push the updated `apk/` folder. Its stable download link always points to the newest APK; the manifest and chunk files support the in-app updater. The publisher is local and does not push or require a GitHub token. Keep existing chunk files so users downloading an earlier manifest can finish.
+## Development
 
-Reachability, progression, puzzle rules, loadout counters and desktop gameplay were checked. Physical Android installation/update testing is still required.
+Open `unity/` in **Unity 6000.6.5f1** with Android Build Support. [Project setup and controls](unity/README.md).
 
-### Art direction roadmap
+| Folder | Contents |
+| --- | --- |
+| `unity/` | Editable Unity project and game source |
+| `apk/` | Latest public APK, update manifests and reusable chunks |
+| `docs/` | Screenshots, branding and release documentation |
+| `tools/` | APK and balance-update publishing scripts |
 
-The planned direction is to replace fully generated visuals with creator-drawn characters and key poses, using AI to assist individual animation frames. [Read the art roadmap](ROADMAP.md).
-
-## Gameplay-only updates
-
-Settings checks `apk/gameplay.json` for newer balance settings. Enemy health, boss health, enemy speed/damage, weapon damage and XP can be updated as a tiny JSON download; no APK install and no music/art download is required. Values are validated and saved for offline play. New enemy health applies when a district starts.
-
-To publish a balance change without rebuilding:
-
-```sh
-python tools/publish_gameplay.py --version 2 --enemyHealth 1.1 --xp 1.1 --notes "Tougher enemies with more XP."
-```
-
-Commit and push `apk/gameplay.json`. New executable features still require an APK update; unchanged APK chunks are reused where possible.
-
-
-## GPU-powered graphics progression (2.1)
-
-Collecting distinct GPUs permanently rebuilds the world's renderer. Graphics upgrades happen automatically and do not spend points or affect collision geometry. Replaying an already credited GPU gives its usual gameplay reward but cannot farm graphics progression.
-
-| Absorbed GPUs | Renderer | World resolution | Visual changes |
-| --- | --- | --- | --- |
-| 0 | Bootstrap | 240 x 135 | Coarse pixels, four-tone city, clear danger/objective accents |
-| 24 | 8-bit | 320 x 180 | Color returns and background city layers appear |
-| 75 | 16-bit | 400 x 225 | Finer colors, additional depth and initial bloom |
-| 150 | Neon | 480 x 270 | Stronger lighting, weather and richer effects |
-| 300 | HD Pixel | 720 x 405 | More detail, weather and particles |
-| 600 | Ultra | 960 x 540 | Full color and the richest lighting/effects |
-
-Controls, text and menus remain clear at every tier. The art stays a pixel-art platformer; higher tiers reveal more detail in the existing artwork. GPU identities and renderer progression save with the character and survive restarts. Existing saves retain gameplay progress; distinct graphics-core tracking begins with this version.
-
-The progression concept and creative direction came from Dustin. AI assisted implementation, consistent with the project's credits and artist-led art roadmap.
-
-Preview captures show the same scene with test GPU totals for each renderer tier.
-
-![Bootstrap renderer](docs/graphics-tier-0.png)
-
-![Ultra renderer](docs/graphics-tier-5.png)
-
+Report problems through [GitHub Issues](https://github.com/dustindwayne/artificial-negligence/issues), including your device, Android version, game version and steps to reproduce.

@@ -1,2 +1,2 @@
 PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 30 unique routes using Unity Physics2D; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.
-PASS: unique GPU graphics credit, saved progression, all six threshold boundaries and render tiers; runtime world/UI captures reviewed.
+PASS (2.1.0 regression baseline): unique GPU graphics credit, saved progression, all six threshold boundaries and render tiers; runtime world/UI captures reviewed. Branding-only 2.1.1 retains these systems.
