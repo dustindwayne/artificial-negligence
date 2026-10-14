@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "enemyHealth": 1,
+  "bossHealth": 1,
+  "enemySpeed": 1,
+  "enemyDamage": 1,
+  "weaponDamage": 1,
+  "xp": 1,
+  "notes": "Initial gameplay balance."
+}

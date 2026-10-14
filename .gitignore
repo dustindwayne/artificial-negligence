@@ -1,0 +1,10 @@
+unity/Library/
+unity/Temp/
+unity/Obj/
+unity/Logs/
+unity/UserSettings/
+unity/Builds/
+*.keystore
+*.jks
+.DS_Store
+__pycache__/

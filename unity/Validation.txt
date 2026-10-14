@@ -1,0 +1,1 @@
+PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all 96 GPU pickups and 24 gaps across six layout variants using Unity Physics2D; 90 box anchors and 18 terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.
