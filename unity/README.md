@@ -49,3 +49,20 @@ Movement adds acceleration, air control, variable jump height, dash (Shift/K on 
 Twelve puzzle families include executable-code tracing, route cost, queue arithmetic, deduction and interactive four-switch XOR circuits. Correct submissions give one powerup; wrong submissions give none. A result screen explains the answer. Closing a puzzle preserves its state.
 
 See CREDITS.md: the creator owns the original concept, art-style direction and overall creative vision; AI assistance was used in implementation and generated assets.
+
+## GPU-powered graphics progression (2.1)
+
+Collecting distinct GPUs permanently rebuilds the world's renderer. Graphics upgrades happen automatically and do not spend points or affect collision geometry. Replaying an already credited GPU gives its usual gameplay reward but cannot farm graphics progression.
+
+| Absorbed GPUs | Renderer | World resolution | Visual changes |
+| --- | --- | --- | --- |
+| 0 | Bootstrap | 240 x 135 | Coarse pixels, four-tone city, clear danger/objective accents |
+| 24 | 8-bit | 320 x 180 | Color returns and background city layers appear |
+| 75 | 16-bit | 400 x 225 | Finer colors, additional depth and initial bloom |
+| 150 | Neon | 480 x 270 | Stronger lighting, weather and richer effects |
+| 300 | HD Pixel | 720 x 405 | More detail, weather and particles |
+| 600 | Ultra | 960 x 540 | Full color and the richest lighting/effects |
+
+Controls, text and menus remain clear at every tier. The art stays a pixel-art platformer; higher tiers reveal more detail in the existing artwork. GPU identities and renderer progression save with the character and survive restarts. Existing saves retain gameplay progress; distinct graphics-core tracking begins with this version.
+
+The progression concept and creative direction came from Dustin. AI assisted implementation, consistent with the project's credits and artist-led art roadmap.

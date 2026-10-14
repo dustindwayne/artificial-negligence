@@ -7,6 +7,10 @@ namespace ArtificialNegligence {
     [Serializable] public class RunStats {
         public int points, score, speed, vitality, health = 5, maxHealth = 5;
         public int[] gear = {0,1,1};
+        public System.Collections.Generic.List<string> graphicsCores=new System.Collections.Generic.List<string>();
+        public int GraphicsGpus {get{return graphicsCores==null?0:graphicsCores.Count;}}
+        public int GraphicsTier {get{return RendererProgress.Tier(GraphicsGpus);}}
+        public bool AbsorbGraphicsGpu(string id){if(graphicsCores==null)graphicsCores=new System.Collections.Generic.List<string>();if(graphicsCores.Contains(id))return false;graphicsCores.Add(id);return true;}
         public int cityUnlocked;public int[] stageStars=new int[30];
         public int xp, rank=1, talents, power, defense, weapon, suit, module, district;
         public static readonly string[] Weapons={"PULSE", "ARC", "SCATTER", "RAIL"};

@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.0.0";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=200;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.1.0";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=210;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -53,6 +53,10 @@ public static class BuildGame {
         Debug.Log("AN_CONFIGURE_PASS / Unity URP 2D, mobile UI, logo, ARM64");
     }
     public static void Validate(){
+        var gpuProgress=new RunStats();Assert(gpuProgress.AbsorbGraphicsGpu("0:0")&&!gpuProgress.AbsorbGraphicsGpu("0:0")&&gpuProgress.GraphicsGpus==1,"Duplicate GPU graphics credit");
+        for(int tier=1;tier<6;tier++){Assert(RendererProgress.Tier(RendererProgress.Thresholds[tier]-1)==tier-1&&RendererProgress.Tier(RendererProgress.Thresholds[tier])==tier,"Graphics threshold incorrect");}
+        var restoredGpu=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(gpuProgress));Assert(restoredGpu.GraphicsGpus==1&&!restoredGpu.AbsorbGraphicsGpu("0:0"),"Graphics progression does not save");
+        Assert(Resources.Load<Shader>("Evolution")!=null,"Graphics progression shader missing");
         Assert(GameplayContent.Parse("{\"version\":2,\"enemyHealth\":1,\"bossHealth\":1,\"enemySpeed\":1,\"enemyDamage\":1,\"weaponDamage\":1,\"xp\":1}")!=null,"Gameplay content rejected");
         Assert(GameplayContent.Parse("{\"version\":2,\"enemyHealth\":-1}")==null&&GameplayContent.Parse("invalid")==null,"Invalid gameplay content accepted");
         string baseline=Path.GetFullPath(Path.Combine(Root,"../work/updater-baseline.apk"));

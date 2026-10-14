@@ -19,7 +19,7 @@ namespace ArtificialNegligence {
             go.GetComponent<CanvasScaler>().uiScaleMode=CanvasScaler.ScaleMode.ConstantPixelSize;
             uiRoot=new GameObject("16x9 Safe Area",typeof(RectTransform)).GetComponent<RectTransform>();uiRoot.SetParent(go.transform,false);uiRoot.anchorMin=uiRoot.anchorMax=new Vector2(.5f,.5f);uiRoot.pivot=new Vector2(.5f,.5f);uiRoot.sizeDelta=new Vector2(960,540);
             new GameObject("Event System",typeof(EventSystem),typeof(StandaloneInputModule));
-            uiWhite=Sprite.Create(Texture2D.whiteTexture,new Rect(0,0,Texture2D.whiteTexture.width,Texture2D.whiteTexture.height),new Vector2(.5f,.5f));frameSprite=CreateFrame();
+            uiWhite=Sprite.Create(Texture2D.whiteTexture,new Rect(0,0,Texture2D.whiteTexture.width,Texture2D.whiteTexture.height),new Vector2(.5f,.5f));frameSprite=CreateFrame();InitializeGraphics();
         }
         Sprite CreateFrame(){
             const int size=64;var t=new Texture2D(size,size,TextureFormat.RGBA32,false);t.filterMode=FilterMode.Point;var colors=new Color[size*size];
@@ -46,7 +46,7 @@ namespace ArtificialNegligence {
         void BuildScreen(){
             if(screenRoot){screenRoot.gameObject.SetActive(false);Destroy(screenRoot.gameObject);}screenRoot=Rect(uiRoot,"Screen / "+mode,0,0,960,540);
             gpuLabel=pointsLabel=healthLabel=nextLabel=buffLabel=toastLabel=null;toastPanel=solveDock=buffPanel=null;miniGpus.Clear();gearLabels.Clear();gearColors.Clear();
-            updateStatusLabel=updateButtonLabel=bossHealthHud=null;
+            updateStatusLabel=updateButtonLabel=bossHealthHud=graphicsLabel=null;
             if(mode==ScreenMode.Play){BuildHud();return;}
             if(mode==ScreenMode.Title){BuildTitle();return;}if(mode==ScreenMode.CityMap){BuildCityMap();return;}
             Image(screenRoot,"Dim world",0,0,960,540,new Color(.001f,.01f,.02f,.75f));
@@ -76,6 +76,7 @@ namespace ArtificialNegligence {
             bossHealthHud=Label(screenRoot,"",620,110,322,33,22,Pink,TextAnchor.MiddleRight);
             buffPanel=Panel(screenRoot,"Active powerups",17,111,594,28,Cyan,.85f).gameObject;buffLabel=Label(buffPanel.transform,"",11,1,575,26,18,Cyan);
             toastPanel=Panel(screenRoot,"Pickup notice",158,148,645,44,Gold,.94f).gameObject;toastLabel=Label(toastPanel.transform,"",12,4,621,36,21,Cream,TextAnchor.MiddleCenter);toastLabel.resizeTextForBestFit=true;toastLabel.resizeTextMinSize=16;toastLabel.resizeTextMaxSize=23;
+            graphicsLabel=Label(screenRoot,RendererProgress.Progress(stats),24,196,510,27,19,Cyan);
             var controls=Panel(screenRoot,"Touch deck",9,446,942,84,Cyan,.93f);Hold(controls,"<",10,10,108,62,Cyan,v=>leftHeld=v);Hold(controls,">",129,10,108,62,Cyan,v=>rightHeld=v);
             for(int i=0;i<3;i++){int slot=i;var cell=Panel(controls,"Equipped slot",257+i*80,12,74,57,TierColor(stats.gear[i]));var img=Image(cell,"Gear icon",3,8,40,40,Color.white,itemFrames[4+i]);gearColors.Add(img);gearLabels.Add(Label(cell,"",39,5,32,46,25,Cream,TextAnchor.MiddleCenter));var b=cell.gameObject.AddComponent<Button>();b.targetGraphic=cell.GetChild(0).GetComponent<Image>();b.targetGraphic.raycastTarget=true;b.onClick.AddListener(()=>SetMode(ScreenMode.Gear));}
             Button(controls,"DASH",503,10,94,62,Cyan,Dash);Hold(controls,"JUMP",607,10,146,62,Cyan,v=>jumpHeld=v);Hold(controls,"PULSE",765,10,165,62,Gold,v=>fireHeld=v);
@@ -83,6 +84,7 @@ namespace ArtificialNegligence {
             UpdateUi();
         }
         void UpdateUi(){
+            if(graphicsLabel)graphicsLabel.text=RendererProgress.Progress(stats);
             if(canvas)canvas.scaleFactor=Mathf.Min(Screen.width/960f,Screen.height/540f);
             if(updateStatusLabel&&updater)updateStatusLabel.text=updater.Status;
             if(updateButtonLabel&&updater)updateButtonLabel.text=updater.ButtonText;

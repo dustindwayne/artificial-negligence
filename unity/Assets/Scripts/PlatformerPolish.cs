@@ -49,6 +49,7 @@ namespace ArtificialNegligence {
                 var body=sr.gameObject.AddComponent<Rigidbody2D>();body.bodyType=RigidbodyType2D.Kinematic;var box=sr.gameObject.AddComponent<BoxCollider2D>();box.size=sr.size;box.usedByEffector=true;sr.gameObject.AddComponent<PlatformEffector2D>().useOneWay=true;sr.gameObject.AddComponent<MaintenanceLift>();
             }
             for(int i=0;i<30;i++){var drop=SpriteObject("Rain streak",white,Vector2.zero,-10,false);drop.transform.localScale=new Vector3(1/PPU,random.Next(3,9)/PPU,1);drop.color=new Color(.55f,.8f,.9f,.16f);rain.Add(drop);}
+            RefreshGraphics(true);
         }
         void TickSceneDepth(){
             if(!worldRoot||!gameCamera)return;float cameraX=gameCamera.transform.position.x;
@@ -89,7 +90,7 @@ namespace ArtificialNegligence {
                 }
             }
             Label(window,"UNLOCKED "+(stats.cityUnlocked+1)+" / LV "+stats.rank+" / "+stats.points+" POINTS",24,435,570,35,23,Cream);
-            Label(window,"Gold: next route / Pink: boss / Stars: GPU mastery",24,472,690,25,20,Cyan);
+            Label(window,RendererProgress.Progress(stats)+" / ABSORB NEW CORES TO UPGRADE",24,472,690,25,20,Cyan);
             Button(window,"CONTINUE",698,445,197,47,Gold,()=>StartStage(stats.cityUnlocked));
         }
         void BuildCircuit(RectTransform window){
