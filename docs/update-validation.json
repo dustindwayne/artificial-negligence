@@ -1,8 +1,8 @@
 {
   "protocol": "PASS: C# and Python exact chunk boundaries and hashes agree",
-  "baseline": "1.2.0",
-  "target": "1.3.0",
-  "reusedBytes": 7152558,
-  "downloadBytes": 23092290,
-  "reusePercent": 23.6
+  "baseline": "1.3.0",
+  "target": "2.0.0",
+  "reusedBytes": 9924971,
+  "downloadBytes": 22408359,
+  "reusePercent": 30.7
 }

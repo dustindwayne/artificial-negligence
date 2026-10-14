@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &953367597
+--- !u!1 &557879310
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 953367599}
-  - component: {fileID: 953367598}
+  - component: {fileID: 557879312}
+  - component: {fileID: 557879311}
   m_Layer: 0
   m_Name: Artificial Negligence
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &953367598
+--- !u!114 &557879311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953367597}
+  m_GameObject: {fileID: 557879310}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1f4e8197fedd684a8d6b904028e2fdf, type: 3}
@@ -156,6 +156,8 @@ MonoBehaviour:
     health: 5
     maxHealth: 5
     gear: 000000000100000001000000i
+    cityUnlocked: 0
+    stageStars: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000i
     xp: 0
     rank: 1
     talents: 0
@@ -169,6 +171,7 @@ MonoBehaviour:
   level: 0
   collected: 0
   totalGpus: 0
+  worldLength: 3120
   gameCamera: {fileID: 0}
   playerBody: {fileID: 0}
   playerVisual: {fileID: 0}
@@ -190,13 +193,13 @@ MonoBehaviour:
   haptics: 0
   qaMode: 0
   updater: {fileID: 0}
---- !u!4 &953367599
+--- !u!4 &557879312
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953367597}
+  m_GameObject: {fileID: 557879310}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -209,4 +212,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 953367599}
+  - {fileID: 557879312}

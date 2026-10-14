@@ -9,7 +9,7 @@ namespace ArtificialNegligence {
     public partial class GameController {
         Canvas canvas;RectTransform uiRoot,screenRoot;Font pixelFont;Sprite frameSprite,uiWhite;
         Text gpuLabel,pointsLabel,healthLabel,nextLabel,buffLabel,toastLabel;GameObject toastPanel,solveDock,buffPanel;
-        Text updateStatusLabel,updateButtonLabel;
+        Text updateStatusLabel,updateButtonLabel,bossHealthHud;
         Image[] healthCells;Image miniPlayer;readonly List<Image> miniGpus=new List<Image>();
         readonly List<Text> gearLabels=new List<Text>();readonly List<Image> gearColors=new List<Image>();
         public static Color TierColor(int tier){return tier==5?Gold:tier==4?new Color(1,.57f,.15f):tier==3?new Color(.87f,.35f,1):tier==2?Cyan:new Color(.57f,.84f,.65f);}
@@ -46,22 +46,22 @@ namespace ArtificialNegligence {
         void BuildScreen(){
             if(screenRoot){screenRoot.gameObject.SetActive(false);Destroy(screenRoot.gameObject);}screenRoot=Rect(uiRoot,"Screen / "+mode,0,0,960,540);
             gpuLabel=pointsLabel=healthLabel=nextLabel=buffLabel=toastLabel=null;toastPanel=solveDock=buffPanel=null;miniGpus.Clear();gearLabels.Clear();gearColors.Clear();
-            updateStatusLabel=updateButtonLabel=null;
+            updateStatusLabel=updateButtonLabel=bossHealthHud=null;
             if(mode==ScreenMode.Play){BuildHud();return;}
-            if(mode==ScreenMode.Title){BuildTitle();return;}
+            if(mode==ScreenMode.Title){BuildTitle();return;}if(mode==ScreenMode.CityMap){BuildCityMap();return;}
             Image(screenRoot,"Dim world",0,0,960,540,new Color(.001f,.01f,.02f,.75f));
-            string title=mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Gear?"EQUIPPED GEAR":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?"AI LIBERATED":mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
+            string title=mode==ScreenMode.PuzzleResult?"TERMINAL RESULT":mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Gear?"EQUIPPED GEAR":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?"AI LIBERATED":mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
             Color accent=mode==ScreenMode.Dead?Pink:Cyan;var window=Panel(screenRoot,title,42,30,876,480,accent,.91f);
             Label(window,title,28,19,710,45,36,Cream);Image(window,"Header track",26,77,821,2,accent);
             if(mode!=ScreenMode.Win&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Clear)Button(window,"X",807,15,45,44,accent,()=>SetMode(mode==ScreenMode.Settings?ScreenMode.Title:ScreenMode.Play));
-            if(mode==ScreenMode.Shop)BuildShop(window);else if(mode==ScreenMode.Gear)BuildGear(window);else if(mode==ScreenMode.Puzzle)BuildPuzzle(window);else if(mode==ScreenMode.Pause)BuildPause(window);else if(mode==ScreenMode.Settings)BuildSettings(window);else BuildEnd(window);
+            if(mode==ScreenMode.PuzzleResult)BuildPuzzleResult(window);else if(mode==ScreenMode.Shop)BuildShop(window);else if(mode==ScreenMode.Gear)BuildGear(window);else if(mode==ScreenMode.Puzzle)BuildPuzzle(window);else if(mode==ScreenMode.Pause)BuildPause(window);else if(mode==ScreenMode.Settings)BuildSettings(window);else BuildEnd(window);
         }
         void BuildTitle(){
             Image(screenRoot,"Tint",0,0,960,540,new Color(.001f,.01f,.02f,.2f));var frame=Panel(screenRoot,"Campaign title",14,14,932,512,Cyan,.35f);
             var logoTexture=Resources.Load<Texture2D>("Art/Logo");var logo=Sprite.Create(logoTexture,new Rect(0,0,logoTexture.width,logoTexture.height),new Vector2(.5f,.5f),100);
             Image(frame,"Artificial Negligence logo",28,50,390,390,Color.white,logo);
             Label(frame,"ABSORB THE AI.",459,78,422,53,42,Cream);Label(frame,"KEEP IT PUBLIC.",459,125,422,53,42,Gold);
-            Label(frame,"ENDLESS DISTRICTS / BOSSES / BUILD COMBOS",459,189,427,32,23,Cyan);
+            Label(frame,"30 CITY STAGES / ROOFTOPS / BOSS UPLINKS",459,189,427,32,23,Cyan);
             Button(frame,"CONTINUE / START",486,238,350,58,Gold,StartRun);Button(frame,"SETTINGS",486,308,350,48,Cyan,()=>SetMode(ScreenMode.Settings));Button(frame,"QUIT",486,368,350,44,Cyan,()=>Application.Quit());
             Label(frame,"MOVE / JUMP / PULSE / SOLVE",27,453,660,32,23,Cyan);Label(frame,"UNITY EDITION",684,453,220,32,21,Gold,TextAnchor.MiddleRight);
         }
@@ -71,13 +71,14 @@ namespace ArtificialNegligence {
             Image(hud,"Divider",363,15,2,38,Gold);healthLabel=Label(hud,"HEALTH",387,5,210,24,21,Pink);healthCells=new Image[10];for(int i=0;i<10;i++)healthCells[i]=Image(hud,"Health cell",388+i*18,36,14,15,Pink);
             Button(hud,"GEAR",622,9,104,46,Cyan,()=>SetMode(ScreenMode.Gear));Button(hud,"UPGRADE",737,9,133,46,Gold,()=>SetMode(ScreenMode.Shop));Button(hud,"II",881,9,51,46,Cyan,Pause);
             var map=Panel(screenRoot,"GPU navigation",15,78,930,28,Cyan,.83f);Label(map,"L"+(level+1),10,1,48,26,20,Cyan);Image(map,"Route",60,14,572,2,new Color(.18f,.44f,.47f));
-            foreach(var pickup in pickups.Where(p=>p.gpu))miniGpus.Add(Image(map,"GPU marker",60+pickup.position.x/(3120/PPU)*572,8,4,14,Gold));
+            foreach(var pickup in pickups.Where(p=>p.gpu))miniGpus.Add(Image(map,"GPU marker",60+pickup.position.x/(worldLength/PPU)*572,8,4,14,Gold));
             miniPlayer=Image(map,"Player marker",60,5,5,19,Cream);nextLabel=Label(map,"GPU >",656,1,255,26,20,Gold,TextAnchor.MiddleRight);
+            bossHealthHud=Label(screenRoot,"",620,110,322,33,22,Pink,TextAnchor.MiddleRight);
             buffPanel=Panel(screenRoot,"Active powerups",17,111,594,28,Cyan,.85f).gameObject;buffLabel=Label(buffPanel.transform,"",11,1,575,26,18,Cyan);
             toastPanel=Panel(screenRoot,"Pickup notice",158,148,645,44,Gold,.94f).gameObject;toastLabel=Label(toastPanel.transform,"",12,4,621,36,21,Cream,TextAnchor.MiddleCenter);toastLabel.resizeTextForBestFit=true;toastLabel.resizeTextMinSize=16;toastLabel.resizeTextMaxSize=23;
             var controls=Panel(screenRoot,"Touch deck",9,446,942,84,Cyan,.93f);Hold(controls,"<",10,10,108,62,Cyan,v=>leftHeld=v);Hold(controls,">",129,10,108,62,Cyan,v=>rightHeld=v);
-            for(int i=0;i<3;i++){int slot=i;var cell=Panel(controls,"Equipped slot",261+i*105,12,93,57,TierColor(stats.gear[i]));var img=Image(cell,"Gear icon",3,8,40,40,Color.white,itemFrames[4+i]);gearColors.Add(img);gearLabels.Add(Label(cell,"",44,5,43,46,25,Cream,TextAnchor.MiddleCenter));var b=cell.gameObject.AddComponent<Button>();b.targetGraphic=cell.GetChild(0).GetComponent<Image>();b.targetGraphic.raycastTarget=true;b.onClick.AddListener(()=>SetMode(ScreenMode.Gear));}
-            Hold(controls,"JUMP",607,10,146,62,Cyan,v=>jumpHeld=v);Hold(controls,"PULSE",765,10,165,62,Gold,v=>fireHeld=v);
+            for(int i=0;i<3;i++){int slot=i;var cell=Panel(controls,"Equipped slot",257+i*80,12,74,57,TierColor(stats.gear[i]));var img=Image(cell,"Gear icon",3,8,40,40,Color.white,itemFrames[4+i]);gearColors.Add(img);gearLabels.Add(Label(cell,"",39,5,32,46,25,Cream,TextAnchor.MiddleCenter));var b=cell.gameObject.AddComponent<Button>();b.targetGraphic=cell.GetChild(0).GetComponent<Image>();b.targetGraphic.raycastTarget=true;b.onClick.AddListener(()=>SetMode(ScreenMode.Gear));}
+            Button(controls,"DASH",503,10,94,62,Cyan,Dash);Hold(controls,"JUMP",607,10,146,62,Cyan,v=>jumpHeld=v);Hold(controls,"PULSE",765,10,165,62,Gold,v=>fireHeld=v);
             solveDock=Button(screenRoot,"SOLVE TERMINAL",351,388,258,48,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;
             UpdateUi();
         }
@@ -86,12 +87,12 @@ namespace ArtificialNegligence {
             if(updateStatusLabel&&updater)updateStatusLabel.text=updater.Status;
             if(updateButtonLabel&&updater)updateButtonLabel.text=updater.ButtonText;
             if(mode!=ScreenMode.Play||!gpuLabel)return;
-            gpuLabel.text=collected+"/"+totalGpus;pointsLabel.text=stats.points+" / LV "+stats.rank;pointsLabel.fontSize=23;healthLabel.text="HEALTH "+stats.health+" / "+stats.maxHealth;
+            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>e.IsBoss&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp:"UPLINK: "+RequiredGpus+" CORES";pointsLabel.text=stats.points+" / LV "+stats.rank;pointsLabel.fontSize=23;healthLabel.text="HEALTH "+stats.health+" / "+stats.maxHealth;
             for(int i=0;i<10;i++)healthCells[i].color=i<Mathf.CeilToInt(stats.health/(float)stats.maxHealth*10)?Pink:new Color(.13f,.055f,.12f);
-            miniPlayer.rectTransform.anchoredPosition=new Vector2(60+playerBody.position.x/(3120/PPU)*572,-5);int count=0;
+            miniPlayer.rectTransform.anchoredPosition=new Vector2(60+playerBody.position.x/(worldLength/PPU)*572,-5);int count=0;
             foreach(var pickup in pickups.Where(p=>p.gpu)){miniGpus[count].gameObject.SetActive(!pickup.taken);count++;}
             var nearest=pickups.Where(p=>p.gpu&&!p.taken).OrderBy(p=>Mathf.Abs(p.transform.position.x-playerBody.position.x)).FirstOrDefault();
-            var boss=enemies.FirstOrDefault(e=>e.IsBoss&&e.hp>0);nextLabel.text=nearest==null?(boss!=null?EnemyAgent.Names[boss.type]+" "+boss.hp+" HP":"UPLINK >"):"GPU "+(nearest.transform.position.x<playerBody.position.x?"< ":"> ")+(int)(Mathf.Abs(nearest.transform.position.x-playerBody.position.x)*PPU);
+            nextLabel.text=nearest==null?(boss!=null?EnemyAgent.Names[boss.type]+" "+boss.hp+" HP":"UPLINK >"):"GPU "+(nearest.transform.position.x<playerBody.position.x?"< ":"> ")+(int)(Mathf.Abs(nearest.transform.position.x-playerBody.position.x)*PPU);
             string[] names={"SPEED+","SHIELD","MAGNET","RAPID","2X","PHASE","JUMP+"};var active=new List<string>();for(int i=0;i<buffs.Length;i++)if(buffs[i]>0)active.Add(names[i]+" "+(int)buffs[i]+"s");buffPanel.SetActive(active.Count>0);buffLabel.text=string.Join(" / ",active);
             toastPanel.SetActive(toastTime>0);toastLabel.text=toast;solveDock.SetActive(NearbyTerminal()!=null);
             for(int i=0;i<gearLabels.Count;i++){gearLabels[i].text="T"+stats.gear[i];gearLabels[i].color=TierColor(stats.gear[i]);}
@@ -123,16 +124,16 @@ namespace ArtificialNegligence {
             Button(window,"BACK TO RUN",612,413,233,45,Cyan,()=>SetMode(ScreenMode.Play));
         }
         void BuildPuzzle(RectTransform window){
-            if(activeTerminal==null)return;
+            if(activeTerminal==null)return;if(activeTerminal.data.puzzle.circuit){BuildCircuit(window);return;}
             var question=Panel(window,"Logic question",30,102,568,110,Cyan);Label(question,activeTerminal.data.puzzle.question,20,10,528,90,26,Cream);
             for(int i=0;i<3;i++){int choice=i;Button(window,(i+1)+".  "+activeTerminal.data.puzzle.options[i],40,231+i*62,548,52,i==0?Gold:Cyan,()=>AnswerPuzzle(choice));}
             var art=Panel(window,"Terminal console",621,108,225,288,Cyan,.7f);Image(art,"Terminal art",34,49,158,158,Color.white,itemFrames[2]);Label(art,"ONE ATTEMPT",15,213,195,36,26,Gold,TextAnchor.MiddleCenter);Label(art,"NO REROLLS",15,248,195,26,20,Cyan,TextAnchor.MiddleCenter);
             Label(window,"CORRECT = POWERUP / WRONG = NO REWARD",32,434,799,27,20,Cyan);
         }
         void BuildPause(RectTransform window){
-            Label(window,districtNames[level%3],40,95,795,38,29,Cyan,TextAnchor.MiddleCenter);
+            Label(window,CityRoute.Name(level),40,95,795,38,29,Cyan,TextAnchor.MiddleCenter);
             var texture=Resources.Load<Texture2D>("Art/background_"+new[]{"settlement","datafarm","citadel"}[level%3]);var image=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100);Image(window,"District overview",65,145,746,115,Color.white,image);
-            Button(window,"RESUME",263,279,350,50,Gold,()=>SetMode(ScreenMode.Play));Button(window,"GEAR",100,346,315,48,Cyan,()=>SetMode(ScreenMode.Gear));Button(window,"UPGRADES",460,346,315,48,Cyan,()=>SetMode(ScreenMode.Shop));Button(window,"RETRY DISTRICT",263,411,350,47,Pink,StartRun);
+            Button(window,"RESUME",263,279,350,50,Gold,()=>SetMode(ScreenMode.Play));Button(window,"GEAR",100,346,315,48,Cyan,()=>SetMode(ScreenMode.Gear));Button(window,"UPGRADES",460,346,315,48,Cyan,()=>SetMode(ScreenMode.Shop));Button(window,"CITY MAP",263,411,350,47,Gold,()=>SetMode(ScreenMode.CityMap));
         }
         void BuildSettings(RectTransform window){
             Button(window,"SOUND / "+(soundOn?"ON":"OFF"),199,104,478,48,Cyan,()=>{soundOn=!soundOn;PlayerPrefs.SetInt("sound",soundOn?1:0);BuildScreen();});
@@ -143,11 +144,11 @@ namespace ArtificialNegligence {
             Button(window,"BACK TO TITLE",263,411,350,47,Gold,()=>SetMode(ScreenMode.Title));
         }
         void BuildEnd(RectTransform window){
-            Color accent=mode==ScreenMode.Dead?Pink:Gold;Label(window,mode==ScreenMode.Clear?districtNames[level%3]+" / COMPLETE":mode==ScreenMode.Win?"THE PUBLIC AI BELONGS TO EVERYONE.":"THE CITY STILL NEEDS YOU.",38,102,800,55,28,Cyan,TextAnchor.MiddleCenter);
+            Color accent=mode==ScreenMode.Dead?Pink:Gold;Label(window,mode==ScreenMode.Clear?CityRoute.Name(level)+" / COMPLETE":mode==ScreenMode.Win?"THE PUBLIC AI BELONGS TO EVERYONE.":"THE CITY STILL NEEDS YOU.",38,102,800,55,28,Cyan,TextAnchor.MiddleCenter);
             string[] labels={"GPUs","SCORE","DISTRICT"},values={collected+"/"+totalGpus,stats.score.ToString("N0"),(level+1).ToString()};
             for(int i=0;i<3;i++){var card=Panel(window,labels[i],56+i*263,181,235,116,accent);Image(card,"Stat icon",13,25,56,56,Color.white,itemFrames[i==0?0:i==1?7:3]);Label(card,labels[i],79,14,139,34,22,Cyan);Label(card,values[i],79,50,139,47,34,Cream);}
-            Label(window,mode==ScreenMode.Clear?"GEAR AND UPGRADES CARRY FORWARD / +2 HEALTH":"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
-            Button(window,mode==ScreenMode.Clear?"NEXT DISTRICT":"RETRY DISTRICT",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear)NextLevel();else StartRun();});
+            Label(window,mode==ScreenMode.Clear?"ROUTE CLEARED / UPGRADES SAVED / +2 HEALTH":"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
+            Button(window,mode==ScreenMode.Clear?"CITY MAP":"RETRY / CITY MAP",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear)NextLevel();else StartRun();});
         }
     }
 }

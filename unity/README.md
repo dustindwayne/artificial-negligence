@@ -2,7 +2,7 @@
 
 Unity 6000.6.5f1 project using the Universal Render Pipeline 2D renderer. Open `Assets/Scenes/ArtificialNegligence.unity` and press Play.
 
-The three districts include 48 mandatory GPUs, random equipment boxes, generated one-attempt logic terminals, background AI ships, point lights, bloom, pixel sparks, patrol/chase scouts, ranged guards with telegraphed shots, and heavy chargers.
+The current build has 30 generated city stages across five districts, connected city-map progression, rooftop routes, checkpoints, dash, animated enemies, boss uplinks, layered scenery and interactive logic terminals.
 
 Touch movement, jump, pulse, gear, upgrades, and pause controls are built as editable Unity UI. Keyboard controls: A/D or arrows; Space to jump; J/F to fire; E to solve; U/G for upgrades/gear; Escape to pause.
 
@@ -37,3 +37,15 @@ Character XP, points, upgrades, equipment and district checkpoint save locally. 
 Six supplied tracks are encoded as 32 kHz Vorbis OGG (quality 1), preserving their full duration and channel layout. Source MP3s are untouched. Combined compressed source assets: 3,059,384 bytes versus 8,741,315 bytes supplied (65% smaller). Unity imports music as streaming Vorbis with 32 kHz sample rate and Android quality 0.25 to keep memory use low.
 
 Menu and settings use menu; gameplay uses gameplay; gear and upgrade screens use upgrades. Entering an undefeated boss's range switches to bosscombat until it is defeated. District clear/victory and game-over use their respective non-looping cues. Other tracks loop. Transitions crossfade over 0.7 seconds. Pause and puzzles lower the music volume; the Sound setting controls both music and effects.
+
+## City traversal update (2.0)
+
+The city map connects 30 generated stages through Street Settlement, Market Rooftops, Transit Works, Data Gardens and Corporate Spire. Every sixth stage is a boss district. Later city cycles continue generating routes. Local character upgrades and unlocked stages persist; completed stages can be replayed for GPU mastery stars.
+
+Stages have 7-9 ground sections, two-tier roof routes, optional moving lifts, timed power vents and checkpoint beacons. Reach an uplink with at least 60% of its GPUs, and defeat its boss when present. Every GPU remains reachable with base movement; full collection earns three mastery stars and a points bonus.
+
+Movement adds acceleration, air control, variable jump height, dash (Shift/K on keyboard), landing particles and camera damping. Scenery includes parallax building layers, street fixtures, foreground foundations and rain. Nine enemy/boss sprite rows include four animation poses each, readable health bars and attack windups.
+
+Twelve puzzle families include executable-code tracing, route cost, queue arithmetic, deduction and interactive four-switch XOR circuits. Correct submissions give one powerup; wrong submissions give none. A result screen explains the answer. Closing a puzzle preserves its state.
+
+See CREDITS.md: the creator owns the original concept, art-style direction and overall creative vision; AI assistance was used in implementation and generated assets.

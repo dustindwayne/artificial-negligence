@@ -10,7 +10,7 @@ namespace ArtificialNegligence {
         AudioSource[] sources;int active;float blend=1;bool bossEngaged;
         public string CurrentTrack {get;private set;}
         public static string Pick(ScreenMode mode,bool boss){
-            if(mode==ScreenMode.Title||mode==ScreenMode.Settings)return "menu";
+            if(mode==ScreenMode.Title||mode==ScreenMode.Settings||mode==ScreenMode.CityMap)return "menu";
             if(mode==ScreenMode.Shop||mode==ScreenMode.Gear)return "upgrades";
             if(mode==ScreenMode.Clear||mode==ScreenMode.Win)return "victory";
             if(mode==ScreenMode.Dead)return "gameover";
@@ -35,7 +35,7 @@ namespace ArtificialNegligence {
                 incoming.loop=desired!="victory"&&desired!="gameover";incoming.volume=0;incoming.Play();blend=0;CurrentTrack=desired;
             }
             blend=Mathf.Min(1,blend+Time.unscaledDeltaTime/.7f);
-            float volume=!game.soundOn?0:game.mode==ScreenMode.Pause||game.mode==ScreenMode.Puzzle?.1f:.23f;
+            float volume=!game.soundOn?0:game.mode==ScreenMode.Pause||game.mode==ScreenMode.Puzzle||game.mode==ScreenMode.PuzzleResult?.1f:.23f;
             sources[active].volume=volume*blend;sources[1-active].volume=volume*(1-blend);
             if(blend>=1&&sources[1-active].isPlaying)sources[1-active].Stop();
         }

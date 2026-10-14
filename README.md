@@ -2,13 +2,15 @@
 
 Absorb the AI. Keep it public.
 
+**Creative direction, original concept and art-style direction: Dustin (dustindwayne). This is an AI-assisted build, including programming and generated visual assets. [Full credits and disclosure](CREDITS.md).**
+
 A neon pixel platformer for Android: collect GPUs, solve changing logic puzzles, defeat corporate security and bosses, and build a character with weapons, armor, modules and permanent upgrades.
 
 ## Download the latest Android game
 
 **[Download latest APK](https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk)**
 
-[Browse the APK folder](apk/) · [Latest version details](apk/latest.json)
+[Browse the APK folder](apk/) Â· [Latest version details](apk/latest.json)
 
 Android 8.0 or newer, ARM64. Download the APK, open it on your phone and approve installation. This is a testing build signed with the same key across these published versions. Install over your existing copy to keep local progress.
 
@@ -20,15 +22,21 @@ The updater scans the installed APK and reuses matching content chunks. Only mis
 
 ## Gameplay
 
-- Endless, increasingly difficult districts using six normal/mirrored routes and changing enemy mixes.
+- A connected city map with 30 generated stages across five districts, then further city cycles.
+- Two-tier rooftops, dash, checkpoints, optional moving lifts, timed hazards and mastery stars.
+- Layered city scenery, rain, foreground detail and a new animated enemy/boss atlas.
 - Scouts, gunners, chargers, Aegis shields, swarms and snipers.
 - Rotating Auditor, Harvester and Executor bosses with telegraphed attacks and enraged phases.
 - XP leveling, talents, points, speed, vitality, weapon mastery and defense training.
 - Pulse, Arc, Scatter and Rail weapons; four armor styles; three modules with combat tradeoffs.
 - Common through Ultra gear. Ultra remains exclusive to boxes with exactly a 0.5% chance per box.
-- One-attempt logic terminals: wrong answers give no reward.
+- Twelve logic-puzzle families, interactive circuits and answer explanations; wrong submissions give no powerup.
 - Six compressed music tracks for menus, gameplay, upgrades, bosses, victory and game over.
 - Local progress saving; offline play except update checks and downloads.
+
+![City map](docs/city-map.png)
+
+![Boss encounter](docs/boss-encounter.png)
 
 ![Game preview](docs/game-preview.jpg)
 

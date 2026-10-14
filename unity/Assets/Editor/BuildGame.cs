@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="1.3.0";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=130;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.0.0";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=200;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -73,15 +73,22 @@ public static class BuildGame {
         int[] positions=new int[3];var across=new HashSet<string>();
         for(int run=0;run<200;run++){
             var factory=new PuzzleFactory(new System.Random(run));var within=new HashSet<string>();
-            for(int i=0;i<9;i++){var puzzle=factory.Create(i);Assert(within.Add(puzzle.question),"Repeated puzzle");across.Add(puzzle.question);Assert(puzzle.options.Distinct().Count()==3,"Duplicate options");Assert(puzzle.options[puzzle.correct]==Expected(puzzle.question),"Wrong generated solution");positions[puzzle.correct]++;
-                var terminal=new TerminalData{puzzle=puzzle};Assert(!terminal.Answer((puzzle.correct+1)%3)&&terminal.attempted&&!terminal.solved,"Wrong attempt rewarded");Assert(!terminal.Answer(puzzle.correct),"Wrong attempt can retry");
-                var good=new TerminalData{puzzle=puzzle};Assert(good.Answer(puzzle.correct)&&!good.Answer(puzzle.correct),"Reward can repeat");
+            for(int i=0;i<9;i++){var puzzle=factory.Create(i);Assert(within.Add(puzzle.question),"Repeated puzzle");across.Add(puzzle.question);Assert(puzzle.options.Distinct().Count()==3,"Duplicate options");Assert(puzzle.options[puzzle.correct]==ExpectedPuzzle(puzzle),"Wrong generated solution");positions[puzzle.correct]++;
+                int correct=puzzle.circuit?puzzle.circuitTarget:puzzle.correct;int wrong=puzzle.circuit?(correct+1)%16:(correct+1)%3;
+                var terminal=new TerminalData{puzzle=puzzle};Assert(!terminal.Answer(wrong)&&terminal.attempted&&!terminal.solved,"Wrong attempt rewarded");Assert(!terminal.Answer(correct),"Wrong attempt can retry");
+                var good=new TerminalData{puzzle=puzzle};Assert(good.Answer(correct)&&!good.Answer(correct),"Reward can repeat");
             }
         }
         Assert(across.Count>300&&positions.All(x=>x>400),"Puzzles do not vary");
         var stats=new RunStats{points=500};stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==2&&stats.gear[2]==2&&stats.maxHealth==6,"Upgrade logic");stats.gear[1]=4;stats.Upgrade(1);Assert(stats.gear[1]==4,"Ultra can be purchased");
-        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all 96 GPU pickups and 24 gaps across six layout variants using Unity Physics2D; 90 box anchors and 18 terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
+        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 30 unique routes using Unity Physics2D; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
         Debug.Log("AN_VALIDATION_PASS / puzzles, drops, upgrades, 3 levels, Unity Physics2D reachability");
+    }
+    static string ExpectedPuzzle(LogicPuzzle p){
+        if(p.family<6)return Expected(p.question);var n=Regex.Matches(p.question,"\\d+").Cast<Match>().Select(m=>int.Parse(m.Value)).ToArray();
+        if(p.family==6){var o=n.Skip(n.Length-4).ToArray();int a=o[0],b=a^o[1],c=b^o[2],d=c^o[3];return (a+b*2+c*4+d*8).ToString();}
+        if(p.family==7)return ((n[0]+n[1])*n[2]).ToString();if(p.family==8)return n.Sum().ToString();if(p.family==9)return (n[0]*(n[0]+1)/2).ToString();
+        if(p.family==10)return Regex.Match(p.question,"([ABC]) has").Groups[1].Value;return (n[n.Length-1]/4).ToString();
     }
     static string Expected(string q){var numbers=Regex.Matches(q,"\\d+").Cast<Match>().Select(m=>int.Parse(m.Value)).ToList();
         if(q.StartsWith("Sequence:"))return (numbers.Count==4?numbers[3]+numbers[1]-numbers[0]:numbers[2]*(numbers[1]/numbers[0])).ToString();
@@ -90,37 +97,40 @@ public static class BuildGame {
     }
     static void CheckReachability(){
         var oldGravity=Physics2D.gravity;var oldMode=Physics2D.simulationMode;Physics2D.gravity=new Vector2(0,-550f/16);Physics2D.simulationMode=SimulationMode2D.Script;
+        int gpuCount=0,gaps=0;
         try{
-            string csv=Resources.Load<TextAsset>("Data/levels").text;
-            for(int level=0;level<6;level++){
-                var rows=LevelRow.Parse(csv,level%3);
-                if(level>=3){for(int r=0;r<rows.Count;r++){var row=rows[r];float width=row.kind=="platform"?row.w:row.kind=="gpu"?12:row.kind=="terminal"?18:15;row.x=3120-row.x-width;rows[r]=row;}rows=rows.OrderBy(r=>r.x).ToList();}
-                var floors=rows.Where(r=>r.kind=="platform"&&r.y==218).ToList();Assert(rows.Count(r=>r.kind=="gpu")==16,"GPU count");
+            for(int level=0;level<30;level++){
+                var rows=CityRoute.Generate(level);var floors=rows.Where(r=>r.kind=="platform"&&r.y==218).OrderBy(r=>r.x).ToList();
                 var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);var physics=scene.GetPhysicsScene2D();
                 foreach(var row in rows.Where(r=>r.kind=="platform")){
                     var go=new GameObject("Validation platform");SceneManager.MoveGameObjectToScene(go,scene);go.transform.position=GameController.PixelCenter(row.x+row.w/2,row.y+row.h/2);var box=go.AddComponent<BoxCollider2D>();box.size=new Vector2(row.w/16,row.h/16);
                     if(row.h<15){var effector=go.AddComponent<PlatformEffector2D>();effector.useOneWay=true;effector.surfaceArc=180;box.usedByEffector=true;}
                 }
-                var character=new GameObject("Base movement test");SceneManager.MoveGameObjectToScene(character,scene);var body=character.AddComponent<Rigidbody2D>();body.constraints=RigidbodyConstraints2D.FreezeRotation;var collider=character.AddComponent<BoxCollider2D>();collider.size=new Vector2(12f/16,22f/16);collider.sharedMaterial=new PhysicsMaterial2D("Validation / no friction"){friction=0,bounciness=0};
-                foreach(var row in rows.Where(r=>r.kind=="gpu")){
-                    bool reachable=false;
-                    foreach(var floor in floors){if(reachable)break;int lo=Math.Max((int)floor.x,(int)row.x-88),hi=Math.Min((int)(floor.x+floor.w-14),(int)row.x+88);
-                        for(int launch=lo;launch<=hi&&!reachable;launch+=4)for(int dir=-1;dir<=1&&!reachable;dir++){
-                            body.position=GameController.PixelCenter(launch+6,207);body.linearVelocity=new Vector2(dir*91f/16,235f/16);
-                            for(int tick=0;tick<90;tick++){physics.Simulate(1f/60);var target=GameController.PixelCenter(row.x+6,row.y+6);if(Mathf.Abs(body.position.x-target.x)<12f/16&&Mathf.Abs(body.position.y+1f/16-target.y)<15f/16){reachable=true;break;}}
-                        }
-                    }
-                    Assert(reachable,"Unreachable GPU in Unity physics / level "+level+" at "+row.x+","+row.y);
-                }
+                var character=new GameObject("Base jump test");SceneManager.MoveGameObjectToScene(character,scene);var body=character.AddComponent<Rigidbody2D>();body.constraints=RigidbodyConstraints2D.FreezeRotation;var collider=character.AddComponent<BoxCollider2D>();collider.size=new Vector2(12f/16,22f/16);collider.sharedMaterial=new PhysicsMaterial2D("Validation friction"){friction=0,bounciness=0};
+                Func<LevelRow,Vector2,float,float,bool> attempt=(source,target,tx,ty)=>{
+                    float targetX=target.x*16;int lo=Math.Max((int)source.x,(int)(targetX-tx-90)),hi=Math.Min((int)(source.x+source.w-12),(int)(targetX+tx+90));
+                    for(int launch=lo;launch<=hi;launch+=6)for(int dir=-1;dir<=1;dir++){
+                        body.position=GameController.PixelCenter(launch+6,source.y-11);body.linearVelocity=new Vector2(dir*91f/16,235f/16);
+                        for(int tick=0;tick<80;tick++){physics.Simulate(1f/60);if(Mathf.Abs(body.position.x-target.x)<tx/16&&Mathf.Abs(body.position.y-target.y)<ty/16)return true;}
+                    }return false;
+                };
                 for(int i=0;i<floors.Count-1;i++){
-                    bool reachable=false;float edge=floors[i].x+floors[i].w,next=floors[i+1].x;
-                    for(int launch=(int)edge-28;launch<edge-4&&!reachable;launch+=2){body.position=GameController.PixelCenter(launch+6,207);body.linearVelocity=new Vector2(91f/16,235f/16);for(int tick=0;tick<90;tick++){physics.Simulate(1f/60);if(body.position.x*16>next+14&&Mathf.Abs(body.position.y+207f/16)<.08f){reachable=true;break;}}}
-                    Assert(reachable,"Gap cannot be crossed / level "+level);
+                    var next=floors[i+1];Assert(attempt(floors[i],GameController.PixelCenter(next.x+20,207),12,2),"Uncrossable generated gap / "+level);gaps++;
                 }
-                foreach(var row in rows.Where(r=>r.kind=="box"||r.kind=="terminal"))Assert(floors.Any(f=>row.x>=f.x&&row.x+18<=f.x+f.w),"Object anchor off ground");
-                EditorSceneManager.CloseScene(scene,true);
+                var reachable=new List<LevelRow>(floors);
+                foreach(var roof in rows.Where(r=>r.kind=="platform"&&r.y<218).OrderByDescending(r=>r.y)){
+                    bool hit=reachable.Where(r=>r.y>roof.y&&r.y-roof.y<=52&&r.x<roof.x+roof.w+90&&r.x+r.w>roof.x-90).Any(r=>attempt(r,GameController.PixelCenter(roof.x+roof.w/2,roof.y-11),roof.w/2-8,2));
+                    Assert(hit,"Unreachable rooftop / "+level+" / "+roof.x);reachable.Add(roof);
+                }
+                foreach(var gpu in rows.Where(r=>r.kind=="gpu")){
+                    bool hit=reachable.Where(r=>Mathf.Abs(r.y-(gpu.y+6))<80&&r.x<gpu.x+100&&r.x+r.w>gpu.x-100).OrderBy(r=>Mathf.Abs(r.y-(gpu.y+27))).Any(r=>attempt(r,GameController.PixelCenter(gpu.x+6,gpu.y+6),12,15));
+                    Assert(hit,"Unreachable generated GPU / "+level+" / "+gpu.x);gpuCount++;
+                }
+                foreach(var row in rows.Where(r=>r.kind=="box"||r.kind=="terminal"||r.kind=="checkpoint"||r.kind=="enemy"))Assert(floors.Any(f=>row.x>=f.x&&row.x+18<=f.x+f.w),"Object off safe ground");
+                EditorSceneManager.CloseScene(scene,true);Debug.Log("AN_ROUTE_PASS / "+level);
             }
         }finally{Physics2D.gravity=oldGravity;Physics2D.simulationMode=oldMode;}
+        Debug.Log("AN_GENERATED_REACHABILITY_PASS / "+gpuCount+" GPUs / "+gaps+" gaps / 30 generated levels");
     }
     public static void Desktop(){Configure();Validate();Build("ArtificialNegligence-preview/ArtificialNegligence.exe",BuildTarget.StandaloneWindows64);}
     public static void Android(){
