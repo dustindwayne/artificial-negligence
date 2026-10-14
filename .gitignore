@@ -8,3 +8,7 @@ unity/Builds/
 *.jks
 .DS_Store
 __pycache__/
+/ArtificialNegligence-Unity.apk
+/ArtificialNegligence-preview/
+*.sln
+*.csproj
