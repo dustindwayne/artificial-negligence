@@ -20,6 +20,10 @@ Version 1.3 introduces **Settings > Check for Updates**. When an update is avail
 
 The updater scans the installed APK and reuses matching content chunks. Only missing chunks are downloaded, so unchanged music and artwork can be reused. Resumable chunk downloads and SHA-256 checks verify the reconstructed APK before Android verifies its signing key and asks you to install it. Download size depends on what changed; this is not a promise of zero music bytes for every build. Version 1.2 and earlier require one full download to gain this updater.
 
+## Art direction roadmap
+
+The planned direction is to replace fully generated visuals with creator-drawn characters and key poses, using AI to assist individual animation frames. [Read the art roadmap](ROADMAP.md).
+
 ## Gameplay
 
 - A connected city map with 30 generated stages across five districts, then further city cycles.
@@ -54,7 +58,11 @@ Then commit and push the updated `apk/` folder. Its stable download link always 
 
 Reachability, progression, puzzle rules, loadout counters and desktop gameplay were checked. Physical Android installation/update testing is still required.
 
-### Gameplay-only updates
+### Art direction roadmap
+
+The planned direction is to replace fully generated visuals with creator-drawn characters and key poses, using AI to assist individual animation frames. [Read the art roadmap](ROADMAP.md).
+
+## Gameplay-only updates
 
 Settings checks `apk/gameplay.json` for newer balance settings. Enemy health, boss health, enemy speed/damage, weapon damage and XP can be updated as a tiny JSON download; no APK install and no music/art download is required. Values are validated and saved for offline play. New enemy health applies when a district starts.
 
@@ -65,3 +73,4 @@ python tools/publish_gameplay.py --version 2 --enemyHealth 1.1 --xp 1.1 --notes 
 ```
 
 Commit and push `apk/gameplay.json`. New executable features still require an APK update; unchanged APK chunks are reused where possible.
+
