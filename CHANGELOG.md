@@ -1,4 +1,6 @@
-# 2.4.2 — Controller and browser edition
+# Changelog
+
+## 2.4.2 — Controller and browser edition
 
 - Windows Xbox/XInput input and standard-mapped browser gamepads.
 - Analog deadzone, movement, duck/slide, combat, AI assists, menus and dialogue.
@@ -7,15 +9,13 @@
 - Documentation audit and UTF-8 punctuation repairs.
 - Software controller-frame tests; physical controller/Android device testing remains outstanding.
 
-# 2.4.1 — Sinister / public signal
+## 2.4.1 — Sinister / public signal
 
 - Added ducking, sliding, and low routes.
 - Added earned AI assistance with a separate compute bank; permanent GPU visual progress remains intact.
 - Added pursuing human Sinister agents and Ai Wrath: hostile elite, liberated ally, then playable unlock.
 - Added brief artwork dialogue scenes and checkpoint transmissions.
 - Added three gameplay music tracks and higher detail pixel textures.
-
-# Changelog
 
 ## 2.4.0
 

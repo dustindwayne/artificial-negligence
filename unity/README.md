@@ -26,7 +26,7 @@ Install matching Unity platform modules. Build methods configure settings and va
 
 Example: Unity.exe -batchmode -quit -projectPath <project> -executeMethod BuildRelease.All -logFile <log>
 
-Android helper paths use the original workspace tool locations when present and embedded tools otherwise. Configure your own SDK/JDK/NDK and signing key when building elsewhere. Never commit a signing key or password. Published APKs currently use the same playtest signing certificate across updates.
+Configure the Android SDK, JDK, NDK and signing key in Unity for your development environment. The build helper uses available configured tools. Never commit a signing key or password. Published APKs currently use the same playtest signing certificate across updates.
 
 ## Checks and saves
 

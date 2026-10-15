@@ -21,8 +21,8 @@
   "legacyAndroidBridge": 230,
   "packages": {
     "ArtificialNegligence-Web-FTP.zip": {
-      "bytes": 40419327,
-      "sha256": "2d3034c1c8a2d1e29193adf15d3d5e7327bb1ee1cbed344f882138f9d48c80f3"
+      "bytes": 40419338,
+      "sha256": "8bdc0ed0d3f91e90873e560270bebbd09dfe6d26fb89fdaac1ea5eafb85e84a8"
     },
     "ArtificialNegligence-Windows.zip": {
       "bytes": 63976021,
@@ -32,5 +32,6 @@
       "bytes": 49123533,
       "sha256": "1dc9e1589f645149098598f312e5837c34d4ffe2568835d09879904c6013f0bc"
     }
-  }
+  },
+  "documentation": "Generic hosting guide; public document links and UTF-8 checked; packaged instructions checked."
 }

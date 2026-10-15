@@ -2,14 +2,14 @@
 
 The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL build. It contains a `play/` folder and upload instructions. No database or server application is required.
 
-## Upload to dustinwann.com
+## Deploy to a web host
 
 1. Extract the ZIP.
 2. Upload the `play` folder into the domain's document root, commonly `public_html`, using your FTP client.
-3. Visit `https://dustinwann.com/play/` after upload, click Enter the City, then Play now.
+3. Visit `https://your-domain.example/play/` after upload, click Enter the City, then Play now.
 4. Link `/play/` from the website homepage.
 
-The website deployment is separate from the GitHub release. Publishing this package does not upload it to dustinwann.com.
+The release provides static files for self-hosting.
 
 The supplied full HTML embeds the page CSS. Existing `hero.png` and the complete `Build/` directory must remain beside `index.html`. A separate CSS version is also kept in the source under `web/`. Do not open the game via `file://`; serve it through HTTP/HTTPS.
 

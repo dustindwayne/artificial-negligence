@@ -96,7 +96,7 @@ Choose **Relaxed, Standard, Hard, or Adaptive**. Adaptive increases pressure aft
 
 ## Download and play
 
-- **[Web / FTP package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** upload the included `play/` folder to your website. [Hosting instructions](docs/WEB-HOSTING.md). This download does not mean the website has been deployed.
+- **[Web / FTP package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** upload the included `play/` folder to your website. [Hosting instructions](docs/WEB-HOSTING.md).
 
 - **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8.0+, ARM64. Install over the existing app to retain local progress. Android asks you to approve installation.
 - **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the entire archive, then run `ArtificialNegligence.exe`. Keep the Data folder and supporting files beside it. The optional HD preview launcher changes rendering only and grants no progress.
@@ -122,7 +122,7 @@ Older saves from the menu-granted loadout system have that equipment cleared on 
 
 ### Controllers
 
-Windows supports Xbox/XInput-compatible controllers; web supports standard-mapped browser gamepads. A jumps/confirms, X or RT attacks, B slides/backs out, RB dashes, Y connects, LB asks for earned help, LT cycles assist, View opens inventory, and Menu pauses. Stick/D-pad navigates menus. [Full controls and tested limits](docs/CONTROLS.md). A physical controller playtest remains outstanding.
+Windows supports Xbox/XInput-compatible controllers; web supports standard-mapped browser gamepads. A jumps/confirms, X or RT attacks, B slides/backs out, RB dashes, Y connects, LB asks for earned help, LT cycles assist, View opens inventory, and Menu pauses. Stick/D-pad navigates menus. [Full controls and tested limits](docs/CONTROLS.md).
 
 ### Updates
 
@@ -144,6 +144,6 @@ The art roadmap moves toward creator-drawn characters and key poses, with AI ass
 
 Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Android Build Support. `BuildGame.Desktop`, `BuildGame.Android`, and `BuildWeb.Build` run puzzle, collection, rarity, sprite-gutter, and route validation before packaging.
 
-Windows runtime checks cover the opening, dialogue completion and replay prevention, inventory, character locks, graphics tiers, upgrades, terminals, bosses, music rotation, Ai Wrath's hostile encounter/liberation/playable unlock, and injected controller-frame routing. The earlier WebGL build was checked in-browser for loading, story, keyboard movement/jumping, GPU collection and saved progress; controller hardware testing is still required. Android package metadata and signing are checked separately; a physical Android device playtest has not been performed for this release.
+Automated checks cover gameplay rules, generated routes, inventory, story, controller routing and build integrity. Browser startup was checked in WebGL. Physical controller and Android-device testing remain outstanding. [Testing and compatibility](docs/TESTING.md).
 
 [Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)

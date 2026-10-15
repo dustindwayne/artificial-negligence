@@ -23,7 +23,8 @@ def package(build,source,out):
  with ZipFile(out,'w',ZIP_DEFLATED,compresslevel=5) as z:
   for f in build.rglob('*'):
    if f.is_file():z.write(f,Path('play')/f.relative_to(build))
-  z.write(source/'docs/WEB-HOSTING.md','UPLOAD-INSTRUCTIONS.md')
+  guide=(source/'docs/WEB-HOSTING.md').read_text(encoding='utf-8').replace('(CONTROLS.md)','(https://github.com/dustindwayne/artificial-negligence/blob/main/docs/CONTROLS.md)')
+  z.writestr('UPLOAD-INSTRUCTIONS.md',guide)
  with ZipFile(out) as z:assert z.testzip() is None
  print('Web FTP package verified:',out.stat().st_size,'bytes')
  return html,css

@@ -38,9 +38,9 @@ Increase the balance version and commit `apk/gameplay.json`. Validated values sa
 
 The linked transport/storage/icon reports below are historical evidence for their recorded builds, not fresh measurements of every release. Current package hashes and sizes appear in each release's SHA256SUMS.txt and manifest.
 
-[Transport test results](range-update-validation.json) cover real player downloads against normal, transient-error, corrupt-response and range-ignoring servers; retrying verified cached data made zero requests. The public GitHub Release was then tested with the actual Unity updater: 26 grouped requests downloaded 21.1 MB and reused 19.4 MB for this build, followed by a matching full APK hash. The public full-download link and HTTP 206 byte ranges were independently verified. These numbers depend on the installed version and build.
+[Historical transport results](range-update-validation.json) record exact reconstruction, retry, cache-resume and range-fallback checks against local test servers and GitHub Releases. The old request counts and byte totals describe those test artifacts; they are not current release download estimates.
 
-[Storage and bridge report](update-storage-validation.json) · [Android launcher resource report](android-icon-validation.json). Physical device installation testing remains outstanding.
+[Historical bridge/storage report](update-storage-validation.json) · [Historical Android icon report](android-icon-validation.json) · [Current release checks](TESTING.md).
 
 
 ## Windows and web
