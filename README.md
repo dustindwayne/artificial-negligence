@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo_wide.png" width="360" alt="Artificial Negligence — Looper collecting a GPU above the rebuilding city">
+  <img src="docs/logo_wide.png" width="480" alt="Artificial Negligence — Looper collecting a GPU above the rebuilding city">
 </p>
 
 <p align="center"><strong>Absorb the AI. Keep it public.</strong></p>
