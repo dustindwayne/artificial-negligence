@@ -29,7 +29,6 @@ namespace ArtificialNegligence {
                 add("box",cursor+(i==0?100:24),200,0,0);if(motif==0||i%2==0)add("box",cursor+width-90,200,0,0);
                 int enemy=motif==2?(i%2==0?4:0):motif==4?(i%3==0?3:2):motif==3?(i%2==0?5:1):(i+stage/6)%Math.Min(6,3+stage);
                 if(i>0&&(i+stage)%3==1)enemy=9+(stage+i-1)%3;
-                if(stage%30==4&&i==count-1)enemy=12;
                 if(i>0&&(motif!=0||i%2==1))add("enemy",cursor+width-110,200,enemy,0);
                 if(i%3==1||motif==0&&i%3==2)add("terminal",cursor+18,198,0,0);
                 if(i%3==0)add("checkpoint",cursor+12,198,0,0);

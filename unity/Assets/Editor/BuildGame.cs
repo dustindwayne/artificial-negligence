@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.2";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=242;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.3";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=243;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -66,7 +66,7 @@ public static class BuildGame {
         }
         foreach(var name in new[]{"menu","gameplay","level99","glitch8bit","electronicpunk","upgrades","bosscombat","victory","gameover"})Assert(Resources.Load<AudioClip>("Music/"+name)?.length>0,"Music missing: "+name);
         Assert(MusicDirector.Pick(ScreenMode.Title,false)=="menu"&&MusicDirector.Pick(ScreenMode.Play,false)=="gameplay"&&MusicDirector.Pick(ScreenMode.Play,true)=="bosscombat"&&MusicDirector.Pick(ScreenMode.Shop,false)=="upgrades"&&MusicDirector.Pick(ScreenMode.Gear,true)=="upgrades"&&MusicDirector.Pick(ScreenMode.Clear,false)=="victory"&&MusicDirector.Pick(ScreenMode.Dead,true)=="gameover","Music state mapping failed");
-        Assert(Enumerable.Range(0,4).Select(i=>MusicDirector.PickGameplay(i)).Distinct().Count()==4&&MusicDirector.PickGameplay(1,1)=="glitch8bit"&&MusicDirector.RotationDuration(20)==60,"Gameplay music rotation failed");
+        Assert(Enumerable.Range(0,4).Select(i=>MusicDirector.PickGameplay(i)).Distinct().Count()==4&&MusicDirector.PickGameplay(1,1)=="glitch8bit"&&MusicDirector.RotationDuration(20)==20,"Gameplay music rotation failed");
         var progression=new RunStats();progression.GainXp(300);Assert(progression.rank>=3&&progression.talents>=2&&progression.WeaponCount==0&&progression.SuitCount==0,"Leveling granted equipment");
         progression.points=500;Assert(progression.Train(true)=="WEAPON MASTERY +1"&&progression.power==1,"Talent purchase failed");
         progression.Discover(1,1,1);progression.SelectEquipment(1,1);int arcShield=progression.HitDamage(3),arcHeavy=progression.HitDamage(2);Assert(arcShield>arcHeavy,"Arc counters missing");

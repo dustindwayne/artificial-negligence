@@ -1,0 +1,36 @@
+{
+  "release": "2.4.3",
+  "builds": "PASS: Windows, Android, WebGL",
+  "windowsRuntime": "PASS",
+  "wrathBossStages": [
+    6,
+    12,
+    13
+  ],
+  "wrathPhases": 3,
+  "bossRegression": "PASS: huge hit and same-frame burst protection, phase gates, distinct attacks, pit recovery, retreats, saved encounter progress, final-only unlock",
+  "gameplayMusic": "PASS: actual track ending transitions, no immediate repeats, four-track shuffle variety, inventory and stage continuity",
+  "routeCases": 60,
+  "gpus": 1960,
+  "groundGaps": 443,
+  "nativeAtlasFrames": 108,
+  "controllerRouting": "PASS",
+  "physicalControllerTest": false,
+  "physicalAndroidDeviceTest": false,
+  "packages": {
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 40418557,
+      "sha256": "eecbb0f2d6abf2fa0da679d9867fb9ae41bddbcfb3eda59d88b6d08e26d18586"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 63977404,
+      "sha256": "c60e5d06622abf36d8b5dccae3d500d3af0fedc93c8f5d6cb673c7eeb9a345f3"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 49128865,
+      "sha256": "bc778bc86e964e35b84d1f0dda52e3f6396d8faf36f8fc289dfcd1e9f3091eb8"
+    }
+  },
+  "webBrowser": "PASS: final 2.4.3 startup, actual game rendering, no startup console errors/warnings",
+  "androidSigning": "PASS: version 243, same playtest certificate as preceding release"
+}

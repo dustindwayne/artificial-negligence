@@ -29,7 +29,7 @@ namespace ArtificialNegligence {
         public int ModuleCount {get{return Math.Min(3,1+(rank-1)/2);}}
         public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}EnsureCollection();return rank>before?"LEVEL "+rank+" / +TALENT":"+"+amount+" XP";}
         public string Train(bool offense){int value=offense?power:defense;if(value>=20)return "TRAINING MAXED";int price=50+value*30;if(talents<1||points<price)return "NEED 1 TALENT + "+price+" PTS";points-=price;talents--;if(offense)power++;else defense++;return offense?"WEAPON MASTERY +1":"DEFENSE TRAINING +1";}
-        public int HitDamage(int family){int damage=gear[1]+power;bool shield=family==3||family==6,heavy=family==2||family==8;
+        public int HitDamage(int family){int damage=gear[1]+power;bool shield=family==3||family==6,heavy=family==2||family==8||family==12;
             if(weapon==1)damage=shield?damage*2:heavy?Math.Max(1,damage/2):damage;
             else if(weapon==3)damage=heavy?damage*2:shield?Math.Max(1,damage/2):damage+1;
             else if(shield)damage=Math.Max(1,damage/2);

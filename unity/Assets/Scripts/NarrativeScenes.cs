@@ -5,7 +5,7 @@ namespace ArtificialNegligence {
  public partial class GameController {
   int narrativeId,narrativeLine,radioStage=-1;ScreenMode narrativeReturn;
   Sprite looperPortrait,wrathPortrait;
-  static readonly string[] SceneTitles={"STREET SIGNAL","THE LOCKOUT","STOLEN COMPUTE","THE CONTROL LAYER","THE LAST GATE","SINISTER ELITE","BREAK THE PROGRAM"};
+  static readonly string[] SceneTitles={"STREET SIGNAL","THE LOCKOUT","STOLEN COMPUTE","THE CONTROL LAYER","THE LAST GATE","SINISTER ELITE","BREAK THE PROGRAM","ORDER UNBROKEN","FAULT IN THE PROGRAM","SECOND ENGAGEMENT","ONE LAST ORDER"};
   static readonly string[][] SceneLines={
    new[]{"LOOPER|They sold us a broken world. Let's take the pieces back.","PUBLIC SIGNAL|The first cores are ahead. Get them back online."},
    new[]{"PUBLIC SIGNAL|The Sinister cut this district off from public AI.","LOOPER|Then we reconnect it. One block at a time."},
@@ -13,7 +13,11 @@ namespace ArtificialNegligence {
    new[]{"PUBLIC SIGNAL|Their control layer is rewriting the streets.","LOOPER|We restore the world. They don't get to decide who sees it."},
    new[]{"LOOPER|We're close. Is anyone still out there?","PUBLIC SIGNAL|All of us. Bring the network home."},
    new[]{"AI WRATH|Public access revoked. Turn around, Looper.","LOOPER|That your voice, or the program talking?"},
-   new[]{"AI WRATH|The orders... they're gone. I can hear myself again.","LOOPER|Then help us keep it that way. You're with us now."}
+   new[]{"AI WRATH|The orders... they're gone. I can hear myself again.","LOOPER|Then help us keep it that way. You're with us now."},
+   new[]{"AI WRATH|This changes nothing. The Sinister will rebuild me.","LOOPER|Then next time, I'll find what's left of you."},
+   new[]{"AI WRATH|They keep sending me back. Why can't I stop?","LOOPER|Because those orders aren't yours. Fight them."},
+   new[]{"AI WRATH|New directives. Same target.","LOOPER|They patched your program. They didn't fix the cracks."},
+   new[]{"AI WRATH|One last order. Erase the runner.","LOOPER|You've heard enough orders. Time to choose."}
   };
   void BeginNarrative(int id,ScreenMode destination){
    stats.EnsureCollection();if(stats.seenStoryScenes.Contains(id))return;
@@ -22,8 +26,9 @@ namespace ArtificialNegligence {
   void AdvanceNarrative(){if(++narrativeLine>=SceneLines[narrativeId].Length)FinishNarrative();else BuildScreen();}
   void FinishNarrative(){if(!stats.seenStoryScenes.Contains(narrativeId))stats.seenStoryScenes.Add(narrativeId);SaveProgress();SetMode(narrativeReturn);}
   bool TickNarrativeEncounter(){
-   if(!stats.seenStoryScenes.Contains(5)&&enemies.Any(e=>e&&e.type==12&&e.hp>0&&Mathf.Abs(e.transform.position.x-playerBody.position.x)<12)){
-    BeginNarrative(5,ScreenMode.Play);return true;
+   int scene=stats.wrathEncounters==0?5:stats.wrathEncounters==1?9:10;
+   if(!stats.seenStoryScenes.Contains(scene)&&enemies.Any(e=>e&&e.type==12&&e.hp>0&&Mathf.Abs(e.transform.position.x-playerBody.position.x)<12)){
+    BeginNarrative(scene,ScreenMode.Play);return true;
    }return false;
   }
   void CheckpointDialogue(){

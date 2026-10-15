@@ -27,37 +27,41 @@ namespace ArtificialNegligence {
   }
   void TickHuman(float dt){
    stun=Mathf.Max(0,stun-dt);humanAttack=Mathf.Max(0,humanAttack-dt);humanShield=Mathf.Max(0,humanShield-dt);humanAbility-=dt;humanNavTimer-=dt;
-   Vector2 delta=game.PlayerHitCenter-humanBody.position;bool close=delta.magnitude<14;bool sight=close&&!Physics2D.Linecast(humanBody.position,game.PlayerHitCenter,1<<8).collider;if(sight||stun>0)humanAlert=9;else humanAlert=Mathf.Max(0,humanAlert-dt);
+   Vector2 delta=game.PlayerHitCenter-humanBody.position;bool close=delta.magnitude<14;bool sight=close&&!Physics2D.Linecast(humanBody.position,game.PlayerHitCenter,1<<8).collider;if(sight||stun>0)humanAlert=12;else humanAlert=Mathf.Max(0,humanAlert-dt);
    if(humanGrounded&&humanNavTimer<=0&&humanAlert>0){humanNavTimer=.3f;FindPursuitRoute();}
    warning.enabled=Mathf.Abs(transform.position.x-game.gameCamera.transform.position.x)<17;warning.color=GameController.Pink;warning.intensity=humanWindup>0?.9f:.12f;
-   if(humanAbility<=0&&(type==10||type==12)&&humanAlert>0){humanAbility=8;humanShield=2.5f;game.Burst(transform.position,GameController.Pink,8);}
+   if(humanAbility<=0&&(type==10)&&humanAlert>0){humanAbility=8;humanShield=2.5f;game.Burst(transform.position,GameController.Pink,8);}
    if(humanOrb){humanOrb.transform.localPosition=new Vector3(-direction*.65f,1.2f+Mathf.Sin(Time.time*4)*.12f,0);humanOrb.color=humanShield>0?GameController.Gold:GameController.Pink;}
-   if(humanWindup>0){humanWindup-=dt;if(humanWindup<=0){
-     int shots=type==9?3:type==12?5:1;for(int i=0;i<shots;i++){float angle=(i-(shots-1)*.5f)*(type==12?10:6);Vector2 shot=Quaternion.Euler(0,0,angle)*humanAim;game.SpawnBullet(humanBody.position+shot*.65f,shot*(type==11?12:10),true,type==12?3:2);}volley++;humanAttack=type==11?1.1f:type==12?1.8f:1.5f;
-    }}else if(sight&&humanAttack<=0&&stun<=0){humanAim=(game.PlayerHitCenter+game.playerBody.linearVelocity*.15f-humanBody.position).normalized;humanWindup=type==12?1:type==11?.48f:.7f;}
+   if(type==12)TickWrath(dt,sight);
+   else if(humanWindup>0){humanWindup-=dt;if(humanWindup<=0){
+     int shots=type==9?3:type==12?5:1;for(int i=0;i<shots;i++){float angle=(i-(shots-1)*.5f)*(type==12?10:6);Vector2 shot=Quaternion.Euler(0,0,angle)*humanAim;game.SpawnBullet(humanBody.position+shot*.65f,shot*(type==11?12:10),true,type==12?3:2);}volley++;humanAttack=type==11?.85f:1.2f;
+    }}else if(sight&&humanAttack<=0&&stun<=0){humanAim=(game.PlayerHitCenter+game.playerBody.linearVelocity*.15f-humanBody.position).normalized;humanWindup=type==12?1:type==11?.45f:.6f;}
    humanLaser.enabled=humanWindup>0;if(humanLaser.enabled){humanLaser.transform.localPosition=new Vector3(humanAim.x*2,humanAim.y*2,0);humanLaser.transform.localScale=new Vector3(4,.035f,1);humanLaser.transform.localRotation=Quaternion.Euler(0,0,Mathf.Atan2(humanAim.y,humanAim.x)*Mathf.Rad2Deg);}
-   visual.sprite=game.enemyFrames[type*4+(humanWindup>0?3:Mathf.Abs(humanBody.linearVelocity.x)>.2f?1+(int)(Time.time*8)%2:0)];visual.flipX=direction<0;visual.color=stun>0?GameController.Cream:humanShield>0?new Color(1,.6f,.8f):Color.white;
+   visual.sprite=game.enemyFrames[type*4+(humanWindup>0?3:Mathf.Abs(humanBody.linearVelocity.x)>.2f?1+(int)(Time.time*8)%2:0)];visual.flipX=direction<0;visual.color=stun>0?GameController.Cream:phaseLock>0?GameController.Gold:humanShield>0?new Color(1,.6f,.8f):Color.white;
    float scale=humanLow?.34f:1;visual.transform.localScale=new Vector3(type==12?1.12f:1,scale,1);visual.transform.localPosition=Vector3.up*(-.6875f+.875f*scale);
-   if(bar){bar.enabled=warning.enabled;bar.transform.localScale=new Vector3(1.2f*Mathf.Max(0,hp)/maxHp,.07f,1);bar.color=GameController.Pink;}
+   if(bar){bar.enabled=warning.enabled;bar.transform.localScale=new Vector3(1.2f*Mathf.Max(0,hp)/maxHp,.07f,1);bar.color=type==12&&wrathRecovery>0?GameController.Gold:GameController.Pink;}
    var hit=game.PlayerHitCenter-(Vector2)humanBox.bounds.center;if(Mathf.Abs(hit.x)<.8f&&Mathf.Abs(hit.y)<.6f)game.Damage(type==12?3:2,Mathf.Sign(hit.x));
   }
   void FixedUpdate(){
    if(!IsHuman||!game||game.mode!=ScreenMode.Play||hp<=0||!humanBody)return;
    humanGrounded=Physics2D.BoxCast(humanBody.position+Vector2.down*.59f,new Vector2(.62f,.12f),0,Vector2.down,.16f,1<<8).collider;
-   float target=game.playerBody.position.x;var velocity=humanBody.linearVelocity;
+   if(RecoverWrath())return;
+   float target=type==12?Mathf.Clamp(game.playerBody.position.x,arenaLeft,arenaRight):game.playerBody.position.x;var velocity=humanBody.linearVelocity;
    if(humanAlert<=0){velocity.x=0;humanBody.linearVelocity=velocity;return;}
-   if(nextNode>=0){var next=navigation[nextNode];target=(next.x+next.w*.5f)/GameController.PPU;}
+   if(type!=12&&nextNode>=0){var next=navigation[nextNode];target=(next.x+next.w*.5f)/GameController.PPU;}
    float move=Mathf.Abs(target-humanBody.position.x)>.15f?Mathf.Sign(target-humanBody.position.x):0;if(nextNode<0&&Mathf.Abs(game.playerBody.position.x-humanBody.position.x)<(type==11?1.1f:2.2f))move=0;
    if(move!=0)direction=move;
    humanLow=false;foreach(var hit in Physics2D.OverlapBoxAll(humanBody.position+new Vector2(direction*.65f,.34f),new Vector2(.7f,.68f),0,1<<8))if(!hit.usedByEffector)humanLow=true;
    humanBox.size=new Vector2(.75f,humanLow?.625f:1.375f);humanBox.offset=humanLow?Vector2.down*.375f:Vector2.zero;
-   float speed=(type==11?5.7f:type==12?4.7f:5.1f)*Mathf.Lerp(1,game.EncounterDifficulty,.4f);if(humanLow)speed=2.4f;
-   if(stun>0||humanWindup>0&&humanGrounded)move=0;
+   float speed=(type==11?5.7f:type==12?4.6f+wrathPhase*.45f:5.6f)*Mathf.Lerp(1,game.EncounterDifficulty,.4f);if(humanLow)speed=2.4f;
+   if(stun>0||humanWindup>0&&humanGrounded||type==12&&(phaseLock>0||wrathRecovery>0))move=0;
    velocity.x=Mathf.MoveTowards(velocity.x,move*speed,50*Time.fixedDeltaTime);
+   if(type==12&&wrathDash>0){bool safe=Physics2D.Raycast(humanBody.position+new Vector2(direction*.9f,-.6f),Vector2.down,1,1<<8).collider;if(safe)velocity.x=direction*11.5f;else wrathDash=0;}
+   if(type==12){var pos=humanBody.position;pos.x=Mathf.Clamp(pos.x,arenaLeft,arenaRight);humanBody.position=pos;}
    bool climb=nextNode>=0&&Mathf.Abs(target-humanBody.position.x)<2.1f&&navigation[nextNode].y<-((humanBody.position.y-.6875f)*GameController.PPU)-8;
    if(humanGrounded&&(move!=0||climb)&&!humanLow){bool edge=!Physics2D.Raycast(humanBody.position+new Vector2(move*.8f,-.6f),Vector2.down,.8f,1<<8).collider;bool wall=Physics2D.Raycast(humanBody.position,Vector2.right*move,.65f,1<<8).collider;if(edge||climb||wall)velocity.y=235f/GameController.PPU;}
    velocity.y=Mathf.Max(-28,velocity.y);humanBody.linearVelocity=velocity;
-   if(humanBody.position.y<-20)Hit(maxHp+1);
+   if(humanBody.position.y<-20&&type!=12)Hit(maxHp+1);
   }
  }
 }

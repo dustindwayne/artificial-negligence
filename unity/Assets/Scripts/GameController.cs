@@ -112,8 +112,8 @@ namespace ArtificialNegligence {
                 int type=(int)row.w;if(type==12&&stats.wrathFreed)continue;enemyIndex++;var sr=SpriteObject("Security / "+EnemyAgent.Names[type],enemyFrames[type*4],PixelCenter(row.x+7.5f,202.8f),8,false);
                 var e=sr.gameObject.AddComponent<EnemyAgent>();e.Initialize(this,type,row.x/PPU);enemies.Add(e);
             }
-            if(CityRoute.Boss(index)){
-                int bossType=6+CityRoute.Area(index)%3;var bossVisual=SpriteObject(EnemyAgent.Names[bossType],enemyFrames[bossType*4],PixelCenter(worldLength-165,193.68f),8,false);
+            if(CityRoute.Boss(index)||index==12&&!stats.wrathFreed&&stats.wrathEncounters==2){
+                int slot=CombatBalance.WrathSlot(index);int bossType=!stats.wrathFreed&&slot==stats.wrathEncounters?12:6+CityRoute.Area(index)%3;var bossVisual=SpriteObject(EnemyAgent.Names[bossType],enemyFrames[bossType*4],PixelCenter(worldLength-165,193.68f),8,false);
                 var boss=bossVisual.gameObject.AddComponent<EnemyAgent>();boss.Initialize(this,bossType,(worldLength-165)/PPU);enemies.Add(boss);
             }
             BuildSceneDepth();BuildLowPassages();ResetTraversal();ResetSupportScene();
@@ -218,7 +218,7 @@ namespace ArtificialNegligence {
             for(int i=bullets.Count-1;i>=0;i--){var b=bullets[i];if(!b.transform){bullets.RemoveAt(i);continue;}Vector2 prev=b.transform.position,next=prev+b.velocity*dt;b.transform.position=next;b.life-=dt;
                 if(Physics2D.Linecast(prev,next,1<<8).collider)b.life=0;
                 if(b.hostile){var center=PlayerHitCenter;var half=PlayerHitSize*.5f;if(Mathf.Abs(next.x-center.x)<half.x+.14f&&Mathf.Abs(next.y-center.y)<half.y+.07f){Damage(b.damage,Mathf.Sign(b.velocity.x),true);b.life=0;}else if(b.life>0)ScoreNearMiss(b,prev,next);}
-                else foreach(var e in enemies){if(!e||e.hp<=0||b.hit.Contains(e))continue;if(Mathf.Abs(next.x-e.transform.position.x)<(e.IsBoss?1.7f:.8f)&&Mathf.Abs(next.y-e.transform.position.y)<(e.IsBoss?1.3f:.75f)){b.hit.Add(e);e.Hit(b.publicAid?b.damage:stats.HitDamage(e.type));if(b.weaponKind==1){foreach(var nearby in enemies.Where(n=>n!=e&&n.hp>0&&Vector2.Distance(n.transform.position,e.transform.position)<2.8f).Take(2))nearby.Hit(Math.Max(1,stats.HitDamage(nearby.type)/2));}if(b.pierce--<=0)b.life=0;break;}}
+                else foreach(var e in enemies){if(!e||e.hp<=0||b.hit.Contains(e))continue;if(Mathf.Abs(next.x-e.transform.position.x)<(e.IsHuman?.65f:e.IsBoss?1.7f:.8f)&&Mathf.Abs(next.y-e.transform.position.y)<(e.IsHuman?.8f:e.IsBoss?1.3f:.75f)){b.hit.Add(e);e.Hit(b.publicAid?b.damage:stats.HitDamage(e.type),b.weaponKind);if(b.weaponKind==1){foreach(var nearby in enemies.Where(n=>n!=e&&n.hp>0&&Vector2.Distance(n.transform.position,e.transform.position)<2.8f).Take(2))nearby.Hit(Math.Max(1,stats.HitDamage(nearby.type)/2));}if(b.pierce--<=0)b.life=0;break;}}
                 if(b.life<=0){Destroy(b.transform.gameObject);bullets.RemoveAt(i);}
             }
         }
@@ -227,7 +227,7 @@ namespace ArtificialNegligence {
             if(stats.health<=0)SetMode(ScreenMode.Dead);
         }
         void Respawn(){stageHits++;EarnMomentum(-20);float x=playerBody.position.x*PPU;var safe=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x<x).OrderByDescending(r=>r.x).FirstOrDefault();playerBody.position=checkpointPosition;playerBody.linearVelocity=Vector2.zero;ResetTraversal();stats.health--;hurtCooldown=1;Toast("FELL INTO THE GRID / HEALTH "+stats.health);if(stats.health<=0)SetMode(ScreenMode.Dead);}
-        public void EnemyDown(EnemyAgent enemy){if(enemy.type==12){stats.wrathFreed=true;BeginNarrative(6,ScreenMode.Play);}stageKills++;EarnMomentum(enemy.IsBoss||enemy.type==12?40:20);int reward=enemy.IsBoss?60+level*10:4+level;stats.points+=reward;stats.score+=reward;string gain=stats.GainXp(enemy.IsBoss?80:12);SaveProgress();Burst(enemy.transform.position,Pink,15);Toast((enemy.IsBoss?"BOSS DEFEATED":EnemyAgent.Names[enemy.type]+" DISABLED")+" / +"+reward+" PTS / "+gain);}
+        public void EnemyDown(EnemyAgent enemy){if(enemy.type==12){stats.wrathEncounters=Math.Min(3,stats.wrathEncounters+1);stats.wrathFreed=stats.wrathEncounters>=3;BeginNarrative(stats.wrathFreed?6:stats.wrathEncounters==1?7:8,ScreenMode.Play);}stageKills++;EarnMomentum(enemy.IsBoss||enemy.type==12?40:20);int reward=enemy.IsBoss?60+level*10:4+level;stats.points+=reward;stats.score+=reward;string gain=stats.GainXp(enemy.IsBoss?80:12);SaveProgress();Burst(enemy.transform.position,Pink,15);Toast((enemy.type==12&&!stats.wrathFreed?"WRATH RETREATED":enemy.IsBoss?"BOSS DEFEATED":EnemyAgent.Names[enemy.type]+" DISABLED")+" / +"+reward+" PTS / "+gain);}
         public void Burst(Vector2 position,Color color,int count){count=Math.Max(2,Mathf.RoundToInt(count*new[]{.3f,.45f,.6f,.8f,1f,1.2f}[stats.GraphicsTier]));for(int i=0;i<count;i++){var sr=SpriteObject("Pixel spark",white,position,14,false);sr.color=color;sr.transform.localScale=Vector3.one*UnityEngine.Random.Range(.07f,.16f);float life=UnityEngine.Random.Range(.3f,.65f);effects.Add(new Effect{transform=sr.transform,visual=sr,velocity=UnityEngine.Random.insideUnitCircle*4,life=life,total=life});}}
         void TickEffects(float dt){for(int i=effects.Count-1;i>=0;i--){var e=effects[i];if(!e.transform){effects.RemoveAt(i);continue;}e.life-=dt;e.velocity+=Vector2.down*5*dt;e.transform.position+=(Vector3)(e.velocity*dt);var c=e.visual.color;c.a=e.life/e.total;e.visual.color=c;if(e.life<=0){Destroy(e.transform.gameObject);effects.RemoveAt(i);}}}
         AudioClip Tone(float frequency,float duration){int rate=22050;float[] samples=new float[(int)(duration*rate)];for(int i=0;i<samples.Length;i++)samples[i]=Mathf.Sin(2*Mathf.PI*frequency*i/rate)*Mathf.Pow(1-i/(float)samples.Length,2);var clip=AudioClip.Create("Synth effect",samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
@@ -288,27 +288,39 @@ namespace ArtificialNegligence {
             stats.graphicsCores=Enumerable.Range(0,75).Select(i=>"qa-character:"+i).ToList();stats.cityUnlocked=6;RefreshGraphics(true);characterReturn=ScreenMode.Gear;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-characters.png"));
             stats.character=1;stats.outfit=2;ApplyCharacter();if(playerFrames.Length!=8)throw new Exception("Character frames failed");SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-custom-survivor.png"));
             stats.graphicsCores=originalCores;RefreshGraphics(true);
-            int[] stages={5,11,17};foreach(int stage in stages){LoadLevel(stage);SetMode(ScreenMode.Play);var boss=enemies.First(e=>e.IsBoss);playerBody.position=(Vector2)boss.transform.position+Vector2.left*4;yield return new WaitForSecondsRealtime(2.8f);if(boss.AttackCount==0)throw new Exception("Boss cannot attack");boss.Hit(Mathf.CeilToInt(boss.maxHp*.6f));yield return new WaitForSecondsRealtime(2.8f);if(stage==11)CaptureQa(System.IO.Path.Combine(path,"unity-boss.png"));boss.Hit(999);}
+            stats.wrathFreed=true;stats.wrathEncounters=3;int[] stages={5,11,17};foreach(int stage in stages){LoadLevel(stage);SetMode(ScreenMode.Play);var boss=enemies.First(e=>e.IsBoss);playerBody.position=(Vector2)boss.transform.position+Vector2.left*4;yield return new WaitForSecondsRealtime(2.8f);if(boss.AttackCount==0)throw new Exception("Boss cannot attack");boss.Hit(Mathf.CeilToInt(boss.maxHp*.6f));yield return new WaitForSecondsRealtime(2.8f);if(stage==11)CaptureQa(System.IO.Path.Combine(path,"unity-boss.png"));boss.Hit(999);}
             LoadLevel(12);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(.3f);CaptureQa(System.IO.Path.Combine(path,"unity-datafarm.png"));LoadLevel(24);yield return new WaitForSecondsRealtime(.3f);CaptureQa(System.IO.Path.Combine(path,"unity-citadel.png"));
-            for(int musicStage=1;musicStage<=3;musicStage++){
-                LoadLevel(musicStage);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(1);
-                if(music.CurrentTrack!=MusicDirector.PickGameplay(musicStage)||!music.IsPlaying)throw new Exception("New gameplay track did not play / "+musicStage);
-            }
-            float musicPosition=music.PlaybackSeconds;SetMode(ScreenMode.Gear);yield return new WaitForSecondsRealtime(1);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(1);
-            if(music.CurrentTrack!="electronicpunk"||music.PlaybackSeconds<musicPosition-.1f)throw new Exception("Gameplay music did not resume after inventory");
+            LoadLevel(1);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(1);
+            var playedTracks=new System.Collections.Generic.HashSet<string>();playedTracks.Add(music.CurrentTrack);
+            for(int track=0;track<6;track++){string before=music.CurrentTrack;if(!music.IsPlaying)throw new Exception("Gameplay music not playing");music.QaEndGameplayTrack();yield return new WaitForSecondsRealtime(1);if(before==music.CurrentTrack||!music.IsPlaying)throw new Exception("Gameplay track repeated at its ending");playedTracks.Add(music.CurrentTrack);}
+            if(playedTracks.Count!=4)throw new Exception("Gameplay shuffle failed to include all four tracks");
+            string resumeTrack=music.CurrentTrack;float musicPosition=music.PlaybackSeconds;SetMode(ScreenMode.Gear);yield return new WaitForSecondsRealtime(1);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(1);
+            if(music.CurrentTrack!=resumeTrack||music.PlaybackSeconds<musicPosition-.1f)throw new Exception("Gameplay music did not resume after inventory");
+            LoadLevel(2);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(.3f);if(music.CurrentTrack!=resumeTrack)throw new Exception("Stage transition restarted gameplay playlist");
             if(looperFrames[0].texture.width!=64||itemFrames[0].texture.width!=64||enemyFrames[0].texture.width!=192||Mathf.Abs(looperFrames[0].bounds.size.x-2)>.001f)throw new Exception("High-density pixel frame size or world footprint failed");
-            Debug.Log("AN_MUSIC_ART_QA_PASS / three new streaming tracks, inventory resume, 64px characters and items, 192px enemies, unchanged world footprint");
+            Debug.Log("AN_MUSIC_ART_QA_PASS / four-track no-repeat shuffle, one pass per track, inventory and stage continuity, 64px characters and items, 192px enemies, unchanged world footprint");
             if(NextAdaptivePressure(0,0,5,1,false)<=0||NextAdaptivePressure(0,6,0,.6f,false)>=0||NextAdaptivePressure(0,0,0,0,true)>=0||NextAdaptivePressure(.45f,0,5,1,false)>.45f||NextAdaptivePressure(-.3f,9,0,0,true)<-.3f)throw new Exception("Adaptive difficulty bounds or performance response failed");
             Debug.Log("AN_ADAPTIVE_QA_PASS / strong clears, struggling clears, defeat, upper and lower bounds");
-            stats.wrathFreed=false;stats.seenStoryScenes.Remove(5);stats.seenStoryScenes.Remove(6);LoadLevel(4);SetMode(ScreenMode.Play);
-            var wrath=enemies.First(e=>e.type==12);playerBody.position=(Vector2)wrath.transform.position+Vector2.left*5;
-            if(!TickNarrativeEncounter()||mode!=ScreenMode.Narrative)throw new Exception("Wrath introduction failed");
-            yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-encounter.png"));FinishNarrative();wrath.Hit(9999);
-            if(!stats.wrathFreed||!stats.CharacterUnlocked(4)||mode!=ScreenMode.Narrative)throw new Exception("Wrath liberation failed");
-            yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-liberation.png"));AdvanceNarrative();AdvanceNarrative();
+            stats.wrathFreed=false;stats.wrathEncounters=0;stats.seenStoryScenes.RemoveAll(id=>id>=5);
+            for(int encounter=0;encounter<3;encounter++){
+             int encounterStage=new[]{5,11,12}[encounter];LoadLevel(encounterStage);SetMode(ScreenMode.Play);var wrath=enemies.First(e=>e.type==12);playerBody.position=(Vector2)wrath.transform.position+Vector2.left*4;
+             if(!TickNarrativeEncounter()||mode!=ScreenMode.Narrative)throw new Exception("Wrath introduction failed");
+             yield return new WaitForSecondsRealtime(.15f);if(encounter==0)CaptureQa(System.IO.Path.Combine(path,"unity-wrath-encounter.png"));FinishNarrative();
+             int startHp=wrath.hp;wrath.Hit(99999,3);if(wrath.hp<=0||wrath.hp<startHp-Mathf.CeilToInt(startHp*.065f))throw new Exception("Wrath burst protection failed");int once=wrath.hp;wrath.Hit(99999,3);if(wrath.hp!=once)throw new Exception("Same-frame Wrath burst bypassed protection");
+             yield return new WaitForSecondsRealtime(2.8f);if(wrath.AttackCount==0)throw new Exception("Wrath cannot attack");
+             int attacks=wrath.AttackCount;for(int hit=0;wrath.CombatPhase<2&&hit<100;hit++){wrath.QaStepCombat(.2f);wrath.Hit(99999,3);}if(wrath.CombatPhase!=2||wrath.hp<=0)throw new Exception("Wrath phase two missing");
+             yield return new WaitForSecondsRealtime(4);if(wrath.AttackCount<=attacks)throw new Exception("Wrath phase two cannot attack");
+             for(int hit=0;wrath.CombatPhase<3&&hit<100;hit++){wrath.QaStepCombat(.2f);wrath.Hit(99999,3);}if(wrath.CombatPhase!=3||wrath.hp<=0)throw new Exception("Wrath phase three missing");
+             yield return new WaitForSecondsRealtime(4);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-phase-three-"+encounter+".png"));
+             wrath.QaVerifyFallRecovery();if(stats.wrathEncounters!=encounter||stats.wrathFreed)throw new Exception("Fall recovery granted Wrath unlock");
+             for(int hit=0;wrath.hp>0&&hit<200;hit++){wrath.QaStepCombat(.2f);wrath.Hit(99999,3);}if(wrath.hp>0)throw new Exception("Wrath cannot be defeated legitimately");
+             if(stats.wrathEncounters!=encounter+1||stats.wrathFreed!=(encounter==2)||stats.CharacterUnlocked(4)!=(encounter==2))throw new Exception("Wrath three-encounter unlock gate failed");
+             if(mode!=ScreenMode.Narrative)throw new Exception("Wrath retreat/liberation scene missing");yield return new WaitForSecondsRealtime(.15f);CaptureQa(System.IO.Path.Combine(path,encounter==2?"unity-wrath-liberation.png":"unity-wrath-retreat-"+encounter+".png"));AdvanceNarrative();AdvanceNarrative();
+             var saved=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(stats));saved.EnsureCollection();if(saved.wrathEncounters!=encounter+1)throw new Exception("Wrath encounter progress did not save");
+            }
             stats.character=4;ApplyCharacter();if(playerFrames[0]!=wrathFrames[0])throw new Exception("Playable Wrath art failed");
             characterReturn=ScreenMode.Play;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-unlocked.png"));
-            Debug.Log("AN_WRATH_QA_PASS / hostile introduction, liberation, saved scenes, playable unlock and original art");
+            Debug.Log("AN_WRATH_QA_PASS / boss stages 6 and 12, final level 13, three phases, burst/phase gates, distinct attacks, pit recovery, retreat scenes, persisted encounters and final-only unlock");
             VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 108 isolated atlas frames, compact HUD, collection, five characters, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
         }
     }

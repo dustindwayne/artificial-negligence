@@ -1,7 +1,7 @@
 # Artificial Negligence
 ## Story and campaign direction
 
-**Build 2.4.2:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, five playable characters, permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+**Build 2.4.3:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, five playable characters, permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
 
 **Restore reality. Keep AI public.**
 
@@ -22,9 +22,9 @@ His pack can break that connection. Every recovered GPU joins a distributed publ
 He is not collecting better graphics for himself. He is giving everyone their world back.
 
 ### The route through the city
-1. **Street Settlement — The first clear picture.** Looper reconnects a neighborhood relay. A face becomes recognizable; a sign becomes readable. The Auditor arrives to repossess the connection. First boss victory proves restoration is possible.
-2. **Market Rooftops — Nobody owns a thought.** Corporate patrols raid independent traders and repair crews. Looper finds Vale, a mechanic keeping the community's machines alive. Restored rooftops reveal routes and stories the glitch had hidden.
-3. **Transit Works — Keep it moving.** The Harvester diverts the city's power and compute toward private towers. The resistance reopens the distribution network and meets Rook, who has been guiding survivors through sealed districts.
+1. **Street Settlement — The first clear picture.** Looper reconnects a neighborhood relay. A face becomes recognizable; a sign becomes readable. Ai Wrath arrives to repossess the connection. The first boss victory forces his retreat, proving restoration is possible without yet breaking his program.
+2. **Market Rooftops — Nobody owns a thought.** Corporate patrols raid independent traders and repair crews. Looper finds Vale, a mechanic keeping the community's machines alive. Restored rooftops reveal routes and stories the glitch had hidden. Wrath returns for the second boss fight, and another retreat exposes cracks in his orders.
+3. **Transit Works — Keep it moving.** The Harvester diverts the city's power and compute toward private towers. Immediately after the second boss level, the third Wrath confrontation breaks the Sinister program and brings him into the resistance. The team reopens the distribution network and meets Rook, who has been guiding survivors through sealed districts.
 4. **Data Gardens — More than survival.** Mender protects public medical models and community archives from deletion. Restoring the gardens brings back details of everyday life: plants, murals, memories, and people the corporate index declared unnecessary.
 5. **Corporate Spire — No premium reality.** The Executor guards the access layer. The corporation offers Looper a place among the elite: one perfect life in exchange for leaving everyone else in the glitch. He refuses. The team breaks the monopoly and makes the restoration network impossible for any single owner to shut down.
 
@@ -73,6 +73,6 @@ The monopoly is broken, but other cities remain disconnected. Further campaign c
 
 ## The Sinister and Ai Wrath
 
-The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. Defeating him breaks that control; he joins the resistance and becomes playable. Short two-line artwork scenes carry this turn, with occasional checkpoint radio lines between major encounters.
+The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. The first two confrontations occur in boss levels 6 and 12. He retreats after both; cracks in his orders become visible. A third encounter in level 13 breaks the program on defeat, after which he joins the resistance and becomes playable. Short two-line artwork scenes introduce each encounter and show the retreats and liberation, with occasional checkpoint radio lines between major encounters.
 
 GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.

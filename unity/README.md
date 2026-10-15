@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D project / 2.4.2
+# Artificial Negligence — Unity 2D project / 2.4.3
 
 Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
@@ -37,3 +37,10 @@ Native progress is local; browser progress belongs to that browser/site. The leg
 Android updates use the current release manifest plus a frozen v2.3.0 bridge. Windows updates are full ZIPs. Web hosting uses static files and page reloads, with no Android updater. See ../docs/UPDATES.md and ../docs/WEB-HOSTING.md.
 
 Concept, world, gameplay vision and art direction: Dustin (dustindwayne). AI assisted programming, visuals, implementation and testing. See CREDITS.md, STORY.md and ROADMAP.md; STORY-PRESENTATION.md describes limited dialogue.
+
+
+## Combat and soundtrack
+
+Ai Wrath encounters are boss levels 6 and 12, then level 13 for his final defeat/unlock. Each fight has three damage-gated phases; guard disruption, armor counters, aimed fans, bursts, rushes and ground waves. First two wins trigger retreats. Existing unlocked saves remain unlocked. Bot/agent health and attack pressure are increased; bosses resist burst kills and Wrath recovers from pits without defeat credit.
+
+The four gameplay tracks play once each in shuffle-bag order with crossfades. Menus and stage changes retain the current track and playback position. Menu, boss, upgrade, victory and defeat contexts remain separate.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.3 — Wrath escalation and gameplay music
+
+- Ai Wrath fights in boss levels 6 and 12; the third encounter in level 13 grants the unlock. First two victories cause retreats.
+- Three phases, scaled health, per-hit/phase protection, guard disruption, aimed fans, bursts, rushes and ground waves. Falling cannot defeat or unlock him.
+- Increased regular enemy/agent durability and pressure; stronger other bosses and reduced stun locking.
+- Gameplay tracks play once before crossfading through a shuffle bag; no immediate repeats, and menu/stage playback continuity.
+- Existing unlocked Ai Wrath saves are retained.
+
 ## 2.4.2 — Controller and browser edition
 
 - Windows Xbox/XInput input and standard-mapped browser gamepads.

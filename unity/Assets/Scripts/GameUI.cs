@@ -78,7 +78,7 @@ namespace ArtificialNegligence {
             var objective=Panel(screenRoot,"Stage objective",329,12,370,57,Gold,.78f);
             Image(objective,"GPU",10,10,29,29,Color.white,itemFrames[0]);gpuLabel=Label(objective,"",48,4,93,24,20,Gold);
             nextLabel=Label(objective,"",149,5,209,23,16,Cream);objectiveFill=Image(objective,"Recovery progress",48,37,306,4,Gold);
-            bossHealthHud=Label(screenRoot,"",340,77,360,22,18,Pink);
+            bossHealthHud=Label(screenRoot,"",320,77,390,22,14,Pink);
             Button(screenRoot,"PACK",754,15,111,42,Cyan,()=>SetMode(ScreenMode.Gear));Button(screenRoot,"II",887,15,55,42,Cyan,Pause);
             buffPanel=Rect(screenRoot,"Active boosts",20,83,300,23).gameObject;buffLabel=Label(buffPanel.transform,"",0,0,300,23,16,Cyan);buffLabel.resizeTextForBestFit=true;buffLabel.resizeTextMinSize=12;buffLabel.resizeTextMaxSize=16;
             toastPanel=Panel(screenRoot,"Pickup notice",319,112,397,36,Gold,.85f).gameObject;toastLabel=Label(toastPanel.transform,"",10,2,377,32,18,Cream,TextAnchor.MiddleCenter);toastLabel.resizeTextForBestFit=true;toastLabel.resizeTextMinSize=13;toastLabel.resizeTextMaxSize=18;
@@ -95,7 +95,7 @@ namespace ArtificialNegligence {
             if(updateButtonLabel&&updater)updateButtonLabel.text=updater.ButtonText;
             if(mode!=ScreenMode.Play||!gpuLabel)return;UpdateSupportHud();
             if(xpHud)xpHud.text="LV "+stats.rank+" / XP "+stats.xp;if(xpFill)xpFill.rectTransform.sizeDelta=new Vector2(105*stats.xp/(float)stats.XpNeeded,4);
-            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>(e.IsBoss||e.type==12)&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp:"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
+            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>(e.IsBoss||e.type==12)&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp+(boss.type==12?" / "+boss.CombatTell:""):"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
             for(int i=0;i<10;i++)healthCells[i].color=i<Mathf.CeilToInt(stats.health/(float)stats.maxHealth*10)?Pink:new Color(.13f,.055f,.12f);
             if(miniPlayer)miniPlayer.rectTransform.anchoredPosition=new Vector2(60+playerBody.position.x/(worldLength/PPU)*572,-5);int count=0;
             foreach(var pickup in pickups.Where(p=>p.gpu)){if(count<miniGpus.Count)miniGpus[count].gameObject.SetActive(!pickup.taken);count++;}

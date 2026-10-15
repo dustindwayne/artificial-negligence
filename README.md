@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.2 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.3 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -20,18 +20,18 @@ The global AI explosion gave ordinary people freedom. The corporations fought to
 
 You are **Looper**. Recover the GPUs, restore the world, and keep AI in the hands of the people. Cross the city, find your equipment, and confront **the Sinister**—human agents and bots enforcing corporate control.
 
-The story continues through a first-run opening, short skippable artwork scenes, and occasional checkpoint transmissions. **Ai Wrath** begins as a Sinister elite. Break him free of the program, and he becomes an ally you can play. [Read the campaign outline](STORY.md).
+The story continues through a first-run opening, short skippable artwork scenes, and occasional checkpoint transmissions. **Ai Wrath** begins as a Sinister elite. Survive his first two boss encounters and defeat him in the third to break the program and unlock him as a playable ally. [Read the campaign outline](STORY.md).
 
 ---
 
 ## New in this update
 
-- **Controller support on Windows and web:** Xbox-style movement, combat, menus, dialogue, button prompts, and disconnect-to-pause. [Mapping and compatibility](docs/CONTROLS.md).
-- **Browser edition:** a playable WebGL build with local browser saves, a loading screen, fullscreen, and a game-world page theme. [FTP hosting guide](docs/WEB-HOSTING.md).
-- **Optional support:** the web page includes a voluntary Ko-fi link below the game, with no advertising or analytics scripts added.
-- **Documentation refresh:** current platform support, controls, build instructions, AI disclosure, historical records, and repaired text encoding.
+- **Ai Wrath is a recurring boss:** encounter him in boss levels **6 and 12**, then confront him a third time in **level 13**. He retreats from the first two fights; the final defeat frees and unlocks him.
+- **Three combat phases:** scaled boss health, burst protection, phase transitions, aimed volleys, sustained bursts, rushes and ground waves. Arc can disrupt his guard; Rail counters his armor. Attack tells and recovery windows reward dodging and timing.
+- **Harder opposition:** stronger bots and human agents, multi-shot gunner/shield attacks, faster pursuit and reduced hit-stun locking. Other bosses also have more health and burst protection.
+- **Less repetitive gameplay music:** each track plays once, then crossfades into a shuffled four-track rotation. Tracks never repeat immediately; menus and stage changes preserve playback.
 
-The previous update added ducking/sliding, earned AI assists, pursuing Sinister agents, Ai Wrath's liberation/playable unlock, short artwork dialogue, higher-detail sprites and three gameplay tracks. [Full changelog](CHANGELOG.md).
+Windows/web controller support, the self-hosted browser edition and optional Ko-fi support link remain available. [Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -84,7 +84,7 @@ The workshop upgrades owned equipment through Legend. **Ultra is found only in b
 
 ### Unlock the resistance
 
-Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, **Rook** by clearing stage 12, and **Ai Wrath** by freeing him from the Sinister program. Locked characters appear as silhouettes; the character screen shows the selected character, outfit, and equipped items.
+Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, **Rook** by clearing stage 12, and **Ai Wrath** after the third encounter in level 13. Already-unlocked saves retain him. Locked characters appear as silhouettes; the character screen shows the selected character, outfit, and equipped items.
 
 Characters currently share combat stats and inventory. Individual signature powers remain part of the [roadmap](ROADMAP.md).
 
