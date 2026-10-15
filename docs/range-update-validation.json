@@ -10,5 +10,12 @@
   },
   "requestPlan": [
     "AN_RANGE_PLAN / requests 27 / missing 21265770 / reused 19301378"
-  ]
+  ],
+  "publicGitHubRelease": "PASS: updater reconstructs verified APK using real public range downloads",
+  "publicRequestPlan": [
+    "AN_RANGE_PLAN / requests 26 / missing 21144624 / reused 19378700"
+  ],
+  "publicDirectDownload": "PASS: latest download SHA-256 matches manifest",
+  "publicRangeHeader": "PASS: HTTP 206, exact Content-Range and byte content",
+  "publicLegacyBridge": "PASS: manifest and sampled chunk hashes"
 }

@@ -33,3 +33,9 @@ python tools/publish_gameplay.py --version 2 --enemyHealth 1.1 --xp 1.1 --notes 
 ```
 
 Increase the balance version and commit `apk/gameplay.json`. Validated values save for offline play; new enemy health applies when the next district starts. New executable features still require an APK update.
+
+## Validation
+
+[Transport test results](range-update-validation.json) cover real player downloads against normal, transient-error, corrupt-response and range-ignoring servers; retrying verified cached data made zero requests. The public GitHub Release was then tested with the actual Unity updater: 26 grouped requests downloaded 21.1 MB and reused 19.4 MB for this build, followed by a matching full APK hash. The public full-download link and HTTP 206 byte ranges were independently verified. These numbers depend on the installed version and build.
+
+[Storage and bridge report](update-storage-validation.json) · [Android launcher resource report](android-icon-validation.json). Physical device installation testing remains outstanding.
