@@ -11,8 +11,8 @@ namespace ArtificialNegligence {
   void TickTitlePresentation(){
    bool visible=mode==ScreenMode.Title;
    if(titleRunner)titleRunner.enabled=visible;
-   if(!visible){if(titleWasVisible){if(playerVisual)playerVisual.enabled=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.GetComponent<SpriteRenderer>().enabled=true;}titleWasVisible=false;return;}
-   titleWasVisible=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.GetComponent<SpriteRenderer>().enabled=false;if(playerVisual)playerVisual.enabled=false;if(!titleRunner)return;
+   if(!visible){if(titleWasVisible){if(playerVisual)playerVisual.enabled=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.SetPresentationVisible(true);}titleWasVisible=false;return;}
+   titleWasVisible=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.SetPresentationVisible(false);if(playerVisual)playerVisual.enabled=false;if(!titleRunner)return;
    float t=Time.unscaledTime-titleStarted;
    var floor=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x/PPU>12&&r.x/PPU<27).FirstOrDefault();
    float left=floor.w>0?(floor.x+22)/PPU:18,right=floor.w>0?(floor.x+floor.w-22)/PPU:25;

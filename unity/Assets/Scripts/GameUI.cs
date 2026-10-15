@@ -49,7 +49,7 @@ namespace ArtificialNegligence {
             gpuLabel=pointsLabel=healthLabel=nextLabel=buffLabel=toastLabel=null;toastPanel=solveDock=buffPanel=null;miniGpus.Clear();gearLabels.Clear();gearColors.Clear();
             updateStatusLabel=updateButtonLabel=bossHealthHud=graphicsLabel=null;
             if(mode==ScreenMode.Play){BuildHud();return;}
-            if(mode==ScreenMode.Story){BuildStory();return;}if(mode==ScreenMode.Title){BuildTitle();return;}if(mode==ScreenMode.CityMap){BuildCityMap();return;}
+            if(mode==ScreenMode.Narrative){BuildNarrative();return;}if(mode==ScreenMode.Story){BuildStory();return;}if(mode==ScreenMode.Title){BuildTitle();return;}if(mode==ScreenMode.CityMap){BuildCityMap();return;}
             Image(screenRoot,"Dim world",0,0,960,540,new Color(.001f,.01f,.02f,.75f));
             string title=mode==ScreenMode.PuzzleResult?"TERMINAL RESULT":mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Characters?"CHARACTER / LOADOUT":mode==ScreenMode.Gear?"INVENTORY":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?"AI LIBERATED":mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
             Color accent=mode==ScreenMode.Dead?Pink:Cyan;var window=Panel(screenRoot,title,42,30,876,480,accent,.91f);
@@ -82,19 +82,19 @@ namespace ArtificialNegligence {
             buffPanel=Rect(screenRoot,"Active boosts",20,83,300,23).gameObject;buffLabel=Label(buffPanel.transform,"",0,0,300,23,16,Cyan);buffLabel.resizeTextForBestFit=true;buffLabel.resizeTextMinSize=12;buffLabel.resizeTextMaxSize=16;
             toastPanel=Panel(screenRoot,"Pickup notice",319,112,397,36,Gold,.85f).gameObject;toastLabel=Label(toastPanel.transform,"",10,2,377,32,18,Cream,TextAnchor.MiddleCenter);toastLabel.resizeTextForBestFit=true;toastLabel.resizeTextMinSize=13;toastLabel.resizeTextMaxSize=18;
             if(Application.isMobilePlatform||qaMode){
-                ActionControl("LEFT","<",18,443,77,Cyan,null,v=>leftHeld=v);ActionControl("RIGHT",">",107,443,77,Cyan,null,v=>rightHeld=v);
+                ActionControl("LEFT","<",18,443,77,Cyan,null,v=>leftHeld=v);ActionControl("RIGHT",">",107,443,77,Cyan,null,v=>rightHeld=v);ActionControl("DUCK","v",202,460,60,Cyan,null,v=>duckHeld=v);ActionControl("SLIDE",">>",275,460,60,Cyan,Slide);
                 ActionControl("DASH",">>",664,460,60,Cyan,Dash);ActionControl("JUMP","^",745,423,94,Cyan,null,v=>jumpHeld=v);ActionControl(stats.HasWeapon?"FIRE":"STRIKE",stats.HasWeapon?"*":"+",856,444,76,Gold,null,v=>fireHeld=v);
-            }else Label(screenRoot,"A/D  MOVE     SPACE  JUMP     J  FIRE     SHIFT  DASH     I  INVENTORY     C  CHARACTER     ESC  PAUSE",28,506,904,22,14,Cyan,TextAnchor.MiddleCenter);
-            solveDock=Button(screenRoot,"CONNECT / E",376,435,208,44,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;UpdateUi();
+            }else Label(screenRoot,"A/D MOVE / SPACE JUMP / S DUCK / CTRL SLIDE / J ATTACK / SHIFT DASH\nR CHAT / Q SUPPORT TYPE / I INVENTORY / C CHARACTER / ESC PAUSE",28,491,904,40,13,Cyan,TextAnchor.MiddleCenter);
+            solveDock=Button(screenRoot,"CONNECT / E",381,411,220,35,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;BuildSupportHud();UpdateUi();
         }
         void UpdateUi(){
             if(graphicsLabel)graphicsLabel.text=RendererProgress.Progress(stats);
             if(canvas){var safe=Screen.safeArea;canvas.scaleFactor=Mathf.Min(safe.width/960f,safe.height/540f);uiRoot.anchoredPosition=(safe.center-new Vector2(Screen.width/2f,Screen.height/2f))/Mathf.Max(.01f,canvas.scaleFactor);}
             if(updateStatusLabel&&updater)updateStatusLabel.text=updater.Status;
             if(updateButtonLabel&&updater)updateButtonLabel.text=updater.ButtonText;
-            if(mode!=ScreenMode.Play||!gpuLabel)return;
+            if(mode!=ScreenMode.Play||!gpuLabel)return;UpdateSupportHud();
             if(xpHud)xpHud.text="LV "+stats.rank+" / XP "+stats.xp;if(xpFill)xpFill.rectTransform.sizeDelta=new Vector2(105*stats.xp/(float)stats.XpNeeded,4);
-            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>e.IsBoss&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp:"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
+            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>(e.IsBoss||e.type==12)&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp:"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
             for(int i=0;i<10;i++)healthCells[i].color=i<Mathf.CeilToInt(stats.health/(float)stats.maxHealth*10)?Pink:new Color(.13f,.055f,.12f);
             if(miniPlayer)miniPlayer.rectTransform.anchoredPosition=new Vector2(60+playerBody.position.x/(worldLength/PPU)*572,-5);int count=0;
             foreach(var pickup in pickups.Where(p=>p.gpu)){if(count<miniGpus.Count)miniGpus[count].gameObject.SetActive(!pickup.taken);count++;}
@@ -135,11 +135,11 @@ namespace ArtificialNegligence {
         }
         void BuildCharacters(RectTransform window){
             stats.EnsureCollection();
-            for(int i=0;i<4;i++){int choice=i;bool unlocked=stats.CharacterUnlocked(i);float x=28+i*130;var card=Panel(window,"Ally / "+i,x,103,120,212,stats.character==i?Gold:Cyan);
-                Image(card,"Character silhouette or portrait",18,8,84,94,unlocked?Color.white:new Color(0,0,0,1),CharacterFrame(i,0)).preserveAspect=true;
-                Label(card,RunStats.Characters[i],5,105,110,27,22,unlocked?Cream:new Color(.5f,.6f,.65f),TextAnchor.MiddleCenter);
-                Label(card,unlocked?stats.character==i?"ACTIVE":"UNLOCKED":i==1?"24 GPUS":i==2?"CLEAR STAGE 6":"CLEAR STAGE 12",5,138,110,27,14,Cyan,TextAnchor.MiddleCenter);
-                var select=Button(card,unlocked?stats.character==i?"ACTIVE":"SWITCH":"LOCKED",8,176,104,28,stats.character==i?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});select.GetComponentInChildren<Text>().fontSize=16;select.interactable=unlocked&&stats.character!=i;
+            for(int i=0;i<5;i++){int choice=i;bool unlocked=stats.CharacterUnlocked(i);float x=28+i*104;var card=Panel(window,"Ally / "+i,x,103,96,212,stats.character==i?Gold:Cyan);
+                Image(card,"Character silhouette or portrait",8,8,80,94,unlocked?Color.white:new Color(0,0,0,1),CharacterFrame(i,0)).preserveAspect=true;
+                Label(card,RunStats.Characters[i],3,105,90,27,18,unlocked?Cream:new Color(.5f,.6f,.65f),TextAnchor.MiddleCenter);
+                Label(card,unlocked?stats.character==i?"ACTIVE":"UNLOCKED":i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":"FREE AI WRATH",3,138,90,27,12,Cyan,TextAnchor.MiddleCenter);
+                var select=Button(card,unlocked?stats.character==i?"ACTIVE":"SWITCH":"LOCKED",6,176,84,28,stats.character==i?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});select.GetComponentInChildren<Text>().fontSize=16;select.interactable=unlocked&&stats.character!=i;
             }
             var preview=Panel(window,"Equipped loadout",562,102,286,216,Gold,.8f);
             Image(preview,"Selected character",5,13,100,140,Color.white,CharacterFrame(stats.character,0)).preserveAspect=true;

@@ -24,9 +24,12 @@ namespace ArtificialNegligence {
                 if(motif==3&&i%2==0){int highX=upperX+upperWidth-34,highY=upperY-28;add("platform",cursor+highX,highY,64,8);add("gpu",cursor+highX+25,highY-28,0,0);}
                 add("gpu",cursor+roofX+roofWidth/2-6,roofY-27,0,0);
                 add("gpu",cursor+upperX+38,upperY-47,0,0);
-                add("gpu",cursor+width-55,i%2==0?169:193,0,0);
+                add("gpu",cursor+width-(i%3==1?140:55),i%2==0?169:193,0,0);
+                if(i%3==1){add("crawl",cursor+width-90,188,64,18);add("gpu",cursor+width-64,207,0,1);}
                 add("box",cursor+(i==0?100:24),200,0,0);if(motif==0||i%2==0)add("box",cursor+width-90,200,0,0);
                 int enemy=motif==2?(i%2==0?4:0):motif==4?(i%3==0?3:2):motif==3?(i%2==0?5:1):(i+stage/6)%Math.Min(6,3+stage);
+                if(i>0&&(i+stage)%3==1)enemy=9+(stage+i-1)%3;
+                if(stage%30==4&&i==count-1)enemy=12;
                 if(i>0&&(motif!=0||i%2==1))add("enemy",cursor+width-110,200,enemy,0);
                 if(i%3==1||motif==0&&i%3==2)add("terminal",cursor+18,198,0,0);
                 if(i%3==0)add("checkpoint",cursor+12,198,0,0);

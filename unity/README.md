@@ -32,3 +32,8 @@ Progress is local. The migration from the older menu-granted loadout backs up pr
 Android uses the versioned GitHub Release APK and reusable-region manifest in apk/. One older upgrade bridge remains. Windows downloads are full ZIPs. No ads or analytics are included.
 
 See ../STORY.md and ../CREDITS.md for campaign direction and AI disclosure. Ally signature powers remain planned; current characters share combat stats and equipment.
+
+
+## 2.4.1 additions
+
+See STORY-PRESENTATION.md for limited dialogue scenes. Duck: S/Down; moving slide: Ctrl; earned chat assist: R; assist type: Q. Ai Wrath unlocks through his liberation encounter. Three new gameplay tracks join the music rotation.

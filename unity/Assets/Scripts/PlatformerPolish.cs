@@ -9,8 +9,8 @@ namespace ArtificialNegligence {
         class DepthObject {public Transform transform;public Vector3 start;public float parallax;}
         readonly List<DepthObject> depth=new List<DepthObject>();readonly List<SpriteRenderer> rain=new List<SpriteRenderer>();
         readonly List<SpriteRenderer> checkpoints=new List<SpriteRenderer>();readonly List<SpriteRenderer> hazards=new List<SpriteRenderer>();
-        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);}
-        public void Dash(){if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
+        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);if(index%6==0&&!qaMode)BeginNarrative((index/6)%5,ScreenMode.Play);}
+        public void Dash(){if(grounded&&(lowStance||duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow))){Slide();return;}if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
         public void BuildSceneDepth(){
             depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=followVelocity=0;dashUsed=false;wasGrounded=false;
             var random=new System.Random(814+level*127);int area=CityRoute.Area(level);
@@ -58,7 +58,7 @@ namespace ArtificialNegligence {
             dashTime=Mathf.Max(0,dashTime-dt);dashCooldown=Mathf.Max(0,dashCooldown-dt);
             landingTimer=Mathf.Max(0,landingTimer-dt);if(grounded){dashUsed=false;if(!wasGrounded){landingTimer=.14f;Burst(playerBody.position+Vector2.down*.65f,Cream,5);}}wasGrounded=grounded;
             trailClock-=dt;if(dashTime>0&&trailClock<=0){Burst(playerBody.position,Cyan,2);trailClock=.04f;}
-            foreach(var cp in checkpoints){if(cp&&Mathf.Abs(cp.transform.position.x-playerBody.position.x)<.7f&&Mathf.Abs(cp.transform.position.y-playerBody.position.y)<1&&cp.color!=Cyan){checkpointPosition=new Vector2(cp.transform.position.x,-201/PPU);cp.color=Cyan;Toast("CHECKPOINT SYNCED");}}
+            foreach(var cp in checkpoints){if(cp&&Mathf.Abs(cp.transform.position.x-playerBody.position.x)<.7f&&Mathf.Abs(cp.transform.position.y-playerBody.position.y)<1&&cp.color!=Cyan){checkpointPosition=new Vector2(cp.transform.position.x,-201/PPU);cp.color=Cyan;Toast("CHECKPOINT SYNCED");CheckpointDialogue();}}
             if(Time.time%3>=1.1f)foreach(var hazard in hazards)if(hazard&&Mathf.Abs(hazard.transform.position.x-playerBody.position.x)<.75f&&Mathf.Abs(hazard.transform.position.y-playerBody.position.y)<.8f)Damage(1,Mathf.Sign(playerBody.position.x-hazard.transform.position.x),true);
         }
         void BuildCityMap(){

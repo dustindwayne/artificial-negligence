@@ -1,3 +1,11 @@
+# 2.4.1 — Sinister / public signal
+
+- Added ducking, sliding, and low routes.
+- Added earned AI assistance with a separate compute bank; permanent GPU visual progress remains intact.
+- Added pursuing human Sinister agents and Ai Wrath: hostile elite, liberated ally, then playable unlock.
+- Added brief artwork dialogue scenes and checkpoint transmissions.
+- Added three gameplay music tracks and higher detail pixel textures.
+
 # Changelog
 
 ## 2.4.0

@@ -6,6 +6,12 @@ using UnityEngine;
 namespace ArtificialNegligence {
     [Serializable] public partial class RunStats {
         public bool storySeen;
+        public int compute,momentum;
+        public const int ComputeCapacity=12,SupportCost=3;
+        public bool SupportReady {get{return momentum>=100&&compute>=SupportCost;}}
+        public void AddCompute(){compute=Math.Min(ComputeCapacity,compute+1);}
+        public void AddMomentum(int amount){momentum=Mathf.Clamp(momentum+amount,0,100);}
+        public bool SpendSupport(){if(!SupportReady)return false;compute-=SupportCost;momentum=0;return true;}
         public int points, score, speed, vitality, health = 5, maxHealth = 5;
         public int[] gear = {0,0,0};
         public System.Collections.Generic.List<string> graphicsCores=new System.Collections.Generic.List<string>();
@@ -92,7 +98,7 @@ namespace ArtificialNegligence {
             }
         }
     }
-    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult,Characters,Story}
+    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult,Characters,Story,Narrative}
     public class TerminalData {
         public LogicPuzzle puzzle;public bool attempted,solved;
         public bool Answer(int choice) {if(attempted)return false;attempted=true;solved=choice==(puzzle.circuit?puzzle.circuitTarget:puzzle.correct);return solved;}

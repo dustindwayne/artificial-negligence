@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.0";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=240;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.1";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=241;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -64,8 +64,9 @@ public static class BuildGame {
             long sum=0;var protocol=new List<string>();foreach(var chunk in UpdateChunks.Read(baseline)){Assert(chunk.data.Length<=UpdateChunks.Max&&chunk.offset==sum,"Chunk offsets invalid");sum+=chunk.data.Length;protocol.Add(chunk.offset+","+chunk.data.Length+","+chunk.hash);}
             Assert(sum==new FileInfo(baseline).Length,"Chunk reconstruction length invalid");File.WriteAllLines(Path.Combine(Path.GetDirectoryName(baseline),"protocol-csharp.txt"),protocol);
         }
-        foreach(var name in new[]{"menu","gameplay","upgrades","bosscombat","victory","gameover"})Assert(Resources.Load<AudioClip>("Music/"+name)?.length>0,"Music missing: "+name);
+        foreach(var name in new[]{"menu","gameplay","level99","glitch8bit","electronicpunk","upgrades","bosscombat","victory","gameover"})Assert(Resources.Load<AudioClip>("Music/"+name)?.length>0,"Music missing: "+name);
         Assert(MusicDirector.Pick(ScreenMode.Title,false)=="menu"&&MusicDirector.Pick(ScreenMode.Play,false)=="gameplay"&&MusicDirector.Pick(ScreenMode.Play,true)=="bosscombat"&&MusicDirector.Pick(ScreenMode.Shop,false)=="upgrades"&&MusicDirector.Pick(ScreenMode.Gear,true)=="upgrades"&&MusicDirector.Pick(ScreenMode.Clear,false)=="victory"&&MusicDirector.Pick(ScreenMode.Dead,true)=="gameover","Music state mapping failed");
+        Assert(Enumerable.Range(0,4).Select(i=>MusicDirector.PickGameplay(i)).Distinct().Count()==4&&MusicDirector.PickGameplay(1,1)=="glitch8bit"&&MusicDirector.RotationDuration(20)==60,"Gameplay music rotation failed");
         var progression=new RunStats();progression.GainXp(300);Assert(progression.rank>=3&&progression.talents>=2&&progression.WeaponCount==0&&progression.SuitCount==0,"Leveling granted equipment");
         progression.points=500;Assert(progression.Train(true)=="WEAPON MASTERY +1"&&progression.power==1,"Talent purchase failed");
         progression.Discover(1,1,1);progression.SelectEquipment(1,1);int arcShield=progression.HitDamage(3),arcHeavy=progression.HitDamage(2);Assert(arcShield>arcHeavy,"Arc counters missing");
@@ -100,8 +101,8 @@ public static class BuildGame {
         var oldSave=new RunStats{collectionVersion=1,rank=7,gear=new[]{2,4,3},weapon=3,suit=2,maxHealth=8};oldSave.EnsureCollection();Assert(oldSave.WeaponCount==0&&oldSave.SuitCount==0&&oldSave.rank==7&&oldSave.maxHealth==5,"Legacy menu grants remain");
         Assert(inventory.character==0&&RunStats.Characters[0]=="LOOPER"&&!inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"Starter or locked characters wrong");inventory.rank=1;inventory.graphicsCores=Enumerable.Range(0,24).Select(i=>"unlock:"+i).ToList();Assert(inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"GPU character unlock");inventory.cityUnlocked=6;Assert(inventory.CharacterUnlocked(2)&&!inventory.CharacterUnlocked(3),"Boss character unlock");
         var inventorySave=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(inventory));inventorySave.EnsureCollection();Assert(inventorySave.WeaponCount==2&&inventorySave.SuitCount==2&&inventorySave.weaponRarities[3]==3&&inventorySave.armorRarities[2]==4&&inventorySave.CharacterUnlocked(2),"Collection save failed");
-        foreach(var spec in new[]{new[]{"looper","4","2","32","32","16"},new[]{"survivors-v3","8","3","32","32","16"},new[]{"enemies-v3","4","9","128","80","40"},new[]{"items-v3","4","4","32","32","16"},new[]{"ai_ships","4","1","128","64","16"}}){
-            var frames=SpriteAtlas.Load(spec[0],int.Parse(spec[1]),int.Parse(spec[2]),int.Parse(spec[3]),int.Parse(spec[4]),int.Parse(spec[5]),spec[0]!="items-v3"&&spec[0]!="ai_ships");
+        foreach(var spec in new[]{new[]{"looper","4","2","64","64","32"},new[]{"survivors-v3","8","3","64","64","32"},new[]{"enemies-v3","4","9","192","120","60"},new[]{"items-v3","4","4","64","64","32"},new[]{"ai_ships","4","1","128","64","16"},new[]{"sinister-agents","4","3","64","64","32"},new[]{"ai-wrath","4","2","64","64","32"}}){
+            var frames=SpriteAtlas.Load(spec[0],int.Parse(spec[1]),int.Parse(spec[2]),int.Parse(spec[3]),int.Parse(spec[4]),int.Parse(spec[5]),spec[0]!="items-v3"&&spec[0]!="ai_ships",spec[0]=="enemies-v3"?3:spec[0]=="ai_ships"?2:4);
             foreach(var frame in frames){var texture=frame.texture;var pixels=texture.GetPixels32();Assert(pixels.Any(c=>c.a>24),"Empty normalized sprite");for(int y=0;y<texture.height;y++)for(int x=0;x<texture.width;x++)if(x<2||y<2||x>=texture.width-2||y>=texture.height-2)Assert(pixels[y*texture.width+x].a==0,"Sprite gutter clipped / "+frame.name);}
         }
         Debug.Log("AN_COLLECTION_PASS / migration, zero starter/XP gear, individual finds, manual equipping, duplicates, armor swaps, gameplay character unlocks, saves, 88 sprite gutters");
@@ -126,7 +127,7 @@ public static class BuildGame {
             for(int level=0;level<60;level++){
                 var rows=CityRoute.Generate(level);var floors=rows.Where(r=>r.kind=="platform"&&r.y==218).OrderBy(r=>r.x).ToList();
                 var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);var physics=scene.GetPhysicsScene2D();
-                foreach(var row in rows.Where(r=>r.kind=="platform")){
+                foreach(var row in rows.Where(r=>r.kind=="platform"||r.kind=="crawl")){
                     var go=new GameObject("Validation platform");SceneManager.MoveGameObjectToScene(go,scene);go.transform.position=GameController.PixelCenter(row.x+row.w/2,row.y+row.h/2);var box=go.AddComponent<BoxCollider2D>();box.size=new Vector2(row.w/16,row.h/16);
                     if(row.h<15){var effector=go.AddComponent<PlatformEffector2D>();effector.useOneWay=true;effector.surfaceArc=180;box.usedByEffector=true;}
                 }
@@ -147,6 +148,7 @@ public static class BuildGame {
                     Assert(hit,"Unreachable rooftop / "+level+" / "+roof.x);reachable.Add(roof);
                 }
                 foreach(var gpu in rows.Where(r=>r.kind=="gpu")){
+                    collider.size=new Vector2(12f/16,(gpu.h==1?10f:22f)/16);collider.offset=new Vector2(0,gpu.h==1?-6f/16:0);
                     bool hit=reachable.Where(r=>Mathf.Abs(r.y-(gpu.y+6))<80&&r.x<gpu.x+100&&r.x+r.w>gpu.x-100).OrderBy(r=>Mathf.Abs(r.y-(gpu.y+27))).Any(r=>attempt(r,GameController.PixelCenter(gpu.x+6,gpu.y+6),12,15));
                     Assert(hit,"Unreachable generated GPU / "+level+" / "+gpu.x);gpuCount++;
                     if(!reachable.Any(r=>gpu.x+6>=r.x-12&&gpu.x+6<=r.x+r.w+12&&Mathf.Abs((r.y-11)-(gpu.y+6))<=17))jumpOnly++;

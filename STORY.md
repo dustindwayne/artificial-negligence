@@ -66,3 +66,10 @@ The monopoly is broken, but other cities remain disconnected. Further campaign c
 
 ### Closing line
 > Reality is not a subscription.
+
+
+## The Sinister and Ai Wrath
+
+The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. Defeating him breaks that control; he joins the resistance and becomes playable. Short two-line artwork scenes carry this turn, with occasional checkpoint radio lines between major encounters.
+
+GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.
