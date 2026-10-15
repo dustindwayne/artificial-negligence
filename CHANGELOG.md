@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.3.0
+
+- Faster update transport: background/cached indexing, grouped ranges, four concurrent downloads, verified resume and full-download fallback.
+- One Release APK per version; obsolete chunks removed while one legacy bridge remains.
+- Explicit Android adaptive, round/legacy launcher icon assignments using Looper artwork.
+- Clean main menu without control slogans or gameplay scenery behind the buttons.
+
 ## 2.2.1
 
 - Looper-led logo applied to the title screen, Android app icon and README.

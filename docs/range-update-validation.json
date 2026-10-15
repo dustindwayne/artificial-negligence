@@ -1,0 +1,14 @@
+{
+  "normal": "PASS: partial ranges reconstruct exact APK",
+  "resume": "PASS: verified cached data; zero network requests",
+  "flaky": "PASS: retries recover from HTTP 503 and corrupted bytes",
+  "fallback": "PASS: server ignoring Range falls back to full verified APK",
+  "serverRequests": {
+    "normal": 27,
+    "flaky": 117,
+    "full": 5
+  },
+  "requestPlan": [
+    "AN_RANGE_PLAN / requests 27 / missing 21265770 / reused 19301378"
+  ]
+}

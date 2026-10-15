@@ -58,13 +58,12 @@ namespace ArtificialNegligence {
             if(mode==ScreenMode.Characters)BuildCharacters(window);else if(mode==ScreenMode.PuzzleResult)BuildPuzzleResult(window);else if(mode==ScreenMode.Shop)BuildShop(window);else if(mode==ScreenMode.Gear)BuildGear(window);else if(mode==ScreenMode.Puzzle)BuildPuzzle(window);else if(mode==ScreenMode.Pause)BuildPause(window);else if(mode==ScreenMode.Settings)BuildSettings(window);else BuildEnd(window);
         }
         void BuildTitle(){
-            Image(screenRoot,"Tint",0,0,960,540,new Color(.001f,.01f,.02f,.2f));var frame=Panel(screenRoot,"Campaign title",14,14,932,512,Cyan,.35f);
+            Image(screenRoot,"Tint",0,0,960,540,new Color(.001f,.01f,.02f,1));var frame=Panel(screenRoot,"Campaign title",14,14,932,512,Cyan,.35f);
             var logoTexture=Resources.Load<Texture2D>("Art/Logo");var logo=Sprite.Create(logoTexture,new Rect(0,0,logoTexture.width,logoTexture.height),new Vector2(.5f,.5f),100);
             Image(frame,"Artificial Negligence logo",28,50,390,390,Color.white,logo);
             Label(frame,"ABSORB THE AI.",459,78,422,53,42,Cream);Label(frame,"KEEP IT PUBLIC.",459,125,422,53,42,Gold);
-            Label(frame,"30 CITY STAGES / ROOFTOPS / BOSS UPLINKS",459,189,427,32,23,Cyan);
-            Button(frame,"CONTINUE / START",486,238,350,58,Gold,StartRun);Button(frame,"SETTINGS",486,308,350,48,Cyan,()=>SetMode(ScreenMode.Settings));Button(frame,"QUIT",486,368,350,44,Cyan,()=>Application.Quit());
-            Label(frame,"MOVE / JUMP / PULSE / SOLVE",27,453,660,32,23,Cyan);Label(frame,"UNITY EDITION",684,453,220,32,21,Gold,TextAnchor.MiddleRight);
+            Button(frame,PlayerPrefs.HasKey("progress-v2")?"CONTINUE":"START GAME",486,221,350,58,Gold,StartRun);Button(frame,"SETTINGS",486,296,350,48,Cyan,()=>SetMode(ScreenMode.Settings));Button(frame,"QUIT",486,361,350,44,Cyan,()=>Application.Quit());
+            Label(frame,"v"+Application.version,789,470,115,24,18,Cyan,TextAnchor.MiddleRight);
         }
         void BuildHud(){
             // One compact status card; secondary progression lives in pause/collection.

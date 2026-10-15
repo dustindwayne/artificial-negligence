@@ -69,8 +69,14 @@ The progression concept and creative direction came from Dustin. AI assisted imp
 
 ## Collection and survivors (2.2)
 
-Looper is the starting character, based on the supplied character reference. Vale unlocks at 24 distinct GPUs; Mender after stage 6; Rook after stage 12. Choose survivors from City Map > Survivor or Pause > Gear > Survivor. Thread colors are cosmetic, unlocked by rank 3, 75 GPUs and 12 stages. All survivors share progression and equipment.
+Looper is the starting character, based on the supplied character reference. Vale unlocks at 24 distinct GPUs; Mender after stage 6; Rook after stage 12. Choose survivors from City Map > Survivor or Items > Survivor. Thread colors are cosmetic, unlocked by rank 3, 75 GPUs and 12 stages. All survivors share progression and equipment.
 
 Boxes discover specific weapon or armor families with their own rarity. The collection keeps each family's highest found tier. Duplicates salvage for points; switching armor cannot heal or grow maximum health repeatedly. Rank 3/5/7 grants Common loadouts; boxes can discover them sooner. Points improve the equipped item through Legend, while Ultra remains a 0.5% box outcome. Existing saves migrate their shared tiers onto previously unlocked families.
 
 The HUD has compact health/core/points status, direction hints, contextual notices and translucent movement/fire controls. XP and graphics progression are in Pause. Six route motifs vary geometry, encounters and objectives. Sprite layouts and masks isolate all 88 active frames; normalized frames use clear two-pixel gutters and shared animation scales. Legacy art remains in Assets/ArtArchive outside Resources.
+
+## Downloads and launcher (2.3)
+
+The updater reads latest-v2.json and retrieves missing, verified byte ranges from one immutable GitHub Release APK, with four requests in flight. Installed-file indexing runs in the background and is cached; retries reuse verified downloaded data. A single frozen 2.3.0 chunk bridge supports older clients. See the repository update guide for publishing and retention.
+
+AndroidBranding assigns adaptive layers. AndroidLauncherResources replaces Unity’s placeholder fallback at all six densities and sets both icon and roundIcon on the launcher manifest. The title menu has a dedicated opaque backdrop and no control slogan.

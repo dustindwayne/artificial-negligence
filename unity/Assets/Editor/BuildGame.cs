@@ -38,15 +38,15 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.2.1";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=221;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.3.0";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=230;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
         PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel26;PlayerSettings.Android.targetSdkVersion=AndroidSdkVersions.AndroidApiLevel35;PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;
         PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);PlayerSettings.SetIl2CppCompilerConfiguration(NamedBuildTarget.Android,Il2CppCompilerConfiguration.Release);
         PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.Android,ManagedStrippingLevel.Low);
-        PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Unknown,new[]{Resources.Load<Texture2D>("Art/Logo")},IconKind.Any);
+        PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Unknown,new[]{Resources.Load<Texture2D>("Art/Logo")},IconKind.Any);AndroidBranding.Configure();
         var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);new GameObject("Artificial Negligence").AddComponent<GameController>();
         EditorSceneManager.SaveScene(scene,"Assets/Scenes/ArtificialNegligence.unity");EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene("Assets/Scenes/ArtificialNegligence.unity",true)};
         EditorUtility.SetDirty(pipeline);AssetDatabase.SaveAssets();
@@ -85,6 +85,13 @@ public static class BuildGame {
         }
         Assert(across.Count>300&&positions.All(x=>x>400),"Puzzles do not vary");
         var stats=new RunStats{points=500};stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==2&&stats.gear[2]==2&&stats.maxHealth==6,"Upgrade logic");stats.gear[1]=4;stats.Upgrade(1);Assert(stats.gear[1]==4,"Ultra can be purchased");
+        var protocolChunks=Enumerable.Range(0,20).Select(i=>new GameUpdater.Chunk{sha256=i.ToString(),size=100000}).ToArray();
+        var ranges=RangeProtocol.Plan(protocolChunks,new System.Collections.Generic.HashSet<string>(new[]{"3","4","13"}));
+        Assert(ranges.All(x=>x.length<=RangeProtocol.MaxRange)&&ranges.Sum(x=>x.length)==1700000,"Range grouping byte count");
+        Assert(ranges.SelectMany(x=>x.chunks).SequenceEqual(Enumerable.Range(0,20).Where(i=>i!=3&&i!=4&&i!=13)),"Range grouping skips or repeats data");
+        Assert(RangeProtocol.Plan(protocolChunks,new System.Collections.Generic.HashSet<string>(protocolChunks.Select(x=>x.sha256))).Count==0,"Unchanged APK downloads data");
+        Assert(RangeProtocol.SafeUrl("https://github.com/dustindwayne/artificial-negligence/releases/download/v2.3.0/ArtificialNegligence.apk")&&!RangeProtocol.SafeUrl("https://example.com/bad.apk"),"Unsafe release URL");
+        Debug.Log("AN_RANGE_PLAN_PASS / bounded grouped requests, reused holes, zero-download case and URL validation");
         var inventory=new RunStats();inventory.EnsureCollection();Assert(!inventory.SelectEquipment(1,3),"Locked weapon selectable");
         inventory.Discover(1,3,3);inventory.SelectEquipment(1,3);Assert(inventory.gear[1]==3&&inventory.weaponRarities[0]==1,"Rarities leak across weapons");
         inventory.SelectEquipment(1,0);Assert(inventory.gear[1]==1&&inventory.weaponRarities[3]==3,"Switch loses rarity");int beforePoints=inventory.points;inventory.Discover(1,3,2);Assert(inventory.points==beforePoints+5&&inventory.weaponRarities[3]==3,"Duplicate downgrades item");

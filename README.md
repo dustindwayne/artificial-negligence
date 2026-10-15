@@ -5,12 +5,12 @@
 <p align="center"><strong>Absorb the AI. Keep it public.</strong></p>
 <p align="center">An Android pixel platformer where collecting GPUs upgrades the world itself.</p>
 <p align="center">
-  <a href="https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk"><strong>Download APK</strong></a> ·
+  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><strong>Download APK</strong></a> ·
   <a href="#screenshots">Screenshots</a> ·
   <a href="ROADMAP.md">Art roadmap</a> ·
   <a href="CREDITS.md">Credits</a>
 </p>
-<p align="center">v2.2.1 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
+<p align="center">v2.3.0 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
 
 ## Overview
 
@@ -67,6 +67,8 @@ The pixel-art style stays consistent as color, scenery, lighting and weather bec
 
 ## Screenshots
 
+[Clean main menu](docs/main-menu.png) · [Android launcher icon](docs/android-icon.png)
+
 <table>
 <tr><th>Bootstrap graphics</th><th>Ultra graphics</th></tr>
 <tr><td><img src="docs/graphics-tier-0.png" alt="Coarse Bootstrap graphics"></td><td><img src="docs/graphics-tier-5.png" alt="Detailed Ultra graphics"></td></tr>
@@ -80,17 +82,19 @@ Screenshots come from the desktop test build. Graphics comparisons and unlock sc
 
 ## Play on Android
 
-1. [Download the latest APK](https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk).
+1. [Download the latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk).
 2. Open it on an Android 8.0+ ARM64 device and approve installation.
 3. Install over an existing compatible copy to keep local progress.
 
-This is a testing build. Checks cover 1,509 GPUs and 443 gaps across the first 60 generated routes, all 88 active sprite frames, collection rules and save migration; desktop gameplay and the HUD have been checked. Physical Android installation and update testing remains outstanding.
+This is a testing build. Checks cover 1,509 GPUs and 443 gaps across the first 60 generated routes, all 88 active sprite frames, collection rules and save migration; desktop gameplay and the HUD have been checked. The updater passed local end-to-end tests for partial downloads, cached retries, corrupt responses and full-download fallback. Packaged Android icon resources were inspected; physical device installation and launcher testing remains outstanding.
 
 ### Updates
 
-Open **Settings → Check for Updates**. APK updates reuse matching installed content chunks, reducing downloads when music and artwork are unchanged. Android asks you to approve installation. Small balance updates can download separately without reinstalling the APK.
+Open **Settings → Check for Updates**. The updater scans installed content in the background, caches its index, groups missing regions and downloads up to four ranges in parallel from one GitHub Release APK. Verified cached data survives retries. Each region and the reconstructed APK are checked before Android asks you to approve installation. A safe full-download fallback handles connections without range support. Small balance updates remain separate.
 
-[Update and publishing guide](docs/UPDATES.md) · [APK folder](apk/) · [Current version manifest](apk/latest.json) · [Changelog](CHANGELOG.md)
+One v2.3.0 upgrade bridge supports older installs. Obsolete chunk files are removed; future APK binaries live in GitHub Releases rather than Git commits.
+
+[Update and publishing guide](docs/UPDATES.md) · [APK folder](apk/) · [Current version manifest](apk/latest-v2.json) · [Changelog](CHANGELOG.md)
 
 ## Controls
 
@@ -119,7 +123,7 @@ Open `unity/` in **Unity 6000.6.5f1** with Android Build Support. [Project setup
 | Folder | Contents |
 | --- | --- |
 | `unity/` | Editable Unity project and game source |
-| `apk/` | Latest public APK, update manifests and reusable chunks |
+| `apk/` | Current download link, range manifest and one legacy upgrade bridge |
 | `docs/` | Screenshots, branding and release documentation |
 | `tools/` | APK and balance-update publishing scripts |
 

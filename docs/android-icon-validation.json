@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "manifestIcon": "res/Qu.xml",
+  "adaptiveLayers": [
+    "background",
+    "foreground"
+  ],
+  "densityBitmaps": 18,
+  "resourceDefinitions": [
+    "    resource 0x7f0c0000 mipmap/app_icon\n      (ldpi) (file) res/Ut.png type=PNG\n      (mdpi) (file) res/W5.png type=PNG\n      (hdpi) (file) res/YA.png type=PNG\n      (xhdpi) (file) res/l4.png type=PNG\n      (xxhdpi) (file) res/Iw.png type=PNG\n      (xxxhdpi) (file) res/oj.png type=PNG\n      (anydpi) (file) res/Qu.xml type=XML\n",
+    "    resource 0x7f0c0001 mipmap/ic_launcher_background\n      (ldpi) (file) res/VA.png type=PNG\n      (mdpi) (file) res/3z.png type=PNG\n      (hdpi) (file) res/I2.png type=PNG\n      (xhdpi) (file) res/6h.png type=PNG\n      (xxhdpi) (file) res/cV.png type=PNG\n      (xxxhdpi) (file) res/Gx.png type=PNG\n",
+    "    resource 0x7f0c0002 mipmap/ic_launcher_foreground\n      (ldpi) (file) res/QR.png type=PNG\n      (mdpi) (file) res/QZ.png type=PNG\n      (hdpi) (file) res/zr.png type=PNG\n      (xhdpi) (file) res/Em.png type=PNG\n      (xxhdpi) (file) res/Lf.png type=PNG\n      (xxxhdpi) (file) res/as.png type=PNG\n  type string id=0d entryCount=37\n"
+  ]
+}

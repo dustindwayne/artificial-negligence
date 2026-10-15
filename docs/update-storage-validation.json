@@ -1,0 +1,12 @@
+{
+  "legacyBridge": "2.3.0",
+  "bridgeReconstruction": "PASS",
+  "allUnreferencedChunksRemoved": true,
+  "oldChunkFiles": 1722,
+  "oldChunkBytes": 109613489,
+  "oldRepoApkBytes": 40136852,
+  "newBridgeChunkFiles": 617,
+  "newRepoUpdateBytes": 40673544,
+  "releaseApkBytes": 40523324,
+  "gitHistory": "retained; no rewrite"
+}

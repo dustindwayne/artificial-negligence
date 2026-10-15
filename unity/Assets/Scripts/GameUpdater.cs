@@ -24,37 +24,32 @@ namespace ArtificialNegligence {
             }
         }
     }
-    public class GameUpdater:MonoBehaviour {
+    public partial class GameUpdater:MonoBehaviour {
         const string Root="https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/";
-        const int Version=130;
+        const int Version=230;
         [Serializable] public class Chunk {public string sha256;public int size;}
-        [Serializable] public class Manifest {public int versionCode;public string version,sha256;public long size;public Chunk[] chunks;}
+        [Serializable] public class Manifest {public int versionCode,protocol;public string version,sha256,downloadUrl;public long size;public Chunk[] chunks;}
         struct Local {public long offset;public int size;}
         Manifest available;bool busy;string ready;GameController game;
         public string Status {get;private set;}="Check for the latest game update.";
         public string ButtonText {get{return busy?"WORKING...":ready!=null?"INSTALL UPDATE":available!=null?"DOWNLOAD UPDATE":"CHECK FOR UPDATES";}}
-        public void Initialize(GameController controller){game=controller;}
+        public void Initialize(GameController controller){game=controller;var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qa-update-manifest");if(at>=0&&at+1<args.Length)StartCoroutine(QaUpdate(args[at+1]));}
         public void Begin(){if(busy)return;if(ready!=null){Install();return;}StartCoroutine(available==null?Check():Download());}
         IEnumerator Check(){
-            busy=true;Status="Checking GitHub...";
-            bool contentUpdated=false;
-            using(var contentRequest=UnityWebRequest.Get(Root+"gameplay.json?check="+DateTimeOffset.UtcNow.ToUnixTimeSeconds())){
-                contentRequest.timeout=15;yield return contentRequest.SendWebRequest();
-                if(contentRequest.result==UnityWebRequest.Result.Success){var content=GameplayContent.Parse(contentRequest.downloadHandler.text);contentUpdated=GameplayContent.Save(content);}
-            }
-            using(var request=UnityWebRequest.Get(Root+"latest.json?check="+DateTimeOffset.UtcNow.ToUnixTimeSeconds())){
-                request.timeout=30;yield return request.SendWebRequest();
+            busy=true;Status="Checking for updates...";string stamp="?check="+DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            using(var contentRequest=UnityWebRequest.Get(Root+"gameplay.json"+stamp))using(var request=UnityWebRequest.Get(Root+"latest-v2.json"+stamp)){
+                contentRequest.timeout=15;request.timeout=25;var contentOperation=contentRequest.SendWebRequest();var appOperation=request.SendWebRequest();yield return appOperation;yield return contentOperation;
+                bool contentUpdated=contentRequest.result==UnityWebRequest.Result.Success&&GameplayContent.Save(GameplayContent.Parse(contentRequest.downloadHandler.text));
                 if(request.result!=UnityWebRequest.Result.Success){Fail("Could not check updates. Try again with internet.");yield break;}
                 Manifest manifest=null;try{manifest=JsonUtility.FromJson<Manifest>(request.downloadHandler.text);}catch{}
                 if(!Valid(manifest)){Fail("Update information is invalid.");yield break;}
-                if(manifest.versionCode<=InstalledVersion()){Status=contentUpdated?"Gameplay balance updated. No APK or music download. New enemy health applies next district.":"You have the latest game and gameplay balance ("+Application.version+").";busy=false;yield break;}
-                available=manifest;Status="Version "+manifest.version+" is available. Tap Download Update.";
-            }
-            busy=false;
+                if(manifest.versionCode<=InstalledVersion()){Status=contentUpdated?"Gameplay balance updated. No APK download needed.":"Your game is up to date ("+Application.version+").";busy=false;yield break;}
+                available=manifest;Status="Version "+manifest.version+" is available. Only missing data will download.";
+            }busy=false;
         }
         static bool Valid(Manifest m){
-            if(m==null||m.versionCode<1||m.size<1||m.size>500000000||m.chunks==null||m.chunks.Length<1||m.chunks.Length>16000||!IsHash(m.sha256))return false;
-            long sum=0;foreach(var c in m.chunks){if(c==null||!IsHash(c.sha256)||c.size<1||c.size>UpdateChunks.Max)return false;sum+=c.size;}return sum==m.size;
+            if(m==null||m.protocol<0||m.protocol>2||m.versionCode<1||m.size<1||m.size>500000000||m.chunks==null||m.chunks.Length<1||m.chunks.Length>16000||!IsHash(m.sha256))return false;
+            long sum=0;foreach(var c in m.chunks){if(c==null||!IsHash(c.sha256)||c.size<1||c.size>UpdateChunks.Max)return false;sum+=c.size;}return sum==m.size&&(m.protocol<2||RangeProtocol.SafeUrl(m.downloadUrl));
         }
         static bool IsHash(string hash){return hash!=null&&Regex.IsMatch(hash,"^[a-f0-9]{64}$");}
         void Fail(string text){Status=text;busy=false;}
@@ -62,7 +57,7 @@ namespace ArtificialNegligence {
 #if UNITY_ANDROID && !UNITY_EDITOR
             using(var player=new AndroidJavaClass("com.unity3d.player.UnityPlayer"))using(var activity=player.GetStatic<AndroidJavaObject>("currentActivity"))using(var info=activity.Call<AndroidJavaObject>("getApplicationInfo"))return info.Get<string>("sourceDir");
 #else
-            return null;
+            var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qa-update-source");return at>=0&&at+1<args.Length?args[at+1]:null;
 #endif
         }
         int InstalledVersion(){
@@ -72,7 +67,8 @@ namespace ArtificialNegligence {
             return Version;
 #endif
         }
-        IEnumerator Download(){
+        IEnumerator Download(){if(available.protocol>=2)yield return DownloadRanges();else yield return LegacyDownload();}
+        IEnumerator LegacyDownload(){
             busy=true;Status="Checking which game files can be reused...";
             string source=null;try{source=InstalledApk();}catch{}
             if(string.IsNullOrEmpty(source)){Fail("Updates install on Android. Use the GitHub APK on desktop.");yield break;}

@@ -1,7 +1,12 @@
-# Latest Android APK
+# Android downloads
 
-[Download Artificial Negligence](https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/ArtificialNegligence-latest.apk)
+**[Download the latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk)**
 
-`ArtificialNegligence-latest.apk` is the most current full install. `latest.json` describes its version, SHA-256, size and update chunks. `chunks/` is used by the in-app updater to reuse unchanged installed content.
+- `latest-v2.json`: current version, immutable Release download URL, SHA-256 and reusable region map.
+- `latest.url`: direct URL for the current version.
+- `gameplay.json`: small balance updates.
+- `latest.json` and `chunks/`: the single v2.3.0 upgrade bridge for older clients. This bridge stays available as newer releases are published.
 
-Use `tools/publish_apk.py` to update this folder as one release, then push it to GitHub.
+New downloads use one APK hosted in GitHub Releases, with parallel byte-range requests for missing regions. The updater validates responses, resumes from verified cached chunks and falls back safely if ranges are unsupported.
+
+Obsolete chunks and the duplicate APK were removed from the current branch. Previous Git commits are retained; this cleanup does not rewrite repository history.
