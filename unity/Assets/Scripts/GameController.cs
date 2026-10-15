@@ -43,7 +43,7 @@ namespace ArtificialNegligence {
             lit=Resources.Load<Material>("WorldLit");unlit=Resources.Load<Material>("WorldUnlit");
             InitializeSpriteSheets();
             white=CreateWhite();platformSprite=CreatePlatform();glowSprite=CreateGlow();
-            gameCamera=new GameObject("Game Camera").AddComponent<Camera>();gameCamera.tag="MainCamera";gameCamera.orthographic=true;gameCamera.orthographicSize=270f/PPU/2;
+            gameCamera=new GameObject("Game Camera").AddComponent<Camera>();gameCamera.tag="MainCamera";gameCamera.orthographic=false;gameCamera.fieldOfView=40;gameCamera.nearClipPlane=.1f;gameCamera.farClipPlane=120;gameCamera.orthographicSize=270f/PPU/2;
             gameCamera.backgroundColor=Ink;gameCamera.clearFlags=CameraClearFlags.SolidColor;gameCamera.transform.position=new Vector3(15,-8.4375f,-20);gameCamera.allowHDR=true;gameCamera.gameObject.AddComponent<AudioListener>();
             var cameraData=gameCamera.gameObject.AddComponent<UniversalAdditionalCameraData>();cameraData.renderPostProcessing=true;
             var global=new GameObject("Ambient 2D light").AddComponent<Light2D>();global.lightType=Light2D.LightType.Global;global.intensity=.85f;global.color=Color.white;
@@ -54,6 +54,7 @@ namespace ArtificialNegligence {
             music=gameObject.AddComponent<MusicDirector>();music.Initialize(this);
             updater=gameObject.AddComponent<GameUpdater>();updater.Initialize(this);
             BuildCanvas();puzzleFactory=new PuzzleFactory(rng);LoadLevel(0);SetMode(ScreenMode.Title);
+            if(Environment.GetCommandLineArgs().Contains("-depthQa")){qaMode=true;StartCoroutine(DepthPreviewQa());}
             if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
         }
 
@@ -164,8 +165,8 @@ namespace ArtificialNegligence {
             if(!gameCamera||!playerBody)return;RefreshGraphics();
             float aspect=(float)Screen.width/Screen.height;const float target=16f/9;
             gameCamera.rect=graphicsTexture?new Rect(0,0,1,1):aspect>target?new Rect((1-target/aspect)/2,0,target/aspect,1):new Rect(0,(1-aspect/target)/2,1,aspect/target);
-            float targetX=mode==ScreenMode.Title?15:Mathf.Clamp(playerBody.position.x+5.5f,15,worldLength/PPU-15);float x=Mathf.SmoothDamp(gameCamera.transform.position.x,targetX,ref followVelocity,.12f,Mathf.Infinity,Time.unscaledDeltaTime);gameCamera.transform.position=new Vector3(x,-8.4375f+(hurtCooldown>.85f?Mathf.Sin(Time.unscaledTime*48)*.05f:0),-20);
-            if(background)background.transform.position=new Vector3(x+5-(x-15)*.03f,-6.4375f,0);
+            UpdateDepthCamera();float x=gameCamera.transform.position.x;
+            if(background)background.transform.position=new Vector3(x+5-(x-15)*.03f,-6.4375f,24);
             float[] widths={116,88,68,38,26},ys={81,119,96,74,131},speeds={4,-7,12,24,-31},phases={145,440,280,85,520};
             for(int i=0;i<ships.Count;i++){float span=480+widths[i]+100;float raw=phases[i]+Time.unscaledTime*speeds[i]-(x-15)*PPU*(.05f+i*.025f);float sx=((raw%span)+span)%span-widths[i]-50;ships[i].flipX=speeds[i]<0;ships[i].transform.position=new Vector3(x-15+(sx+widths[i]/2)/PPU,-(ys[i]+widths[i]/4+Mathf.Sin(Time.unscaledTime*.5f+i)*2)/PPU,0);}
             var nearest=pickups.Where(p=>p.gpu&&!p.taken&&p.transform).OrderBy(p=>Mathf.Abs(p.transform.position.x-playerBody.position.x)).Take(4).ToArray();

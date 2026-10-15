@@ -18,6 +18,10 @@
 
 Start as **Looper**, a core runner collecting GPUs before corporations seize them. Unlock more survivors as you cross the city. Fight through rooftop routes, solve intellect terminals and reach district bosses. Every core helps reclaim public AI—and brings more color, detail and depth to the world.
 
+## Unity 2.5D preview
+
+A Windows prototype adds perspective, platform depth, and a smooth moving camera to the existing Unity game. [Preview details and controls](docs/unity-25d-preview.md).
+
 ## Features
 
 - **A connected city:** 30 generated stages across five districts, followed by further city cycles with increasingly tough enemies.
@@ -128,3 +132,4 @@ Open `unity/` in **Unity 6000.6.5f1** with Android Build Support. [Project setup
 | `tools/` | APK and balance-update publishing scripts |
 
 Report problems through [GitHub Issues](https://github.com/dustindwayne/artificial-negligence/issues), including your device, Android version, game version and steps to reproduce.
+
