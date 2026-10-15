@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.png" width="360" alt="Artificial Negligence — GPU core, street survivor and a city rebuilding from pixels">
+  <img src="docs/logo.png" width="360" alt="Artificial Negligence — Looper collecting a GPU above the rebuilding city">
 </p>
 
 <p align="center"><strong>Absorb the AI. Keep it public.</strong></p>
@@ -10,7 +10,7 @@
   <a href="ROADMAP.md">Art roadmap</a> ·
   <a href="CREDITS.md">Credits</a>
 </p>
-<p align="center">v2.2.0 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
+<p align="center">v2.2.1 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
 
 ## Overview
 
@@ -110,7 +110,7 @@ Choose characters from **City Map → Survivor** or **Pause → Gear → Survivo
 
 **Dustin (dustindwayne)** created the concept, art-style direction, world, gameplay vision and overall creative direction, and supplied music and visual references. This build uses AI assistance for programming, generated artwork, integration and testing. [Full credits and disclosure](CREDITS.md).
 
-The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator’s review. [Read the roadmap](ROADMAP.md). The new emblem combines the survivor, GPU collection and the city’s transition from coarse pixels to richer detail. [Logo generation record](docs/logo-generation.md) · [Sprite refresh and prompt record](docs/sprite-refresh.md).
+The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator’s review. [Read the roadmap](ROADMAP.md). The logo features Looper’s character art, GPU collection and the city’s transition from coarse pixels to richer detail. [Logo generation record](docs/logo-generation.md) · [Sprite refresh and prompt record](docs/sprite-refresh.md).
 
 ## Development
 

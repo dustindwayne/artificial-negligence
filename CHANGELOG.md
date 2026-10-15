@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.1
+
+- Looper-led logo applied to the title screen, Android app icon and README.
+- Retained the previous city logo and the artwork generation record.
+
 ## 2.2.0
 
 - Looper starts unlocked, with Vale, Mender and Rook earned through gameplay.

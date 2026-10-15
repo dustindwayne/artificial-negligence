@@ -9,7 +9,7 @@ Android may ask you to allow the game to install updates. After allowing it, ret
 Build with a higher Android version code and the same signing key. Keep the key private.
 
 ```sh
-python tools/publish_apk.py /path/to/game.apk --version 2.2.0 --code 220
+python tools/publish_apk.py /path/to/game.apk --version 2.2.1 --code 221
 ```
 
 Commit and push `apk/`. Keep all previously published chunk files so downloads using older manifests can finish. The stable latest APK link points to the current build.
