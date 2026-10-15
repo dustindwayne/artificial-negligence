@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace ArtificialNegligence {
     [Serializable] public partial class RunStats {
+        public bool storySeen;
         public int points, score, speed, vitality, health = 5, maxHealth = 5;
-        public int[] gear = {0,1,1};
+        public int[] gear = {0,0,0};
         public System.Collections.Generic.List<string> graphicsCores=new System.Collections.Generic.List<string>();
         public int GraphicsGpus {get{return graphicsCores==null?0:graphicsCores.Count;}}
         public int GraphicsTier {get{return RendererProgress.Tier(GraphicsGpus);}}
@@ -17,10 +18,10 @@ namespace ArtificialNegligence {
         public static readonly string[] Suits={"BALANCED", "KINETIC", "INSULATED", "LIGHT"};
         public static readonly string[] Modules={"SPRINTER", "CAPACITOR", "STABILIZER"};
         public int XpNeeded {get{return 60+(rank-1)*35;}}
-        public int WeaponCount {get{EnsureCollection();return weaponRarities.Count(v=>v>0);}}
-        public int SuitCount {get{EnsureCollection();return armorRarities.Count(v=>v>0);}}
+        public int WeaponCount {get{EnsureCollection();return inventory.Count(i=>i.slot==1);}}
+        public int SuitCount {get{EnsureCollection();return inventory.Count(i=>i.slot==2);}}
         public int ModuleCount {get{return Math.Min(3,1+(rank-1)/2);}}
-        public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}EnsureCollection();return rank>before?"LEVEL "+rank+" / +TALENT / LOADOUTS UNLOCKED":"+"+amount+" XP";}
+        public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}EnsureCollection();return rank>before?"LEVEL "+rank+" / +TALENT":"+"+amount+" XP";}
         public string Train(bool offense){int value=offense?power:defense;if(value>=20)return "TRAINING MAXED";int price=50+value*30;if(talents<1||points<price)return "NEED 1 TALENT + "+price+" PTS";points-=price;talents--;if(offense)power++;else defense++;return offense?"WEAPON MASTERY +1":"DEFENSE TRAINING +1";}
         public int HitDamage(int family){int damage=gear[1]+power;bool shield=family==3||family==6,heavy=family==2||family==8;
             if(weapon==1)damage=shield?damage*2:heavy?Math.Max(1,damage/2):damage;
@@ -28,7 +29,7 @@ namespace ArtificialNegligence {
             else if(shield)damage=Math.Max(1,damage/2);
             if(module==1&&weapon==1)damage+=2;if(module==2&&weapon==3)damage+=2;return Math.Max(1,Mathf.RoundToInt(damage*GameplayContent.Current.weaponDamage));
         }
-        public int Incoming(int raw,bool energy){if(suit==1)raw+=energy?1:-1;if(suit==2)raw+=energy?-1:1;if(suit==3)raw++;return Math.Max(1,raw-defense/3);}
+        public int Incoming(int raw,bool energy){if(HasArmor&&suit==1)raw+=energy?1:-1;if(HasArmor&&suit==2)raw+=energy?-1:1;if(HasArmor&&suit==3)raw++;return Math.Max(1,raw-defense/3);}
         public string Matchup {get{return weapon==1?"ARC breaks shields; weak vs heavy armor":weapon==2?"SCATTER clears swarms; short range":weapon==3?"RAIL breaks armor; weak vs shields":"PULSE is balanced; shields resist it";}}
 
         public static readonly string[] Tiers = {"NONE","COMMON","RARE","EPIC","LEGEND","ULTRA"};
@@ -36,12 +37,13 @@ namespace ArtificialNegligence {
         public int Level(int slot) { return slot==0?speed:slot==3?vitality:gear[slot]; }
         public int Cap(int slot) { return slot==0?5:slot==3?3:4; }
         public string Upgrade(int slot) {
+            EnsureCollection();if(slot==1&&!HasWeapon||slot==2&&!HasArmor)return "FIND AND EQUIP AN ITEM FIRST";
             if(Level(slot)>=Cap(slot)) return slot==1||slot==2?"ULTRA IS FOUND IN BOXES ONLY":"UPGRADE MAXED";
             int cost=Cost(slot); if(points<cost)return "NEED "+cost+" POINTS";
             points-=cost;
             if(slot==0) { speed++; return "RUNNING SPEED / LEVEL "+speed; }
-            if(slot==1) {EnsureCollection();gear[1]++;weaponRarities[weapon]=gear[1];return Tiers[gear[1]]+" "+Weapons[weapon]+" / TIER "+gear[1];}
-            if(slot==2) {EnsureCollection();gear[2]++;armorRarities[suit]=gear[2];maxHealth++;health++;return Tiers[gear[2]]+" "+Suits[suit]+" ARMOR / TIER "+gear[2];}
+            if(slot==1) {UpgradeEquippedItem(1);return Tiers[gear[1]]+" "+Weapons[weapon]+" / TIER "+gear[1];}
+            if(slot==2) {UpgradeEquippedItem(2);return Tiers[gear[2]]+" "+Suits[suit]+" ARMOR / TIER "+gear[2];}
             vitality++;maxHealth++;health++;return "VITALITY / LEVEL "+vitality;
         }
         public static int RollTier(int roll) { if(roll<0||roll>=200)throw new ArgumentOutOfRangeException();return roll==0?5:roll<10?4:roll<30?3:roll<80?2:1; }
@@ -90,7 +92,7 @@ namespace ArtificialNegligence {
             }
         }
     }
-    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult,Characters}
+    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult,Characters,Story}
     public class TerminalData {
         public LogicPuzzle puzzle;public bool attempted,solved;
         public bool Answer(int choice) {if(attempted)return false;attempted=true;solved=choice==(puzzle.circuit?puzzle.circuitTarget:puzzle.correct);return solved;}

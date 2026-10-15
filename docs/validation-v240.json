@@ -1,0 +1,28 @@
+{
+  "version": "2.4.0",
+  "status": "PASS",
+  "routes": 60,
+  "gpus": 1793,
+  "gaps": 443,
+  "jumpOnlyGpus": 966,
+  "windowsRuntime": [
+    "story first run",
+    "title actor movement",
+    "empty initial inventory",
+    "no XP equipment grants",
+    "individual duplicate items",
+    "manual equip",
+    "character silhouettes",
+    "button feedback",
+    "graphics tiers",
+    "puzzles",
+    "bosses"
+  ],
+  "android": [
+    "build",
+    "version code 240",
+    "signature matches previous release",
+    "adaptive and density launcher icons"
+  ],
+  "androidDeviceRuntime": "Not tested on a physical Android device in this session."
+}

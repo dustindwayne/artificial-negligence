@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.3.0";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=230;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.0";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=240;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -66,11 +66,11 @@ public static class BuildGame {
         }
         foreach(var name in new[]{"menu","gameplay","upgrades","bosscombat","victory","gameover"})Assert(Resources.Load<AudioClip>("Music/"+name)?.length>0,"Music missing: "+name);
         Assert(MusicDirector.Pick(ScreenMode.Title,false)=="menu"&&MusicDirector.Pick(ScreenMode.Play,false)=="gameplay"&&MusicDirector.Pick(ScreenMode.Play,true)=="bosscombat"&&MusicDirector.Pick(ScreenMode.Shop,false)=="upgrades"&&MusicDirector.Pick(ScreenMode.Gear,true)=="upgrades"&&MusicDirector.Pick(ScreenMode.Clear,false)=="victory"&&MusicDirector.Pick(ScreenMode.Dead,true)=="gameover","Music state mapping failed");
-        var progression=new RunStats();progression.GainXp(300);Assert(progression.rank>=3&&progression.talents>=2&&progression.WeaponCount>=2,"XP does not unlock builds");
+        var progression=new RunStats();progression.GainXp(300);Assert(progression.rank>=3&&progression.talents>=2&&progression.WeaponCount==0&&progression.SuitCount==0,"Leveling granted equipment");
         progression.points=500;Assert(progression.Train(true)=="WEAPON MASTERY +1"&&progression.power==1,"Talent purchase failed");
-        progression.weapon=1;int arcShield=progression.HitDamage(3),arcHeavy=progression.HitDamage(2);Assert(arcShield>arcHeavy,"Arc counters missing");
-        progression.weapon=3;Assert(progression.HitDamage(2)>progression.HitDamage(3),"Rail counters missing");
-        progression.suit=1;Assert(progression.Incoming(3,true)>progression.Incoming(3,false),"Armor tradeoff missing");
+        progression.Discover(1,1,1);progression.SelectEquipment(1,1);int arcShield=progression.HitDamage(3),arcHeavy=progression.HitDamage(2);Assert(arcShield>arcHeavy,"Arc counters missing");
+        progression.Discover(1,3,1);progression.SelectEquipment(1,3);Assert(progression.HitDamage(2)>progression.HitDamage(3),"Rail counters missing");
+        progression.Discover(2,1,1);progression.SelectEquipment(2,1);Assert(progression.Incoming(3,true)>progression.Incoming(3,false),"Armor tradeoff missing");
         var restored=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(progression));Assert(restored.rank==progression.rank&&restored.power==1&&restored.weapon==3,"Progress save failed");
         var tierCounts=new int[6];for(int i=0;i<200;i++)tierCounts[RunStats.RollTier(i)]++;
         Assert(tierCounts.SequenceEqual(new[]{0,120,50,20,9,1}),"Ultra drop is not exactly 0.5 percent");
@@ -84,7 +84,7 @@ public static class BuildGame {
             }
         }
         Assert(across.Count>300&&positions.All(x=>x>400),"Puzzles do not vary");
-        var stats=new RunStats{points=500};stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==2&&stats.gear[2]==2&&stats.maxHealth==6,"Upgrade logic");stats.gear[1]=4;stats.Upgrade(1);Assert(stats.gear[1]==4,"Ultra can be purchased");
+        var stats=new RunStats{points=500};stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==0&&stats.gear[2]==0&&stats.points==500,"Workshop created equipment");stats.Discover(1,0,1);stats.SelectEquipment(1,0);stats.Discover(2,0,1);stats.SelectEquipment(2,0);stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==2&&stats.gear[2]==2&&stats.maxHealth==7,"Owned item upgrade logic");stats.points=10000;stats.Upgrade(1);stats.Upgrade(1);stats.Upgrade(1);Assert(stats.gear[1]==4,"Ultra can be purchased");
         var protocolChunks=Enumerable.Range(0,20).Select(i=>new GameUpdater.Chunk{sha256=i.ToString(),size=100000}).ToArray();
         var ranges=RangeProtocol.Plan(protocolChunks,new System.Collections.Generic.HashSet<string>(new[]{"3","4","13"}));
         Assert(ranges.All(x=>x.length<=RangeProtocol.MaxRange)&&ranges.Sum(x=>x.length)==1700000,"Range grouping byte count");
@@ -92,18 +92,19 @@ public static class BuildGame {
         Assert(RangeProtocol.Plan(protocolChunks,new System.Collections.Generic.HashSet<string>(protocolChunks.Select(x=>x.sha256))).Count==0,"Unchanged APK downloads data");
         Assert(RangeProtocol.SafeUrl("https://github.com/dustindwayne/artificial-negligence/releases/download/v2.3.0/ArtificialNegligence.apk")&&!RangeProtocol.SafeUrl("https://example.com/bad.apk"),"Unsafe release URL");
         Debug.Log("AN_RANGE_PLAN_PASS / bounded grouped requests, reused holes, zero-download case and URL validation");
-        var inventory=new RunStats();inventory.EnsureCollection();Assert(!inventory.SelectEquipment(1,3),"Locked weapon selectable");
-        inventory.Discover(1,3,3);inventory.SelectEquipment(1,3);Assert(inventory.gear[1]==3&&inventory.weaponRarities[0]==1,"Rarities leak across weapons");
-        inventory.SelectEquipment(1,0);Assert(inventory.gear[1]==1&&inventory.weaponRarities[3]==3,"Switch loses rarity");int beforePoints=inventory.points;inventory.Discover(1,3,2);Assert(inventory.points==beforePoints+5&&inventory.weaponRarities[3]==3,"Duplicate downgrades item");
-        inventory.Discover(2,2,4);inventory.SelectEquipment(2,2);int hp=inventory.maxHealth;inventory.SelectEquipment(2,0);inventory.SelectEquipment(2,2);Assert(inventory.maxHealth==hp,"Armor switch farms health");
-        var oldSave=new RunStats{rank=7,gear=new[]{2,4,3},weapon=3,suit=2};oldSave.EnsureCollection();Assert(oldSave.weaponRarities.All(v=>v==4)&&oldSave.armorRarities.All(v=>v==3),"Legacy equipment lost");
-        Assert(inventory.character==0&&RunStats.Characters[0]=="LOOPER"&&!inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"Starter or locked characters wrong");inventory.graphicsCores=Enumerable.Range(0,24).Select(i=>"unlock:"+i).ToList();Assert(inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"GPU character unlock");inventory.cityUnlocked=6;Assert(inventory.CharacterUnlocked(2)&&!inventory.CharacterUnlocked(3),"Boss character unlock");
-        var inventorySave=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(inventory));inventorySave.EnsureCollection();Assert(inventorySave.weaponRarities[3]==3&&inventorySave.armorRarities[2]==4&&inventorySave.CharacterUnlocked(2),"Collection save failed");
+        var inventory=new RunStats();inventory.EnsureCollection();Assert(inventory.WeaponCount==0&&inventory.SuitCount==0&&!inventory.HasWeapon&&!inventory.HasArmor&&!inventory.SelectEquipment(1,3),"Starter equipment was granted");
+        inventory.GainXp(10000);Assert(inventory.WeaponCount==0&&inventory.SuitCount==0,"XP granted equipment");
+        inventory.Discover(1,3,3);Assert(!inventory.HasWeapon,"Find auto-equipped a weapon");inventory.SelectEquipment(1,3);int first=inventory.weaponItemId;
+        inventory.Discover(1,3,2);Assert(inventory.WeaponCount==2&&inventory.weaponItemId==first&&inventory.gear[1]==3,"Duplicate was discarded or auto-equipped");inventory.EquipItem(inventory.inventory.Last().id);Assert(inventory.gear[1]==2,"Cannot equip an individual weaker find");inventory.EquipItem(first);
+        inventory.Discover(2,2,4);inventory.SelectEquipment(2,2);int hp=inventory.maxHealth;inventory.Discover(2,0,1);inventory.SelectEquipment(2,0);inventory.SelectEquipment(2,2);Assert(inventory.maxHealth==hp,"Armor switch farms health");
+        var oldSave=new RunStats{collectionVersion=1,rank=7,gear=new[]{2,4,3},weapon=3,suit=2,maxHealth=8};oldSave.EnsureCollection();Assert(oldSave.WeaponCount==0&&oldSave.SuitCount==0&&oldSave.rank==7&&oldSave.maxHealth==5,"Legacy menu grants remain");
+        Assert(inventory.character==0&&RunStats.Characters[0]=="LOOPER"&&!inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"Starter or locked characters wrong");inventory.rank=1;inventory.graphicsCores=Enumerable.Range(0,24).Select(i=>"unlock:"+i).ToList();Assert(inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"GPU character unlock");inventory.cityUnlocked=6;Assert(inventory.CharacterUnlocked(2)&&!inventory.CharacterUnlocked(3),"Boss character unlock");
+        var inventorySave=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(inventory));inventorySave.EnsureCollection();Assert(inventorySave.WeaponCount==2&&inventorySave.SuitCount==2&&inventorySave.weaponRarities[3]==3&&inventorySave.armorRarities[2]==4&&inventorySave.CharacterUnlocked(2),"Collection save failed");
         foreach(var spec in new[]{new[]{"looper","4","2","32","32","16"},new[]{"survivors-v3","8","3","32","32","16"},new[]{"enemies-v3","4","9","128","80","40"},new[]{"items-v3","4","4","32","32","16"},new[]{"ai_ships","4","1","128","64","16"}}){
             var frames=SpriteAtlas.Load(spec[0],int.Parse(spec[1]),int.Parse(spec[2]),int.Parse(spec[3]),int.Parse(spec[4]),int.Parse(spec[5]),spec[0]!="items-v3"&&spec[0]!="ai_ships");
             foreach(var frame in frames){var texture=frame.texture;var pixels=texture.GetPixels32();Assert(pixels.Any(c=>c.a>24),"Empty normalized sprite");for(int y=0;y<texture.height;y++)for(int x=0;x<texture.width;x++)if(x<2||y<2||x>=texture.width-2||y>=texture.height-2)Assert(pixels[y*texture.width+x].a==0,"Sprite gutter clipped / "+frame.name);}
         }
-        Debug.Log("AN_COLLECTION_PASS / migration, independent rarities, locked equipment, duplicates, armor swaps, gameplay character unlocks, saves, 88 sprite gutters");
+        Debug.Log("AN_COLLECTION_PASS / migration, zero starter/XP gear, individual finds, manual equipping, duplicates, armor swaps, gameplay character unlocks, saves, 88 sprite gutters");
         CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 60 unique routes using Unity Physics2D; 88 isolated sprite frames with clear gutters; independent equipment rarities, duplicates and armor swaps; legacy save migration; Looper starter and gameplay character unlocks; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
         Debug.Log("AN_VALIDATION_PASS / puzzles, drops, upgrades, collection, sprite gutters, 60 levels, Unity Physics2D reachability");
     }
@@ -120,7 +121,7 @@ public static class BuildGame {
     }
     static void CheckReachability(){
         var oldGravity=Physics2D.gravity;var oldMode=Physics2D.simulationMode;Physics2D.gravity=new Vector2(0,-550f/16);Physics2D.simulationMode=SimulationMode2D.Script;
-        int gpuCount=0,gaps=0;
+        int gpuCount=0,gaps=0,jumpOnly=0;
         try{
             for(int level=0;level<60;level++){
                 var rows=CityRoute.Generate(level);var floors=rows.Where(r=>r.kind=="platform"&&r.y==218).OrderBy(r=>r.x).ToList();
@@ -148,11 +149,13 @@ public static class BuildGame {
                 foreach(var gpu in rows.Where(r=>r.kind=="gpu")){
                     bool hit=reachable.Where(r=>Mathf.Abs(r.y-(gpu.y+6))<80&&r.x<gpu.x+100&&r.x+r.w>gpu.x-100).OrderBy(r=>Mathf.Abs(r.y-(gpu.y+27))).Any(r=>attempt(r,GameController.PixelCenter(gpu.x+6,gpu.y+6),12,15));
                     Assert(hit,"Unreachable generated GPU / "+level+" / "+gpu.x);gpuCount++;
+                    if(!reachable.Any(r=>gpu.x+6>=r.x-12&&gpu.x+6<=r.x+r.w+12&&Mathf.Abs((r.y-11)-(gpu.y+6))<=17))jumpOnly++;
                 }
                 foreach(var row in rows.Where(r=>r.kind=="box"||r.kind=="terminal"||r.kind=="checkpoint"||r.kind=="enemy"))Assert(floors.Any(f=>row.x>=f.x&&row.x+18<=f.x+f.w),"Object off safe ground");
                 EditorSceneManager.CloseScene(scene,true);Debug.Log("AN_ROUTE_PASS / "+level);
             }
         }finally{Physics2D.gravity=oldGravity;Physics2D.simulationMode=oldMode;}
+        Assert(jumpOnly>=120,"Not enough jump-only GPU placements");Debug.Log("AN_JUMP_GPU_PASS / "+jumpOnly+" airborne pickups requiring a jump without magnet buffs");
         Debug.Log("AN_GENERATED_REACHABILITY_PASS / "+gpuCount+" GPUs / "+gaps+" gaps / 60 generated levels");
     }
     public static void Desktop(){Configure();Validate();Build("ArtificialNegligence-preview/ArtificialNegligence.exe",BuildTarget.StandaloneWindows64);}

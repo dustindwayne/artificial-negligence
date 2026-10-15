@@ -5,14 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ArtificialNegligence {
     public partial class GameController {
-        float dashTime,dashCooldown,trailClock,landingTimer;bool dashUsed,wasGrounded;Vector2 checkpointPosition;
+        float dashTime,dashCooldown,trailClock,followVelocity,landingTimer;bool dashUsed,wasGrounded;Vector2 checkpointPosition;
         class DepthObject {public Transform transform;public Vector3 start;public float parallax;}
         readonly List<DepthObject> depth=new List<DepthObject>();readonly List<SpriteRenderer> rain=new List<SpriteRenderer>();
         readonly List<SpriteRenderer> checkpoints=new List<SpriteRenderer>();readonly List<SpriteRenderer> hazards=new List<SpriteRenderer>();
         public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);}
         public void Dash(){if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
         public void BuildSceneDepth(){
-            depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=0;dashUsed=false;wasGrounded=false;
+            depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=followVelocity=0;dashUsed=false;wasGrounded=false;
             var random=new System.Random(814+level*127);int area=CityRoute.Area(level);
             Color[] accents={Cyan,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};Color accent=Color.Lerp(accents[area],accents[(area+level%6)%5],(level%6)*.055f);background.color=Color.Lerp(Color.white,accent,.2f);
             for(int layer=0;layer<3;layer++)for(float x=-100;x<worldLength+200;x+=random.Next(100,170)){
@@ -46,11 +46,11 @@ namespace ArtificialNegligence {
                 var body=sr.gameObject.AddComponent<Rigidbody2D>();body.bodyType=RigidbodyType2D.Kinematic;var box=sr.gameObject.AddComponent<BoxCollider2D>();box.size=sr.size;box.usedByEffector=true;sr.gameObject.AddComponent<PlatformEffector2D>().useOneWay=true;sr.gameObject.AddComponent<MaintenanceLift>();
             }
             for(int i=0;i<30;i++){var drop=SpriteObject("Rain streak",white,Vector2.zero,-10,false);drop.transform.localScale=new Vector3(1/PPU,random.Next(3,9)/PPU,1);drop.color=new Color(.55f,.8f,.9f,.16f);rain.Add(drop);}
-            BuildPerspectiveDepth();RefreshGraphics(true);
+            RefreshGraphics(true);
         }
         void TickSceneDepth(){
             if(!worldRoot||!gameCamera)return;float cameraX=gameCamera.transform.position.x;
-            foreach(var obj in depth)if(obj.transform)obj.transform.position=obj.start+Vector3.right*(cameraX-15)*obj.parallax+Vector3.forward*(18-obj.parallax*35);
+            foreach(var obj in depth)if(obj.transform)obj.transform.position=obj.start+Vector3.right*(cameraX-15)*obj.parallax;
             for(int i=0;i<rain.Count;i++){rain[i].transform.position=new Vector3(cameraX-16+(i*7.137f-Time.time*1.8f)%33,-2-(i*1.117f+Time.time*5)%12,0);}
             foreach(var hazard in hazards)if(hazard)hazard.color=(Time.time%3<1.1f)?new Color(Pink.r,Pink.g,Pink.b,.32f):Pink;
         }
@@ -65,7 +65,7 @@ namespace ArtificialNegligence {
             Image(screenRoot,"Dim city",0,0,960,540,new Color(.003f,.01f,.02f,.87f));var window=Panel(screenRoot,"City route",18,15,924,511,Cyan);
             int page=stats.cityUnlocked/30,offset=page*30;
             Label(window,"CITY ROUTE / CYCLE "+(page+1),24,15,667,45,36,Cream);Button(window,"MENU",773,15,124,43,Cyan,()=>SetMode(ScreenMode.Title));
-            Label(window,"TRAVERSE THE CITY. SIXTH STAGES GUARD BOSS UPLINKS.",24,65,865,29,22,Gold);
+            Label(window,new[]{"RECONNECT THE STREETS. RESTORE THE FIRST PUBLIC RELAY.","FREE THE ROOFTOPS. KEEP KNOWLEDGE IN PUBLIC HANDS.","BREAK THE HARVESTER. REOPEN THE CITY NETWORK.","SAVE THE PUBLIC ARCHIVES. RESTORE MORE THAN SURVIVAL.","NO PREMIUM REALITY. BREAK THE CORPORATE ACCESS LAYER."}[CityRoute.Area(stats.cityUnlocked)],24,65,865,29,19,Gold);
             // Street blocks, a canal and a continuous winding route form an actual city overview.
             Image(window,"Canal",620,104,21,305,new Color(.1f,.45f,.55f,.14f));
             var mapRandom=new System.Random(741);for(int r=0;r<8;r++)for(int c=0;c<12;c++){
@@ -113,4 +113,3 @@ namespace ArtificialNegligence {
         void FixedUpdate(){if(GameController.Instance.mode==ScreenMode.Play)body.MovePosition(start+Vector2.up*Mathf.Sin(Time.time*1.1f)*.55f);}
     }
 }
-

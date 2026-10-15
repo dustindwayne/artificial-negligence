@@ -19,7 +19,7 @@ namespace ArtificialNegligence {
             evolutionMaterial=new Material(Resources.Load<Shader>("Evolution"));worldDisplay.material=evolutionMaterial;bootstrapActorMaterial=new Material(unlit);bootstrapActorMaterial.SetColor("_Color",new Color(3,3,3,1));RefreshGraphics(true);
         }
         public void RefreshGraphics(bool force=false){
-            if(!worldDisplay)return;int tier=stats.GraphicsTier;if(!force&&activeGraphics==tier)return;activeGraphics=tier;
+            if(!worldDisplay)return;int tier=mode==ScreenMode.Title?4:stats.GraphicsTier;if(!force&&activeGraphics==tier)return;activeGraphics=tier;
             int width=RendererProgress.Widths[tier],height=width*9/16;
             if(!graphicsTexture||graphicsTexture.width!=width){
                 var previous=graphicsTexture;graphicsTexture=new RenderTexture(width,height,24,RenderTextureFormat.ARGB32){filterMode=FilterMode.Point,antiAliasing=1,useMipMap=false,name="GPU renderer / "+RendererProgress.Names[tier]};graphicsTexture.Create();gameCamera.targetTexture=graphicsTexture;worldDisplay.texture=graphicsTexture;
@@ -29,7 +29,7 @@ namespace ArtificialNegligence {
             gameCamera.GetUniversalAdditionalCameraData().renderPostProcessing=tier>=2;
             if(graphicsBloom)graphicsBloom.intensity.Override(new[]{0f,0f,.12f,.28f,.38f,.48f}[tier]);
             if(background){Color[] accents={Cyan,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};background.color=tier==0?new Color(.22f,.32f,.29f):Color.Lerp(Color.white,accents[CityRoute.Area(level)],.16f);}
-            if(worldRoot)foreach(var sr in worldRoot.GetComponentsInChildren<SpriteRenderer>(true))if(sr.name=="Walkable platform"){sr.sprite=tier==0?white:platformSprite;sr.color=tier==0?new Color(.55f,.67f,.55f):Color.white;}
+            if(worldRoot)foreach(var sr in worldRoot.GetComponentsInChildren<SpriteRenderer>(true))if(sr.name=="Walkable platform"){sr.sprite=tier==0?white:PlatformStyle(sr.transform.position.x);sr.color=tier==0?new Color(.55f,.67f,.55f):Color.white;}
             if(playerVisual)playerVisual.sharedMaterial=tier==0?bootstrapActorMaterial:unlit;
             foreach(var enemy in enemies)if(enemy)enemy.GetComponent<SpriteRenderer>().sharedMaterial=tier==0?bootstrapActorMaterial:unlit;
             foreach(var obj in depth)if(obj.transform)obj.transform.gameObject.SetActive(tier>=(obj.parallax>.25f?2:1));

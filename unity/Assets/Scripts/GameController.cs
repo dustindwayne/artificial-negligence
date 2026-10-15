@@ -43,7 +43,7 @@ namespace ArtificialNegligence {
             lit=Resources.Load<Material>("WorldLit");unlit=Resources.Load<Material>("WorldUnlit");
             InitializeSpriteSheets();
             white=CreateWhite();platformSprite=CreatePlatform();glowSprite=CreateGlow();
-            gameCamera=new GameObject("Game Camera").AddComponent<Camera>();gameCamera.tag="MainCamera";gameCamera.orthographic=false;gameCamera.fieldOfView=40;gameCamera.nearClipPlane=.1f;gameCamera.farClipPlane=120;gameCamera.orthographicSize=270f/PPU/2;
+            gameCamera=new GameObject("Game Camera").AddComponent<Camera>();gameCamera.tag="MainCamera";gameCamera.orthographic=true;gameCamera.orthographicSize=270f/PPU/2;
             gameCamera.backgroundColor=Ink;gameCamera.clearFlags=CameraClearFlags.SolidColor;gameCamera.transform.position=new Vector3(15,-8.4375f,-20);gameCamera.allowHDR=true;gameCamera.gameObject.AddComponent<AudioListener>();
             var cameraData=gameCamera.gameObject.AddComponent<UniversalAdditionalCameraData>();cameraData.renderPostProcessing=true;
             var global=new GameObject("Ambient 2D light").AddComponent<Light2D>();global.lightType=Light2D.LightType.Global;global.intensity=.85f;global.color=Color.white;
@@ -54,7 +54,6 @@ namespace ArtificialNegligence {
             music=gameObject.AddComponent<MusicDirector>();music.Initialize(this);
             updater=gameObject.AddComponent<GameUpdater>();updater.Initialize(this);
             BuildCanvas();puzzleFactory=new PuzzleFactory(rng);LoadLevel(0);SetMode(ScreenMode.Title);
-            if(Environment.GetCommandLineArgs().Contains("-depthQa")){qaMode=true;StartCoroutine(DepthPreviewQa());}
             if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
         }
 
@@ -74,9 +73,10 @@ namespace ArtificialNegligence {
 
         public void SaveProgress(){if(qaMode)return;stats.EnsureCollection();if(mode!=ScreenMode.Title&&mode!=ScreenMode.Characters)stats.district=level;PlayerPrefs.SetString("progress-v2",JsonUtility.ToJson(stats));PlayerPrefs.Save();}
         public void StartRun(){
-            if(!qaMode&&PlayerPrefs.HasKey("progress-v2")){try{stats=JsonUtility.FromJson<RunStats>(PlayerPrefs.GetString("progress-v2"));}catch{stats=new RunStats();}}
-            else stats=new RunStats();stats.EnsureCollection();ApplyCharacter();stats.health=stats.maxHealth;buffs=new float[7];if(stats.stageStars==null||stats.stageStars.Length!=30)stats.stageStars=new int[30];stats.cityUnlocked=Math.Max(stats.cityUnlocked,stats.district);level=stats.district;LoadLevel(level);SetMode(ScreenMode.CityMap);}
+            if(!qaMode&&PlayerPrefs.HasKey("progress-v2")){try{string saved=PlayerPrefs.GetString("progress-v2");stats=JsonUtility.FromJson<RunStats>(saved);if(stats.collectionVersion<2&&!PlayerPrefs.HasKey("progress-before-loot-inventory")){PlayerPrefs.SetString("progress-before-loot-inventory",saved);PlayerPrefs.Save();}}catch{stats=new RunStats();}}
+            else stats=new RunStats();stats.EnsureCollection();ApplyCharacter();stats.health=stats.maxHealth;buffs=new float[7];if(stats.stageStars==null||stats.stageStars.Length!=30)stats.stageStars=new int[30];stats.cityUnlocked=Math.Max(stats.cityUnlocked,stats.district);level=stats.district;LoadLevel(level);if(!stats.storySeen)BeginStory(ScreenMode.CityMap);else SetMode(ScreenMode.CityMap);}
         public void LoadLevel(int index){
+            BeginDifficultyStage();
             if(music)music.ResetEncounter();
             if(worldRoot){worldRoot.SetActive(false);Destroy(worldRoot);}enemies.Clear();pickups.Clear();terminals.Clear();bullets.Clear();effects.Clear();ships.Clear();
             level=index;collected=0;rows=CityRoute.Generate(index);worldLength=CityRoute.Width(rows);puzzleFactory=new PuzzleFactory(new System.Random(rng.Next()));
@@ -85,7 +85,7 @@ namespace ArtificialNegligence {
             background=SpriteObject("Parallax skyline",bgSprite,new Vector2(20,-6.4375f),-100,false);
             for(int i=0;i<5;i++){var ship=SpriteObject("AI ship / background",shipFrames[new[]{3,2,1,0,0}[i]],Vector2.zero,-60+i,false);ship.color=new Color(.6f,.8f,.85f,.62f+i*.06f);ship.transform.localScale=Vector3.one*(new[]{116f,88,68,38,26}[i]/128);ships.Add(ship);}
             foreach(var row in rows.Where(r=>r.kind=="platform")){
-                var sr=SpriteObject("Walkable platform",platformSprite,PixelCenter(row.x+row.w/2,row.y+row.h/2),0);sr.drawMode=SpriteDrawMode.Tiled;sr.size=new Vector2(row.w/PPU,row.h/PPU);sr.gameObject.layer=8;
+                var sr=SpriteObject("Walkable platform",PlatformStyle((row.x+row.w/2)/PPU),PixelCenter(row.x+row.w/2,row.y+row.h/2),0);sr.drawMode=SpriteDrawMode.Tiled;sr.size=new Vector2(row.w/PPU,row.h/PPU);sr.gameObject.layer=8;
                 var collider=sr.gameObject.AddComponent<BoxCollider2D>();collider.size=sr.size;
                 if(row.h<15){var oneWay=sr.gameObject.AddComponent<PlatformEffector2D>();oneWay.useOneWay=true;oneWay.surfaceArc=180;collider.usedByEffector=true;}
                 var edge=SpriteObject("Neon footing",white,PixelCenter(row.x+row.w/2,row.y+1),2,false);edge.color=CityRoute.Boss(index)?Gold:Cyan;edge.transform.localScale=new Vector3(row.w/PPU,2f/PPU,1);
@@ -121,7 +121,7 @@ namespace ArtificialNegligence {
             totalGpus=pickups.Count(p=>p.gpu);activeTerminal=null;ClearInput();shotCooldown=hurtCooldown=knockback=jumpBuffer=coyote=0;Array.Clear(buffs,0,buffs.Length);
             gameCamera.transform.position=new Vector3(15,-8.4375f,-20);Toast("LEVEL "+(index+1)+" / "+CityRoute.Name(index));
         }
-        public void SetMode(ScreenMode next){mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
+        public void SetMode(ScreenMode next){if(next==ScreenMode.Clear||next==ScreenMode.Dead)RecordDifficultyResult(next==ScreenMode.Dead);mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
         public void ClearInput(){leftHeld=rightHeld=jumpHeld=fireHeld=jumpLatch=false;}
         public void Pause(){if(mode==ScreenMode.Play)SetMode(ScreenMode.Pause);}
         public void NextLevel(){stats.health=Math.Min(stats.maxHealth,stats.health+2);level=stats.cityUnlocked;SetMode(ScreenMode.CityMap);}
@@ -129,8 +129,11 @@ namespace ArtificialNegligence {
         void OnApplicationPause(bool value){if(value&&!qaMode)Pause();}
         void OnApplicationFocus(bool value){if(!value&&!qaMode)Pause();}
         void Update(){
+            if(mode==ScreenMode.Story){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceStory();if(Input.GetKeyDown(KeyCode.Escape))FinishStory();UpdateUi();return;}
+            if(mode==ScreenMode.Play&&Input.GetKeyDown(KeyCode.I))SetMode(ScreenMode.Gear);
+            if(mode==ScreenMode.Play&&Input.GetKeyDown(KeyCode.C)){characterReturn=ScreenMode.Pause;SetMode(ScreenMode.Characters);}
             if(Input.GetKeyDown(KeyCode.Escape)){if(mode==ScreenMode.Play)Pause();else if(mode==ScreenMode.Characters)SetMode(characterReturn);else if(mode==ScreenMode.CityMap)SetMode(ScreenMode.Title);else if(mode!=ScreenMode.Title&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Win&&mode!=ScreenMode.Clear)SetMode(ScreenMode.Play);}
-            TickSceneDepth();if(mode!=ScreenMode.Play){UpdateUi();return;}
+            TickTitlePresentation();TickSceneDepth();if(mode!=ScreenMode.Play){UpdateUi();return;}
             if(Input.GetKeyDown(KeyCode.U)){SetMode(ScreenMode.Shop);return;}if(Input.GetKeyDown(KeyCode.G)){SetMode(ScreenMode.Gear);return;}
             bool jump=jumpHeld||Input.GetKey(KeyCode.Space)||Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow);
             if(jump&&!jumpLatch)jumpBuffer=.13f;jumpLatch=jump;
@@ -138,7 +141,7 @@ namespace ArtificialNegligence {
             float dt=Time.deltaTime;shotCooldown=Mathf.Max(0,shotCooldown-dt);hurtCooldown=Mathf.Max(0,hurtCooldown-dt);knockback=Mathf.Max(0,knockback-dt);flash=Mathf.Max(0,flash-dt);toastTime=Mathf.Max(0,toastTime-dt);
             for(int i=0;i<buffs.Length;i++)buffs[i]=Mathf.Max(0,buffs[i]-dt);
             if((fireHeld||Input.GetKey(KeyCode.J)||Input.GetKey(KeyCode.F))&&shotCooldown<=0)Fire();
-            playerVisual.flipX=facing<0;int frame=!grounded?3:Mathf.Abs(playerBody.linearVelocity.x)>.2f?1+(int)(Time.time*8)%2:0;if(grounded&&landingTimer>0)frame=7;if(shotCooldown>.25f)frame=4;if(hurtCooldown>0)frame=stats.character==0?6:5;else if(stats.character==0&&(buffs[1]>0||buffs[5]>0)&&Mathf.Abs(playerBody.linearVelocity.x)<.2f)frame=5;playerVisual.sprite=playerFrames[frame];
+            playerVisual.flipX=facing<0;int frame=!grounded?3:Mathf.Abs(playerBody.linearVelocity.x)>.2f?1+(int)(Time.time*8)%2:0;if(grounded&&landingTimer>0)frame=7;if(shotCooldown>.25f)frame=stats.HasWeapon?4:5;if(hurtCooldown>0)frame=stats.character==0?6:5;else if(stats.character==0&&(buffs[1]>0||buffs[5]>0)&&Mathf.Abs(playerBody.linearVelocity.x)<.2f)frame=5;playerVisual.sprite=playerFrames[frame];
             playerVisual.color=hurtCooldown>0&&((int)(hurtCooldown*12)%2==0)?new Color(1,1,1,.35f):Color.white;playerLight.intensity=.4f+flash*2;playerLight.color=buffs[1]>0||buffs[5]>0?Gold:Cyan;
             TickPickups(dt);TickBullets(dt);TickEffects(dt);TickPlatformer(dt);UpdateUi();
             if(playerBody.position.y<-20)Respawn();
@@ -155,7 +158,7 @@ namespace ArtificialNegligence {
             grounded=Physics2D.BoxCast(playerBody.position+Vector2.down*.59f,new Vector2(.63f,.15f),0,Vector2.down,.2f,1<<8).collider!=null;
             coyote=grounded?.10f:Mathf.Max(0,coyote-Time.fixedDeltaTime);jumpBuffer=Mathf.Max(0,jumpBuffer-Time.fixedDeltaTime);
             float input=((rightHeld||Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow))?1:0)-((leftHeld||Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow))?1:0);
-            float speed=(91+stats.speed*19+stats.gear[0]*7+(buffs[0]>0?50:0)+(stats.module==0?12:0)+(stats.suit==3?18:stats.suit==1?-10:0))/PPU;
+            float speed=(91+stats.speed*19+stats.gear[0]*7+(buffs[0]>0?50:0)+(stats.module==0?12:0)+(stats.HasArmor?(stats.suit==3?18:stats.suit==1?-10:0):0))/PPU;
             var velocity=playerBody.linearVelocity;if(knockback<=0)velocity.x=Mathf.MoveTowards(velocity.x,input*speed,(grounded?55:35)*Time.fixedDeltaTime);if(dashTime>0)velocity=new Vector2(facing*15,0);velocity.y=Mathf.Max(velocity.y,-460/PPU);
             if(input!=0)facing=input>0?1:-1;
             if(jumpBuffer>0&&coyote>0){velocity.y=(buffs[6]>0?290:235)/PPU;jumpBuffer=coyote=0;grounded=false;}
@@ -165,8 +168,8 @@ namespace ArtificialNegligence {
             if(!gameCamera||!playerBody)return;RefreshGraphics();
             float aspect=(float)Screen.width/Screen.height;const float target=16f/9;
             gameCamera.rect=graphicsTexture?new Rect(0,0,1,1):aspect>target?new Rect((1-target/aspect)/2,0,target/aspect,1):new Rect(0,(1-aspect/target)/2,1,aspect/target);
-            UpdateDepthCamera();float x=gameCamera.transform.position.x;
-            if(background)background.transform.position=new Vector3(x+5-(x-15)*.03f,-6.4375f,24);
+            float targetX=mode==ScreenMode.Title?15:Mathf.Clamp(playerBody.position.x+5.5f,15,worldLength/PPU-15);float x=Mathf.SmoothDamp(gameCamera.transform.position.x,targetX,ref followVelocity,.12f,Mathf.Infinity,Time.unscaledDeltaTime);gameCamera.transform.position=new Vector3(x,-8.4375f+(hurtCooldown>.85f?Mathf.Sin(Time.unscaledTime*48)*.05f:0),-20);
+            if(background)background.transform.position=new Vector3(x+5-(x-15)*.03f,-6.4375f,0);
             float[] widths={116,88,68,38,26},ys={81,119,96,74,131},speeds={4,-7,12,24,-31},phases={145,440,280,85,520};
             for(int i=0;i<ships.Count;i++){float span=480+widths[i]+100;float raw=phases[i]+Time.unscaledTime*speeds[i]-(x-15)*PPU*(.05f+i*.025f);float sx=((raw%span)+span)%span-widths[i]-50;ships[i].flipX=speeds[i]<0;ships[i].transform.position=new Vector3(x-15+(sx+widths[i]/2)/PPU,-(ys[i]+widths[i]/4+Mathf.Sin(Time.unscaledTime*.5f+i)*2)/PPU,0);}
             var nearest=pickups.Where(p=>p.gpu&&!p.taken&&p.transform).OrderBy(p=>Mathf.Abs(p.transform.position.x-playerBody.position.x)).Take(4).ToArray();
@@ -180,7 +183,7 @@ namespace ArtificialNegligence {
                 if(Mathf.Abs(d.x)>.85f||Mathf.Abs(d.y)>1.02f)continue;
                 p.taken=true;p.sprite.enabled=false;if(p.light)p.light.enabled=false;Burst(p.transform.position,p.gpu?Gold:new Color(.8f,.3f,1),12);Sound(pickupSound);
                 if(p.gpu){collected++;int amount=buffs[4]>0?20:10;stats.points+=amount;stats.score+=amount;stats.GainXp(8);int previousTier=stats.GraphicsTier;AwardGraphicsGpu(p.coreId);SaveProgress();if(stats.GraphicsTier==previousTier){Toast("+"+amount+" POINTS");toastTime=1.2f;}}
-                else{int slot=rng.Next(5)==0?0:rng.Next(1,3),tier=RunStats.RollTier(rng.Next(200));string gear=slot==0?stats.Equip(0,tier):stats.Discover(slot,rng.Next(4),tier);string boost=GrantPowerup(false);SaveProgress();Toast(gear+" / "+boost);}
+                else{int slot=stats.WeaponCount==0?1:rng.Next(5)==0?0:rng.Next(1,3),tier=RunStats.RollTier(rng.Next(200));string gear=slot==0?stats.Equip(0,tier):stats.Discover(slot,rng.Next(4),tier);string boost=GrantPowerup(false);SaveProgress();Toast(gear+" / "+boost);}
             }
         }
         public string GrantPowerup(bool puzzle){
@@ -198,6 +201,7 @@ namespace ArtificialNegligence {
             SetMode(ScreenMode.PuzzleResult);
         }
         public void Fire(){
+            if(!stats.HasWeapon){shotCooldown=.5f;var target=enemies.FirstOrDefault(e=>e&&e.hp>0&&Mathf.Abs(e.transform.position.y-playerBody.position.y)<1.3f&&(e.transform.position.x-playerBody.position.x)*facing>=0&&Mathf.Abs(e.transform.position.x-playerBody.position.x)<1.6f);if(target)target.Hit(1);Burst(playerBody.position+Vector2.right*facing*.8f,Cyan,3);return;}
             float interval=new[]{.36f,.5f,.65f,.85f}[stats.weapon];shotCooldown=buffs[3]>0?.12f:Mathf.Max(.12f,interval-stats.gear[1]*.025f-(stats.module==1?.06f:0));flash=.18f;
             var origin=playerBody.position+new Vector2(facing*.6f,.04f);float speed=stats.weapon==3?27:stats.weapon==1?12:245/PPU;
             SpawnBullet(origin,new Vector2(facing*speed,0),false,stats.gear[1],stats.weapon==3?3:stats.gear[1]>=4?1:0);
@@ -214,11 +218,11 @@ namespace ArtificialNegligence {
             }
         }
         public void Damage(int amount,float direction,bool energy=false){if(hurtCooldown>0||qaMode)return;if(buffs[1]>0||buffs[5]>0){Burst(playerBody.position,Gold,6);hurtCooldown=.2f;return;}
-            stats.health-=stats.Incoming(Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.enemyDamage)),energy);hurtCooldown=1.1f;knockback=.18f;playerBody.linearVelocity=new Vector2(direction*5,7);Burst(playerBody.position,Pink,12);Sound(hitSound);if(haptics)Haptic();Toast("SECURITY HIT / HEALTH "+stats.health);
+            stageHits++;stats.health-=stats.Incoming(Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.enemyDamage)),energy);hurtCooldown=1.1f;knockback=.18f;playerBody.linearVelocity=new Vector2(direction*5,7);Burst(playerBody.position,Pink,12);Sound(hitSound);if(haptics)Haptic();Toast("SECURITY HIT / HEALTH "+stats.health);
             if(stats.health<=0)SetMode(ScreenMode.Dead);
         }
-        void Respawn(){float x=playerBody.position.x*PPU;var safe=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x<x).OrderByDescending(r=>r.x).FirstOrDefault();playerBody.position=checkpointPosition;playerBody.linearVelocity=Vector2.zero;stats.health--;hurtCooldown=1;Toast("FELL INTO THE GRID / HEALTH "+stats.health);if(stats.health<=0)SetMode(ScreenMode.Dead);}
-        public void EnemyDown(EnemyAgent enemy){int reward=enemy.IsBoss?60+level*10:4+level;stats.points+=reward;stats.score+=reward;string gain=stats.GainXp(enemy.IsBoss?80:12);SaveProgress();Burst(enemy.transform.position,Pink,15);Toast((enemy.IsBoss?"BOSS DEFEATED":EnemyAgent.Names[enemy.type]+" DISABLED")+" / +"+reward+" PTS / "+gain);}
+        void Respawn(){stageHits++;float x=playerBody.position.x*PPU;var safe=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x<x).OrderByDescending(r=>r.x).FirstOrDefault();playerBody.position=checkpointPosition;playerBody.linearVelocity=Vector2.zero;stats.health--;hurtCooldown=1;Toast("FELL INTO THE GRID / HEALTH "+stats.health);if(stats.health<=0)SetMode(ScreenMode.Dead);}
+        public void EnemyDown(EnemyAgent enemy){stageKills++;int reward=enemy.IsBoss?60+level*10:4+level;stats.points+=reward;stats.score+=reward;string gain=stats.GainXp(enemy.IsBoss?80:12);SaveProgress();Burst(enemy.transform.position,Pink,15);Toast((enemy.IsBoss?"BOSS DEFEATED":EnemyAgent.Names[enemy.type]+" DISABLED")+" / +"+reward+" PTS / "+gain);}
         public void Burst(Vector2 position,Color color,int count){count=Math.Max(2,Mathf.RoundToInt(count*new[]{.3f,.45f,.6f,.8f,1f,1.2f}[stats.GraphicsTier]));for(int i=0;i<count;i++){var sr=SpriteObject("Pixel spark",white,position,14,false);sr.color=color;sr.transform.localScale=Vector3.one*UnityEngine.Random.Range(.07f,.16f);float life=UnityEngine.Random.Range(.3f,.65f);effects.Add(new Effect{transform=sr.transform,visual=sr,velocity=UnityEngine.Random.insideUnitCircle*4,life=life,total=life});}}
         void TickEffects(float dt){for(int i=effects.Count-1;i>=0;i--){var e=effects[i];if(!e.transform){effects.RemoveAt(i);continue;}e.life-=dt;e.velocity+=Vector2.down*5*dt;e.transform.position+=(Vector3)(e.velocity*dt);var c=e.visual.color;c.a=e.life/e.total;e.visual.color=c;if(e.life<=0){Destroy(e.transform.gameObject);effects.RemoveAt(i);}}}
         AudioClip Tone(float frequency,float duration){int rate=22050;float[] samples=new float[(int)(duration*rate)];for(int i=0;i<samples.Length;i++)samples[i]=Mathf.Sin(2*Mathf.PI*frequency*i/rate)*Mathf.Pow(1-i/(float)samples.Length,2);var clip=AudioClip.Create("Synth effect",samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
@@ -253,10 +257,19 @@ namespace ArtificialNegligence {
             string[] args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qaOutput");string path=at>=0?args[at+1]:Application.persistentDataPath;System.IO.Directory.CreateDirectory(path);
             yield return new WaitForSecondsRealtime(1);
             CaptureAtlasQa(path,"Looper",looperFrames,4);CaptureAtlasQa(path,"Survivors",survivorAtlas,8);CaptureAtlasQa(path,"Enemies",enemyFrames,6);CaptureAtlasQa(path,"Equipment",itemFrames,4);CaptureAtlasQa(path,"Ships",shipFrames,4);SetMode(ScreenMode.Title);
-            CaptureQa(System.IO.Path.Combine(path,"unity-title.png"));
-            StartRun();yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-city-map.png"));StartStage(0);
+            yield return new WaitForSecondsRealtime(.3f);var attractStart=titleRunner.transform.position;yield return new WaitForSecondsRealtime(.7f);if(titleRunner.transform.position==attractStart)throw new Exception("Start scene actor did not animate");if(stats.GraphicsGpus!=0)throw new Exception("Title granted GPU progress");CaptureQa(System.IO.Path.Combine(path,"unity-title.png"));Debug.Log("AN_TITLE_QA_PASS / live actor movement, no progression awarded");
+            StartRun();if(mode!=ScreenMode.Story)throw new Exception("First run did not start with story");yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-story.png"));for(int page=0;page<4;page++)AdvanceStory();if(!stats.storySeen||mode!=ScreenMode.CityMap)throw new Exception("Story did not lead to city map");Debug.Log("AN_STORY_QA_PASS / first-run opening and completion");yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-city-map.png"));
+            characterReturn=ScreenMode.CityMap;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);
+            var portraits=screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Where(i=>i.name=="Character silhouette or portrait").ToArray();if(portraits.Length!=4||portraits.Count(i=>i.color==Color.black)!=3)throw new Exception("Locked character silhouettes failed");
+            if(screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Count(i=>i.name=="Equipped item")!=1)throw new Exception("Character equipped item preview failed");
+            CaptureQa(System.IO.Path.Combine(path,"unity-characters-locked.png"));
+            var feedback=screenRoot.GetComponentInChildren<ButtonFeedback>();var feedbackLabel=feedback.GetComponentInChildren<UnityEngine.UI.Text>();var labelPosition=feedbackLabel.rectTransform.anchoredPosition;
+            feedback.OnPointerDown(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));yield return new WaitForSecondsRealtime(.12f);if(feedbackLabel.rectTransform.anchoredPosition==labelPosition)throw new Exception("Paused button feedback failed");feedback.OnPointerUp(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
+            SetMode(ScreenMode.Settings);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-settings.png"));
+            Debug.Log("AN_UI_QA_PASS / three locked silhouettes, empty weapon/armor slots and starter shoes, unscaled press feedback");
+            SetMode(ScreenMode.Gear);yield return new WaitForSecondsRealtime(.2f);if(stats.WeaponCount!=0||stats.SuitCount!=0||screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Any(i=>i.name=="Found equipment"))throw new Exception("Inventory granted starter loot");CaptureQa(System.IO.Path.Combine(path,"unity-empty-inventory.png"));StartStage(0);int initialBullets=bullets.Count;Fire();if(bullets.Count!=initialBullets)throw new Exception("Unarmed player fired a free weapon");
             float start=playerBody.position.x;rightHeld=true;fireHeld=true;jumpHeld=true;yield return new WaitForSecondsRealtime(.9f);jumpHeld=false;Dash();yield return new WaitForSecondsRealtime(.4f);ClearInput();
-            if(playerBody.position.x<=start+2)throw new Exception("QA movement failed");stats.points=300;stats.rank=7;stats.gear[1]=3;stats.gear[2]=4;stats.maxHealth=stats.health=9;
+            if(playerBody.position.x<=start+2)throw new Exception("QA movement failed");stats.points=300;stats.rank=7;stats.Discover(1,0,3);stats.SelectEquipment(1,0);stats.Discover(2,0,4);stats.SelectEquipment(2,0);stats.maxHealth=stats.health=9;
             yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-gameplay.png"));
             CaptureQa(System.IO.Path.Combine(path,"unity-graphics-bootstrap.png"));var originalCores=stats.graphicsCores;
             for(int tier=0;tier<6;tier++){stats.graphicsCores=Enumerable.Range(0,RendererProgress.Thresholds[tier]).Select(i=>"qa:"+i).ToList();RefreshGraphics(true);yield return new WaitForSecondsRealtime(.2f);if(graphicsTexture.width!=RendererProgress.Widths[tier])throw new Exception("Graphics tier render failed");CaptureQa(System.IO.Path.Combine(path,"unity-graphics-tier-"+tier+".png"));}
@@ -272,6 +285,8 @@ namespace ArtificialNegligence {
             stats.graphicsCores=originalCores;RefreshGraphics(true);
             int[] stages={5,11,17};foreach(int stage in stages){LoadLevel(stage);SetMode(ScreenMode.Play);var boss=enemies.First(e=>e.IsBoss);playerBody.position=(Vector2)boss.transform.position+Vector2.left*4;yield return new WaitForSecondsRealtime(2.8f);if(boss.AttackCount==0)throw new Exception("Boss cannot attack");boss.Hit(Mathf.CeilToInt(boss.maxHp*.6f));yield return new WaitForSecondsRealtime(2.8f);if(stage==11)CaptureQa(System.IO.Path.Combine(path,"unity-boss.png"));boss.Hit(999);}
             LoadLevel(12);SetMode(ScreenMode.Play);yield return new WaitForSecondsRealtime(.3f);CaptureQa(System.IO.Path.Combine(path,"unity-datafarm.png"));LoadLevel(24);yield return new WaitForSecondsRealtime(.3f);CaptureQa(System.IO.Path.Combine(path,"unity-citadel.png"));
+            if(NextAdaptivePressure(0,0,5,1,false)<=0||NextAdaptivePressure(0,6,0,.6f,false)>=0||NextAdaptivePressure(0,0,0,0,true)>=0||NextAdaptivePressure(.45f,0,5,1,false)>.45f||NextAdaptivePressure(-.3f,9,0,0,true)<-.3f)throw new Exception("Adaptive difficulty bounds or performance response failed");
+            Debug.Log("AN_ADAPTIVE_QA_PASS / strong clears, struggling clears, defeat, upper and lower bounds");
             Debug.Log("AN_RUNTIME_QA_PASS 88 isolated atlas frames, compact HUD, collection, four characters, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
         }
     }

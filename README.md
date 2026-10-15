@@ -1,135 +1,104 @@
 <p align="center">
-  <img src="docs/logo_wide.png" width="480" alt="Artificial Negligence — Looper collecting a GPU above the rebuilding city">
+  <img src="docs/logo_wide.png" width="480" alt="Artificial Negligence â€” Looper collecting a GPU above the rebuilding city">
 </p>
 
-<p align="center"><strong>Absorb the AI. Keep it public.</strong></p>
-<p align="center">An Android pixel platformer where collecting GPUs upgrades the world itself.</p>
+<p align="center"><strong>Restore reality. Keep AI public.</strong></p>
+<p align="center">A 2D pixel platformer for Android and Windows.</p>
 <p align="center">
-  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><strong>Download APK</strong></a> ·
-  <a href="#screenshots">Screenshots</a> ·
-  <a href="ROADMAP.md">Art roadmap</a> ·
-  <a href="CREDITS.md">Credits</a>
+  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><strong>Android APK</strong></a> ·
+  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip"><strong>Windows ZIP</strong></a> ·
+  <a href="STORY.md">Story</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CREDITS.md">Credits</a>
 </p>
-<p align="center">v2.3.0 · Android 8+ · ARM64 · Unity 6000.6.5f1 · Playtest build</p>
+<p align="center">v2.4.0 · Android 8+ / ARM64 · Windows 64-bit · Unity 6000.6.5f1 · Playtest build</p>
 
-## Overview
+## The story
 
-**Artificial Negligence** is a single-player 2D platformer for Android, built in Unity.
+The global AI explosion set the masses free. People shared knowledge, built tools, and reclaimed their lives. The corporations tried to take it back, seizing GPUs and reserving intelligence for the elite.
 
-Start as **Looper**, a core runner collecting GPUs before corporations seize them. Unlock more survivors as you cross the city. Fight through rooftop routes, solve intellect terminals and reach district bosses. Every core helps reclaim public AI—and brings more color, detail and depth to the world.
+Their takeover glitched reality itself. Color vanished, animation lost frames, and neighborhoods collapsed into crude pixels.
 
-## Unity 2.5D preview
+You are **Looper**, a core runner reconnecting a public network. Recover GPUs to restore the world and keep AI in the hands of the people. Find allies, salvage equipment, and fight your way through the city to the corporate uplinks.
 
-A Windows prototype adds perspective, platform depth, and a smooth moving camera to the existing Unity game. [Preview details and controls](docs/unity-25d-preview.md).
+**The first run begins with a four-part story opening.** Advance at your own pace or skip it; replay it using **Story** on the start screen. [Read the full campaign outline](STORY.md).
 
-## Features
+## Play your way
 
-- **A connected city:** 30 generated stages across five districts, followed by further city cycles with increasingly tough enemies.
-- **Platforming routes:** six route motifs vary platform spacing, rooftops, loot, terminals, enemy encounters and hazards. Dash, checkpoints and optional moving lifts support exploration.
-- **Enemies with presence:** six enemy classes, animated attacks and three rotating bosses.
-- **Build your survivor:** permanent XP, talents and upgrades; Pulse, Arc, Scatter and Rail weapons with armor and module tradeoffs.
-- **A persistent collection:** discover weapons and armor with their own Common–Ultra rarities, equip combinations and salvage duplicates. Ultra equipment has a 0.5% chance in boxes.
-- **Gameplay character unlocks:** Looper starts unlocked; collect 24 distinct GPUs for Vale, clear stage 6 for Mender and stage 12 for Rook. Thread colors unlock through leveling, cores and stage clears.
-- **A quieter HUD:** compact status, contextual messages and translucent thumb controls; secondary progress stays in pause and inventory.
-- **Changing logic puzzles:** twelve puzzle families, explanations after answers and no powerup for a wrong answer.
+- **Platforming and exploration:** 30 generated stages across five city districts, with further cycles of increasing resistance. Narrow catwalks, broad rooftops, stacked ledges, taller climbs, gaps, checkpoints, hazards, and optional moving lifts vary the route.
+- **Jump for the reward:** airborne GPUs sit above ledges and over gaps. All generated landings, GPUs, and ground gaps are checked with the base jump across 60 routes; no equipment or jump boost is required for reachability.
+- **Find your equipment:** start unarmed and unarmored. Strike at close range until you find a weapon. Open supply boxes to collect individual weapons and armor pieces; XP never grants equipment.
+- **An actual inventory:** keep multiple copies, including different rarities of the same type. Equip each find deliberately; stronger loot never auto-equips and weaker copies are retained.
+- **Permanent growth:** GPUs and combat earn points and XP. Spend points on personal upgrades and improve equipment you own. Talents support weapon mastery and defense training.
+- **Changing terminals:** twelve puzzle families, one attempt per terminal, and no powerup for a wrong answer.
+- **Security and bosses:** scouts, gunners, chargers, shields, swarms, and snipers; rotating Auditor, Harvester, and Executor bosses with telegraphed attacks.
+- **Adaptive difficulty:** choose Relaxed, Standard, Hard, or Adaptive. Adaptive raises pressure after strong clears and eases it after repeated hits or defeat; encounter adjustments apply between stages.
+- **A living start screen:** moving city traffic, an animated Looper, and transmissions introduce the fight.
 
-## How a run works
+## Equipment and allies
 
-1. Pick a stage on the city map and explore ground routes and rooftops.
-2. Collect GPUs for points and XP; open boxes for equipment and temporary boosts.
-3. Solve intellect terminals for extra powerups. Each terminal allows one attempt.
-4. Reach the uplink with at least 60% of the stage’s GPUs. Boss stages also require defeating the boss.
-5. Spend points, improve your build and move to the next route. Full GPU clears earn three mastery stars.
-
-Character, collection, XP and graphics progress save locally. Revisit stages for points and loot; graphics progression requires distinct cores.
-
-## Combat and equipment
-
-| Weapon | Strength | Tradeoff |
+| Weapon family | Strength | Tradeoff |
 | --- | --- | --- |
 | Pulse | Balanced fire | Shields resist it |
-| Arc | Breaks shields; chains to nearby enemies | Less effective against heavy armor |
-| Scatter | Wide spread against swarms | Short range |
-| Rail | Armor damage and piercing | Less effective against shields |
+| Arc | Breaks shields and chains between enemies | Weaker against heavy armor |
+| Scatter | Spread against swarms | Short range |
+| Rail | Piercing and armor damage | Weaker against shields |
 
-Balanced, Kinetic, Insulated and Light armor change protection and movement. Sprinter, Capacitor and Stabilizer modules complement different builds. Items keep their own rarity: **Common → Rare → Epic → Legend → Ultra**. Find stronger drops, salvage duplicates or spend points to improve the equipped item through Legend. Ultra is found in boxes only.
+Balanced, Kinetic, Insulated, and Light armor offer different protection and movement tradeoffs. Each found copy keeps its own **Common → Rare → Epic → Legend → Ultra** tier. The workshop improves equipped, owned items through Legend. **Ultra is found only in boxes, with a 0.5% chance per box.**
 
-## Graphics are progression
+Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, and **Rook** by clearing stage 12. The character screen shows locked silhouettes, the selected character, equipped gear, and outfit unlocks. Characters currently share combat stats and inventory; their proposed signature powers are described in the story outline and are not yet implemented.
 
-Distinct GPUs permanently improve the renderer. Upgrades are automatic; points remain available for character upgrades. Replaying an already credited GPU still awards gameplay rewards, but does not advance graphics again.
+## Restore the world's graphics
 
-| GPUs collected | Graphics tier | World resolution |
-| ---: | --- | --- |
-| 0 | Bootstrap | 240 × 135 |
-| 24 | 8-bit | 320 × 180 |
-| 75 | 16-bit | 400 × 225 |
-| 150 | Neon | 480 × 270 |
-| 300 | HD Pixel | 720 × 405 |
-| 600 | Ultra | 960 × 540 |
+Distinct GPU cores permanently upgrade visual quality through **Bootstrap → 8-bit → 16-bit → Neon → HD Pixel → Ultra**. Revisited districts use your earned graphics tier. Collecting the same core again does not grant duplicate restoration credit.
 
-The pixel-art style stays consistent as color, scenery, lighting and weather become richer. Menus and controls stay sharp throughout; collision geometry stays consistent.
+The restoration is part of the story: every recovered core returns compute to the public and repairs reality. Platform collision and jump physics stay consistent throughout.
 
 ## Screenshots
 
-[Clean main menu](docs/main-menu.png) · [Android launcher icon](docs/android-icon.png)
+| Start screen | Story opening |
+| --- | --- |
+| ![Live city start screen](docs/title-v240.png) | ![Story opening](docs/story-v240.png) |
 
-<table>
-<tr><th>Bootstrap graphics</th><th>Ultra graphics</th></tr>
-<tr><td><img src="docs/graphics-tier-0.png" alt="Coarse Bootstrap graphics"></td><td><img src="docs/graphics-tier-5.png" alt="Detailed Ultra graphics"></td></tr>
-<tr><th>City route</th><th>Boss encounter</th></tr>
-<tr><td><img src="docs/city-map.png" alt="Connected city map"></td><td><img src="docs/boss-encounter.png" alt="Boss combat"></td></tr>
-<tr><th>Survivor unlocks</th><th>Equipment collection</th></tr>
-<tr><td><img src="docs/characters.png" alt="Looper and unlockable survivors"></td><td><img src="docs/equipment.png" alt="Weapons with independent rarities"></td></tr>
-</table>
+| Platforming | Character and equipment |
+| --- | --- |
+| ![2D platforming and varied surfaces](docs/gameplay-v240.png) | ![Locked silhouettes and earned loadout](docs/characters-v240.png) |
 
-Screenshots come from the desktop test build. Graphics comparisons and unlock screens use staged progress.
+## Download and play
 
-## Play on Android
+**[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk)** — Android 8.0+, ARM64. Open the APK on your device and approve installation. Install over the existing app to retain local progress.
 
-1. [Download the latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk).
-2. Open it on an Android 8.0+ ARM64 device and approve installation.
-3. Install over an existing compatible copy to keep local progress.
+**[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip)** — extract the entire archive, then run `ArtificialNegligence.exe`. Keep the Data folder and supporting files beside it.
 
-This is a testing build. Checks cover 1,509 GPUs and 443 gaps across the first 60 generated routes, all 88 active sprite frames, collection rules and save migration; desktop gameplay and the HUD have been checked. The updater passed local end-to-end tests for partial downloads, cached retries, corrupt responses and full-download fallback. Packaged Android icon resources were inspected; physical device installation and launcher testing remains outstanding.
+Older saves from the menu-granted equipment system have that loadout cleared when migrated. A backup is retained locally as `progress-before-loot-inventory`; player levels, GPU restoration, and character unlocks are preserved. Newly found items use the individual inventory system.
 
-### Updates
+### Controls
 
-Open **Settings → Check for Updates**. The updater scans installed content in the background, caches its index, groups missing regions and downloads up to four ranges in parallel from one GitHub Release APK. Verified cached data survives retries. Each region and the reconstructed APK are checked before Android asks you to approve installation. A safe full-download fallback handles connections without range support. Small balance updates remain separate.
-
-One v2.3.0 upgrade bridge supports older installs. Obsolete chunk files are removed; future APK binaries live in GitHub Releases rather than Git commits.
-
-[Update and publishing guide](docs/UPDATES.md) · [APK folder](apk/) · [Current version manifest](apk/latest-v2.json) · [Changelog](CHANGELOG.md)
-
-## Controls
-
-| Action | Android | Keyboard |
+| Action | Android | Windows |
 | --- | --- | --- |
-| Move | Left / right | A / D or arrow keys |
-| Jump | Jump | Space, W or Up |
-| Dash | Dash | Left Shift or K |
-| Fire | Fire | J or F |
-| Solve terminal | Nearby Solve prompt | E |
-| Gear / upgrades | Pause → Gear / Upgrades | G / U |
-| Pause | Top-right pause button | Escape |
+| Move | Left / right pads | A / D or arrows |
+| Jump | Jump | Space, W, or Up |
+| Strike / fire equipped weapon | Strike / Fire | J or F |
+| Dash | Dash | Shift or K |
+| Terminal | Connect prompt | E |
+| Inventory | Pack / pause menu | I or G |
+| Character | Pause → Character | C |
+| Upgrades | Pause → Upgrades | U |
+| Pause | Pause | Escape |
+| Story page | Next | Space / Enter |
 
-Choose characters from **City Map → Survivor** or **Pause → Gear → Survivor**. Characters and thread colors are cosmetic and share your saved build.
+### In-app updates
+
+Use **Settings → Check for Updates** on Android. The updater reuses matching regions from the installed APK, downloads missing data in parallel, verifies the rebuilt APK, and hands installation to Android. Download size depends on the changes; unchanged music and art can be reused. Installation still requires Android approval.
+
+The current APK is hosted once in GitHub Releases. [`apk/`](apk/) contains its download link and region manifest. One v2.3.0 bridge is retained so older clients can reach the current updater. Windows updates are distributed as a complete ZIP.
 
 ## Creative direction and AI use
 
-**Dustin (dustindwayne)** created the concept, art-style direction, world, gameplay vision and overall creative direction, and supplied music and visual references. This build uses AI assistance for programming, generated artwork, integration and testing. [Full credits and disclosure](CREDITS.md).
+**Dustin (dustindwayne)** created the game concept, world, art-style direction, gameplay vision, and overall creative direction, and supplied music and visual references. This build uses AI assistance for programming, generated artwork, integration, and testing. [Full disclosure and credits](CREDITS.md).
 
-The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator’s review. [Read the roadmap](ROADMAP.md). The logo features Looper’s character art, GPU collection and the city’s transition from coarse pixels to richer detail. [Logo generation record](docs/logo-generation.md) · [Sprite refresh and prompt record](docs/sprite-refresh.md).
+The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator's review. [Art roadmap](ROADMAP.md) · [Logo record](docs/logo-generation.md) · [Sprite record](docs/sprite-refresh.md).
 
 ## Development
 
-Open `unity/` in **Unity 6000.6.5f1** with Android Build Support. [Project setup and controls](unity/README.md).
+Open [`unity/`](unity/) in Unity **6000.6.5f1** with Android Build Support. Build methods are `BuildGame.Desktop` and `BuildGame.Android`. Both run gameplay and base-jump route validation before packaging. Runtime `-qa` checks cover the opening, interface, collection, graphics tiers, upgrades, puzzles, movement, and bosses.
 
-| Folder | Contents |
-| --- | --- |
-| `unity/` | Editable Unity project and game source |
-| `apk/` | Current download link, range manifest and one legacy upgrade bridge |
-| `docs/` | Screenshots, branding and release documentation |
-| `tools/` | APK and balance-update publishing scripts |
-
-Report problems through [GitHub Issues](https://github.com/dustindwayne/artificial-negligence/issues), including your device, Android version, game version and steps to reproduce.
-
+[Changelog](CHANGELOG.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)

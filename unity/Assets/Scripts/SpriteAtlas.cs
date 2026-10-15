@@ -59,6 +59,6 @@ namespace ArtificialNegligence {
             }playerFrames=styledCharacters[id];if(playerVisual)playerVisual.sprite=playerFrames[0];
         }
         public Sprite CharacterFrame(int character,int frame){return character==0?looperFrames[frame]:survivorAtlas[(character==3?0:character)*8+frame];}
-        public Sprite EquipmentIcon(int slot,int family){return itemFrames[slot==1?new[]{5,8,9,10}[family]:new[]{6,11,12,13}[family]];}
+        public Sprite EquipmentIcon(int slot,int family){return itemFrames[slot==0?4:slot==1?new[]{5,8,9,10}[family]:new[]{6,11,12,13}[family]];}
     }
 }
