@@ -1,8 +1,10 @@
 # Logo generation record
 
+> Status for 2.4.2: Historical city-logo generation record. The active app identity uses Looper artwork; the README hero is now Looper versus Ai Wrath. This file preserves the original prompt and does not identify the current launcher image.
+
 Creative direction: Dustin (dustindwayne). AI-assisted artwork generated with the built-in `image_gen.imagegen` tool, using the previous logo as a visual reference. The emblem represents GPU collection, the street survivor and graphics progression.
 
-Asset: [logo-city.png](logo-city.png). Previous reference: [logo-legacy.png](logo-legacy.png). Also used in `unity/Assets/Resources/Art/Logo.png`.
+Asset: [logo-city.png](logo-city.png). Previous reference: [logo-legacy.png](logo-legacy.png). Superseded for active use by the Looper logo described in [logo-generation.md](logo-generation.md).
 
 ## Final prompt
 

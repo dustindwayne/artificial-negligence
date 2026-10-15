@@ -1,39 +1,39 @@
-# Artificial Negligence — Unity project
+# Artificial Negligence — Unity 2D project / 2.4.2
 
-Unity 6000.6.5f1 with Universal Render Pipeline 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play.
+Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
-## Current game
+## Implemented
 
-- Four-page opening on the first run; Story on the title screen replays it.
-- 30 generated stages across five city districts, followed by further cycles. CityRoute.cs generates the routes; the old CSV is retained as a historical asset.
-- Five pixel platform surface patterns, varied ledges/heights, gap jumps and airborne GPUs. Physics validation covers 60 routes with the base jump and no gear.
-- No starting or level-granted weapons/armor. Boxes produce individual finds; inventory stores multiple copies and manual equipment selections. Upgrade only owned equipment.
-- Character unlocks, locked silhouettes, selected loadout, outfits, personal upgrades, talents, one-attempt terminals, bosses and music.
-- Relaxed / Standard / Hard / Adaptive difficulty. Adaptive changes encounter pressure between stages.
+30 generated stages across five districts and further cycles; 60 route validation cases. Varied platforms, gaps, airborne GPUs, duck/slide passages, permanent GPU graphics restoration and separate compute/momentum-gated AI support. No starter or XP-granted weapons/armor: find individual items, retain copies, manually equip and upgrade owned equipment. Five gameplay-unlocked characters including Ai Wrath, short artwork story scenes, twelve puzzle families with one attempt, bots/human Sinister agents/bosses, four difficulty modes and contextual music.
+
+Individual ally signature powers, the full campaign outline and creator-drawn sprite replacements remain planned.
 
 ## Controls
 
-A/D or arrows: move. Space/W/Up: jump. J/F: strike or fire equipped weapon. Shift/K: dash. E: terminal. I/G: inventory. C: character. U: upgrades. Escape: pause. Story: Space/Enter advances; Escape skips.
+Keyboard: A/D or arrows move; Space/W/Up jump; S/Down duck; Ctrl moving slide; J/F attack; Shift/K dash; E terminal; I/G inventory; C character; U upgrades; Escape pause/skip; Enter/Space story advance.
 
-## Build and checks
+Windows XInput and standard-mapped web gamepads: stick/D-pad movement and duck, A jump/confirm, B slide/back/skip, X/RT attack, Y terminal, RB dash, LB earned AI assist, LT assist type, View inventory, Menu pause. Android uses touch controls. See ../docs/CONTROLS.md for target limits and verification.
 
-BuildGame.Desktop builds a Windows player. BuildGame.Android builds an Android 8+ ARM64 APK. Both configure the project and validate gameplay, collection, puzzle rules, rarity rolls, sprite gutters and base-jump route reachability before building.
+## Build
 
-Example: Unity.exe -batchmode -quit -projectPath <project> -executeMethod BuildGame.Desktop -logFile <log>
+- BuildGame.Desktop: Windows x64.
+- BuildGame.Android: Android 8+ ARM64, SDK 35, NDK r27c, JDK 17.
+- BuildWeb.Build: WebGL with gzip fallback, hashed names and Web audio import override.
+- BuildRelease.All: all three targets sequentially.
+- After a Web build, run tools/package_web.py from the repository root to restore the themed index and package it.
 
-For Android, install Android Build Support for the same editor. The current helper uses SDK 35, NDK r27c, and JDK 17, with embedded tools as a fallback when the local task tool paths are absent. Build outputs are signed for playtesting; never publish a private signing key in this repository.
+Install matching Unity platform modules. Build methods configure settings and validate gameplay, puzzle rewards, rarity, inventory, sprite gutters and generated reachability. Native audio uses streaming; Web uses compressed-in-memory AAC imports. Game surfaces and collisions retain the same world footprint at all visual tiers.
 
-Run the Windows executable with -qa -qaOutput <folder> for isolated runtime checks and screenshots. This mode suppresses save writes. Tests cover the opening, interface, inventory, graphics tiers, movement, upgrades, terminals and bosses.
+Example: Unity.exe -batchmode -quit -projectPath <project> -executeMethod BuildRelease.All -logFile <log>
 
-## Saves and updates
+Android helper paths use the original workspace tool locations when present and embedded tools otherwise. Configure your own SDK/JDK/NDK and signing key when building elsewhere. Never commit a signing key or password. Published APKs currently use the same playtest signing certificate across updates.
 
-Progress is local. The migration from the older menu-granted loadout backs up progress-before-loot-inventory, clears that loadout, and preserves non-equipment progression. New inventory items have individual IDs and persist through JSON save/load.
+## Checks and saves
 
-Android uses the versioned GitHub Release APK and reusable-region manifest in apk/. One older upgrade bridge remains. Windows downloads are full ZIPs. No ads or analytics are included.
+Run the Windows executable with -qa -qaOutput <folder> for isolated checks and captures; QA suppresses save writes. Checks include story flow, found-only inventory, locked silhouettes, GPU visual tiers, movement, upgrades, puzzles, bosses, music, Wrath liberation and injected controller input. Physical controller and Android-device validation remain outstanding.
 
-See ../STORY.md and ../CREDITS.md for campaign direction and AI disclosure. Ally signature powers remain planned; current characters share combat stats and equipment.
+Native progress is local; browser progress belongs to that browser/site. The legacy menu-granted loadout migration backs up progress-before-loot-inventory and clears old granted gear while preserving other progression. New equipment has individual IDs and retains found copies.
 
+Android updates use the current release manifest plus a frozen v2.3.0 bridge. Windows updates are full ZIPs. Web hosting uses static files and page reloads, with no Android updater. See ../docs/UPDATES.md and ../docs/WEB-HOSTING.md.
 
-## 2.4.1 additions
-
-See STORY-PRESENTATION.md for limited dialogue scenes. Duck: S/Down; moving slide: Ctrl; earned chat assist: R; assist type: Q. Ai Wrath unlocks through his liberation encounter. Three new gameplay tracks join the music rotation.
+Concept, world, gameplay vision and art direction: Dustin (dustindwayne). AI assisted programming, visuals, implementation and testing. See CREDITS.md, STORY.md and ROADMAP.md; STORY-PRESENTATION.md describes limited dialogue.

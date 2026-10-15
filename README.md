@@ -3,7 +3,7 @@
 </p>
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
-<p align="center">A story-driven 2D pixel platformer for Android and Windows.</p>
+<p align="center">A story-driven 2D pixel platformer for Android, Windows, and your browser.</p>
 <p align="center">
   <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><img src="docs/download-android.svg" width="250" height="58" alt="Download Android APK"></a>
   <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip"><img src="docs/download-windows.svg" width="250" height="58" alt="Download Windows ZIP"></a>
@@ -11,7 +11,8 @@
 <p align="center">
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
-<p align="center">v2.4.1 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
+<p align="center">v2.4.2 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -25,12 +26,12 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **Duck and slide:** move through low maintenance passages with a smaller collision shape.
-- **Earn AI help:** defeats and close calls build momentum. With a full meter and enough compute, ask chat for a temporary drone, bridge, or shield.
-- **Pursuing agents:** Sinister Marshals, Handlers, and Stalkers chase and fight with AI support.
-- **Ai Wrath:** a new encounter, liberation scene, and gameplay-earned character unlock.
-- **Story artwork:** original character illustrations accompany brief dialogue.
-- **More presence:** higher detail pixel sprites, richer platform textures, and three additional gameplay music tracks.
+- **Controller support on Windows and web:** Xbox-style movement, combat, menus, dialogue, button prompts, and disconnect-to-pause. [Mapping and compatibility](docs/CONTROLS.md).
+- **Browser edition:** a playable WebGL build with local browser saves, a loading screen, fullscreen, and a game-world page theme. [FTP hosting guide](docs/WEB-HOSTING.md).
+- **Optional support:** the web page includes a voluntary Ko-fi link below the game, with no advertising or analytics scripts added.
+- **Documentation refresh:** current platform support, controls, build instructions, AI disclosure, historical records, and repaired text encoding.
+
+The previous update added ducking/sliding, earned AI assists, pursuing Sinister agents, Ai Wrath's liberation/playable unlock, short artwork dialogue, higher-detail sprites and three gameplay tracks. [Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -47,6 +48,10 @@ These are actual Windows captures. The banner above is promotional artwork.
 | Live start screen | Intellect terminal |
 | --- | --- |
 | ![Animated city start screen](docs/title-v241.png) | ![Logic puzzle terminal](docs/puzzle-v241.png) |
+
+### Browser edition
+
+![Browser edition running the actual 2.4.2 game](docs/web-v242.png)
 
 ## Built around exploration and choice
 
@@ -91,6 +96,8 @@ Choose **Relaxed, Standard, Hard, or Adaptive**. Adaptive increases pressure aft
 
 ## Download and play
 
+- **[Web / FTP package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** upload the included `play/` folder to your website. [Hosting instructions](docs/WEB-HOSTING.md). This download does not mean the website has been deployed.
+
 - **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8.0+, ARM64. Install over the existing app to retain local progress. Android asks you to approve installation.
 - **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the entire archive, then run `ArtificialNegligence.exe`. Keep the Data folder and supporting files beside it. The optional HD preview launcher changes rendering only and grants no progress.
 
@@ -113,11 +120,15 @@ Older saves from the menu-granted loadout system have that equipment cleared on 
 | Pause | Escape | Pause |
 | Story: continue / skip | Space or Enter / Escape | Continue / Skip |
 
+### Controllers
+
+Windows supports Xbox/XInput-compatible controllers; web supports standard-mapped browser gamepads. A jumps/confirms, X or RT attacks, B slides/backs out, RB dashes, Y connects, LB asks for earned help, LT cycles assist, View opens inventory, and Menu pauses. Stick/D-pad navigates menus. [Full controls and tested limits](docs/CONTROLS.md). A physical controller playtest remains outstanding.
+
 ### Updates
 
 On Android, use **Settings → Check for Updates**. The updater reuses matching regions from the installed APK, downloads missing regions in parallel, verifies the completed package, and hands installation to Android. Actual savings depend on what changed; unchanged music and art can be reused. Small balance updates can arrive separately.
 
-The current APK is hosted once in GitHub Releases. [`apk/`](apk/) provides its link and update manifest. One v2.3.0 bridge remains for older clients. Windows updates are full ZIP downloads.
+The current APK is hosted once in GitHub Releases. [`apk/`](apk/) provides its link and update manifest. One v2.3.0 bridge remains for older clients. Windows updates are full ZIP downloads. The web build updates when its hosting files are replaced and the page reloads; browser saves stay separate from native saves.
 
 ---
 
@@ -131,8 +142,8 @@ The art roadmap moves toward creator-drawn characters and key poses, with AI ass
 
 ## Development and testing
 
-Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Android Build Support. `BuildGame.Desktop` and `BuildGame.Android` run puzzle, collection, rarity, sprite-gutter, and route validation before packaging.
+Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Android Build Support. `BuildGame.Desktop`, `BuildGame.Android`, and `BuildWeb.Build` run puzzle, collection, rarity, sprite-gutter, and route validation before packaging.
 
-Windows runtime checks cover the opening, dialogue completion and replay prevention, inventory, character locks, graphics tiers, upgrades, terminals, bosses, music rotation, and Ai Wrath's hostile encounter, liberation, and playable unlock. Android package metadata and signing are checked separately; a physical Android device playtest has not been performed for this release.
+Windows runtime checks cover the opening, dialogue completion and replay prevention, inventory, character locks, graphics tiers, upgrades, terminals, bosses, music rotation, Ai Wrath's hostile encounter/liberation/playable unlock, and injected controller-frame routing. The earlier WebGL build was checked in-browser for loading, story, keyboard movement/jumping, GPU collection and saved progress; controller hardware testing is still required. Android package metadata and signing are checked separately; a physical Android device playtest has not been performed for this release.
 
 [Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)

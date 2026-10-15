@@ -1,12 +1,10 @@
-# Android downloads
+# Android — 2.4.2
 
-**[Download the latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk)**
+[Download latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk). Android 8+, ARM64. Install over the existing app to keep progress. Touch input is supported; controller implementation in this release targets Windows/web.
 
-- `latest-v2.json`: current version, immutable Release download URL, SHA-256 and reusable region map.
-- `latest.url`: direct URL for the current version.
-- `gameplay.json`: small balance updates.
-- `latest.json` and `chunks/`: the single v2.3.0 upgrade bridge for older clients. This bridge stays available as newer releases are published.
+- latest-v2.json: current version, immutable release APK URL, SHA-256 and reusable-region map.
+- latest.url: current direct APK URL.
+- gameplay.json: small balance adjustments.
+- latest.json and chunks/: frozen v2.3.0 bridge for older clients; retained across routine releases.
 
-New downloads use one APK hosted in GitHub Releases, with parallel byte-range requests for missing regions. The updater validates responses, resumes from verified cached chunks and falls back safely if ranges are unsupported.
-
-Obsolete chunks and the duplicate APK were removed from the current branch. Previous Git commits are retained; this cleanup does not rewrite repository history.
+Use Settings → Check for Updates. Missing regions download in parallel; matching installed/cached regions can be reused. The complete APK is verified before Android asks to install it. Savings depend on build packing and are not guaranteed for every unchanged song. The current APK is hosted once in Releases. [Update protocol and historical tests](../docs/UPDATES.md).

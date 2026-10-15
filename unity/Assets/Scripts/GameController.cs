@@ -121,7 +121,7 @@ namespace ArtificialNegligence {
             totalGpus=pickups.Count(p=>p.gpu);activeTerminal=null;ClearInput();shotCooldown=hurtCooldown=knockback=jumpBuffer=coyote=0;Array.Clear(buffs,0,buffs.Length);
             gameCamera.transform.position=new Vector3(15,-8.4375f,-20);Toast("LEVEL "+(index+1)+" / "+CityRoute.Name(index));
         }
-        public void SetMode(ScreenMode next){if(mode==ScreenMode.Play&&supportDirty&&next!=ScreenMode.Play){supportDirty=false;SaveProgress();}if(next==ScreenMode.Clear||next==ScreenMode.Dead)RecordDifficultyResult(next==ScreenMode.Dead);mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
+        public void SetMode(ScreenMode next){if(mode==ScreenMode.Play&&supportDirty&&next!=ScreenMode.Play){supportDirty=false;SaveProgress();}if(next==ScreenMode.Clear||next==ScreenMode.Dead)RecordDifficultyResult(next==ScreenMode.Dead);padGate=true;mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
         public void ClearInput(){leftHeld=rightHeld=jumpHeld=fireHeld=jumpLatch=duckHeld=false;}
         public void Pause(){if(mode==ScreenMode.Play)SetMode(ScreenMode.Pause);}
         public void NextLevel(){stats.health=Math.Min(stats.maxHealth,stats.health+2);level=stats.cityUnlocked;SetMode(ScreenMode.CityMap);}
@@ -129,6 +129,7 @@ namespace ArtificialNegligence {
         void OnApplicationPause(bool value){if(value&&!qaMode)Pause();}
         void OnApplicationFocus(bool value){if(!value&&!qaMode)Pause();}
         void Update(){
+            if(TickController())return;
             if(mode==ScreenMode.Narrative){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceNarrative();else if(Input.GetKeyDown(KeyCode.Escape))FinishNarrative();return;}
             if(mode==ScreenMode.Story){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceStory();if(Input.GetKeyDown(KeyCode.Escape))FinishStory();UpdateUi();return;}
             if(mode==ScreenMode.Play&&Input.GetKeyDown(KeyCode.I))SetMode(ScreenMode.Gear);
@@ -138,12 +139,12 @@ namespace ArtificialNegligence {
             if(TickNarrativeEncounter())return;
             if(Input.GetKeyDown(KeyCode.U)){SetMode(ScreenMode.Shop);return;}if(Input.GetKeyDown(KeyCode.G)){SetMode(ScreenMode.Gear);return;}
             if(Input.GetKeyDown(KeyCode.LeftControl)||Input.GetKeyDown(KeyCode.RightControl))Slide();if(Input.GetKeyDown(KeyCode.R))AskChat();if(Input.GetKeyDown(KeyCode.Q))CycleSupport();
-            bool jump=jumpHeld||Input.GetKey(KeyCode.Space)||Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow);
+            bool jump=PadHeld(PadButton.A)||jumpHeld||Input.GetKey(KeyCode.Space)||Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow);
             if(jump&&!jumpLatch)jumpBuffer=.13f;jumpLatch=jump;
             if(Input.GetKeyDown(KeyCode.E))OpenNearbyPuzzle();if(Input.GetKeyDown(KeyCode.LeftShift)||Input.GetKeyDown(KeyCode.K))Dash();
             float dt=Time.deltaTime;shotCooldown=Mathf.Max(0,shotCooldown-dt);hurtCooldown=Mathf.Max(0,hurtCooldown-dt);knockback=Mathf.Max(0,knockback-dt);flash=Mathf.Max(0,flash-dt);toastTime=Mathf.Max(0,toastTime-dt);
             for(int i=0;i<buffs.Length;i++)buffs[i]=Mathf.Max(0,buffs[i]-dt);
-            if((fireHeld||Input.GetKey(KeyCode.J)||Input.GetKey(KeyCode.F))&&shotCooldown<=0)Fire();
+            if((PadHeld(PadButton.X)||PadHeld(PadButton.RT)||fireHeld||Input.GetKey(KeyCode.J)||Input.GetKey(KeyCode.F))&&shotCooldown<=0)Fire();
             playerVisual.flipX=facing<0;int frame=!grounded?3:Mathf.Abs(playerBody.linearVelocity.x)>.2f?1+(int)(Time.time*8)%2:0;if(grounded&&landingTimer>0)frame=7;if(shotCooldown>.25f)frame=stats.HasWeapon?4:5;if(hurtCooldown>0)frame=stats.character==0?6:5;else if(stats.character==0&&(buffs[1]>0||buffs[5]>0)&&Mathf.Abs(playerBody.linearVelocity.x)<.2f)frame=5;if(lowStance)frame=IsSliding?7:6;playerVisual.sprite=playerFrames[frame];ApplyStanceVisual();
             playerVisual.color=hurtCooldown>0&&((int)(hurtCooldown*12)%2==0)?new Color(1,1,1,.35f):Color.white;playerLight.intensity=.4f+flash*2;playerLight.color=buffs[1]>0||buffs[5]>0?Gold:Cyan;
             TickPickups(dt);TickBullets(dt);TickEffects(dt);TickPlatformer(dt);TickPublicAI(dt);UpdateUi();
@@ -161,6 +162,7 @@ namespace ArtificialNegligence {
             grounded=Physics2D.BoxCast(playerBody.position+Vector2.down*.59f,new Vector2(.63f,.15f),0,Vector2.down,.2f,1<<8).collider!=null;
             coyote=grounded?.10f:Mathf.Max(0,coyote-Time.fixedDeltaTime);jumpBuffer=Mathf.Max(0,jumpBuffer-Time.fixedDeltaTime);
             float input=((rightHeld||Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow))?1:0)-((leftHeld||Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow))?1:0);
+            if(input==0)input=PadMove;
             float speed=(91+stats.speed*19+stats.gear[0]*7+(buffs[0]>0?50:0)+(stats.module==0?12:0)+(stats.HasArmor?(stats.suit==3?18:stats.suit==1?-10:0):0))/PPU;
             var velocity=playerBody.linearVelocity;speed=LowMovement(input,speed,ref velocity);if(knockback<=0&&!IsSliding)velocity.x=Mathf.MoveTowards(velocity.x,input*speed,(grounded?55:35)*Time.fixedDeltaTime);if(dashTime>0&&!lowStance)velocity=new Vector2(facing*15,0);velocity.y=Mathf.Max(velocity.y,-460/PPU);
             if(input!=0&&!IsSliding)facing=input>0?1:-1;
@@ -269,7 +271,7 @@ namespace ArtificialNegligence {
             var feedback=screenRoot.GetComponentInChildren<ButtonFeedback>();var feedbackLabel=feedback.GetComponentInChildren<UnityEngine.UI.Text>();var labelPosition=feedbackLabel.rectTransform.anchoredPosition;
             feedback.OnPointerDown(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));yield return new WaitForSecondsRealtime(.12f);if(feedbackLabel.rectTransform.anchoredPosition==labelPosition)throw new Exception("Paused button feedback failed");feedback.OnPointerUp(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
             SetMode(ScreenMode.Settings);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-settings.png"));
-            Debug.Log("AN_UI_QA_PASS / three locked silhouettes, empty weapon/armor slots and starter shoes, unscaled press feedback");
+            Debug.Log("AN_UI_QA_PASS / four locked silhouettes, empty weapon/armor slots and starter shoes, unscaled press feedback");
             SetMode(ScreenMode.Gear);yield return new WaitForSecondsRealtime(.2f);if(stats.WeaponCount!=0||stats.SuitCount!=0||screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Any(i=>i.name=="Found equipment"))throw new Exception("Inventory granted starter loot");CaptureQa(System.IO.Path.Combine(path,"unity-empty-inventory.png"));StartStage(0);int initialBullets=bullets.Count;Fire();if(bullets.Count!=initialBullets)throw new Exception("Unarmed player fired a free weapon");
             float start=playerBody.position.x;rightHeld=true;fireHeld=true;jumpHeld=true;yield return new WaitForSecondsRealtime(.9f);jumpHeld=false;Dash();yield return new WaitForSecondsRealtime(.4f);ClearInput();
             if(playerBody.position.x<=start+2)throw new Exception("QA movement failed");stats.points=300;stats.rank=7;stats.Discover(1,0,3);stats.SelectEquipment(1,0);stats.Discover(2,0,4);stats.SelectEquipment(2,0);stats.maxHealth=stats.health=9;
@@ -307,7 +309,7 @@ namespace ArtificialNegligence {
             stats.character=4;ApplyCharacter();if(playerFrames[0]!=wrathFrames[0])throw new Exception("Playable Wrath art failed");
             characterReturn=ScreenMode.Play;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-unlocked.png"));
             Debug.Log("AN_WRATH_QA_PASS / hostile introduction, liberation, saved scenes, playable unlock and original art");
-            Debug.Log("AN_RUNTIME_QA_PASS 88 isolated atlas frames, compact HUD, collection, four characters, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
+            VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 108 isolated atlas frames, compact HUD, collection, five characters, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
         }
     }
 }

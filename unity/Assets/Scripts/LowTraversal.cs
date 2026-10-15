@@ -23,7 +23,7 @@ namespace ArtificialNegligence {
   }
   float LowMovement(float input,float speed,ref Vector2 velocity){
    float dt=Time.fixedDeltaTime;slideTime=Mathf.Max(0,slideTime-dt);slideCooldown=Mathf.Max(0,slideCooldown-dt);
-   bool down=duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow);bool room=CanStand();
+   bool down=PadDuck||duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow);bool room=CanStand();
    if(jumpBuffer>0&&room){slideTime=0;down=false;}
    SetLowCollider(slideTime>0||grounded&&down||!room,slideTime>0);
    if(slideTime>0){velocity.x=slideFacing*Mathf.Lerp(6.5f,10,slideTime/.6f);slideTrail-=dt;if(slideTrail<=0){slideTrail=.08f;Burst(playerBody.position+Vector2.down*.6f,Cyan,2);}return 0;}

@@ -45,6 +45,7 @@ namespace ArtificialNegligence {
         void Hold(Transform parent,string text,float x,float y,float w,float h,Color accent,Action<bool> changed){var b=Button(parent,text,x,y,w,h,accent,null);b.gameObject.AddComponent<HoldControl>().changed=changed;}
         void Pips(Transform parent,int value,int cap,float x,float y,Color color){for(int i=0;i<cap;i++)Image(parent,"Tier cell",x+i*24,y,18,8,i<value?color:new Color(.09f,.26f,.29f));}
         void BuildScreen(){
+            controllerMenuHint=null;
             if(screenRoot){screenRoot.gameObject.SetActive(false);Destroy(screenRoot.gameObject);}screenRoot=Rect(uiRoot,"Screen / "+mode,0,0,960,540);
             gpuLabel=pointsLabel=healthLabel=nextLabel=buffLabel=toastLabel=null;toastPanel=solveDock=buffPanel=null;miniGpus.Clear();gearLabels.Clear();gearColors.Clear();
             updateStatusLabel=updateButtonLabel=bossHealthHud=graphicsLabel=null;
@@ -84,7 +85,7 @@ namespace ArtificialNegligence {
             if(Application.isMobilePlatform||qaMode){
                 ActionControl("LEFT","<",18,443,77,Cyan,null,v=>leftHeld=v);ActionControl("RIGHT",">",107,443,77,Cyan,null,v=>rightHeld=v);ActionControl("DUCK","v",202,460,60,Cyan,null,v=>duckHeld=v);ActionControl("SLIDE",">>",275,460,60,Cyan,Slide);
                 ActionControl("DASH",">>",664,460,60,Cyan,Dash);ActionControl("JUMP","^",745,423,94,Cyan,null,v=>jumpHeld=v);ActionControl(stats.HasWeapon?"FIRE":"STRIKE",stats.HasWeapon?"*":"+",856,444,76,Gold,null,v=>fireHeld=v);
-            }else Label(screenRoot,"A/D MOVE / SPACE JUMP / S DUCK / CTRL SLIDE / J ATTACK / SHIFT DASH\nR CHAT / Q SUPPORT TYPE / I INVENTORY / C CHARACTER / ESC PAUSE",28,491,904,40,13,Cyan,TextAnchor.MiddleCenter);
+            }else controlHint=Label(screenRoot,"A/D MOVE / SPACE JUMP / S DUCK / CTRL SLIDE / J ATTACK / SHIFT DASH\nR CHAT / Q SUPPORT TYPE / I INVENTORY / C CHARACTER / ESC PAUSE",28,491,904,40,13,Cyan,TextAnchor.MiddleCenter);
             solveDock=Button(screenRoot,"CONNECT / E",381,411,220,35,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;BuildSupportHud();UpdateUi();
         }
         void UpdateUi(){
@@ -171,8 +172,12 @@ namespace ArtificialNegligence {
         void BuildSettings(RectTransform window){
             Button(window,"SOUND / "+(soundOn?"ON":"OFF"),199,104,478,48,Cyan,()=>{soundOn=!soundOn;PlayerPrefs.SetInt("sound",soundOn?1:0);BuildScreen();});
             Button(window,"HAPTICS / "+(haptics?"ON":"OFF"),199,165,478,48,Cyan,()=>{haptics=!haptics;PlayerPrefs.SetInt("haptics",haptics?1:0);BuildScreen();});
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            Label(window,"WEB EDITION / "+Application.version+"\nProgress saves in this browser. Reload for new releases.",75,227,726,103,22,Cyan,TextAnchor.MiddleCenter);
+#else
             var update=Button(window,updater.ButtonText,199,227,478,48,Gold,()=>updater.Begin());updateButtonLabel=update.GetComponentInChildren<Text>();
             updateStatusLabel=Label(window,updater.Status,75,283,726,58,22,Cyan,TextAnchor.MiddleCenter);
+            #endif
             Button(window,"DIFFICULTY / "+DifficultyName,199,343,478,42,Cyan,CycleDifficulty);Label(window,"ADAPTIVE: PERFORMANCE CHANGES THE NEXT STAGE",75,389,726,20,16,Cyan,TextAnchor.MiddleCenter);
             Button(window,"BACK TO TITLE",263,411,350,47,Gold,()=>SetMode(ScreenMode.Title));
         }

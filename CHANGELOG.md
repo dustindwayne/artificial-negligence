@@ -1,3 +1,12 @@
+# 2.4.2 — Controller and browser edition
+
+- Windows Xbox/XInput input and standard-mapped browser gamepads.
+- Analog deadzone, movement, duck/slide, combat, AI assists, menus and dialogue.
+- Selected-button feedback, menu hints, held-button transition protection, disconnect-to-pause.
+- WebGL FTP package, browser-local saves, themed public terminal page and optional Ko-fi support link.
+- Documentation audit and UTF-8 punctuation repairs.
+- Software controller-frame tests; physical controller/Android device testing remains outstanding.
+
 # 2.4.1 — Sinister / public signal
 
 - Added ducking, sliding, and low routes.

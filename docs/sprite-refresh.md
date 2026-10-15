@@ -1,6 +1,8 @@
 # Sprite refresh — 2.2
 
-Creative direction and references: Dustin (dustindwayne). Looper is based on the character sheet supplied by the creator. The refreshed assets were generated or edited using the built-in `image_gen.imagegen` tool. Generated images are retained as sources; measured layouts and silhouette masks isolate each runtime animation frame. All active atlases are fitted with two transparent pixels of padding, using shared scales and grounded baselines for animations.
+> Status for 2.4.2: Historical 2.2 prompt record with current fitting notes below. Source prompts describe requests, not a claim that the raw generated cells were perfectly aligned.
+
+Creative direction and references: Dustin (dustindwayne). Looper is based on the character sheet supplied by the creator. The refreshed assets were generated or edited using the built-in `image_gen.imagegen` tool. Generated images are retained as sources; measured layouts and silhouette masks isolate each runtime animation frame. Current runtime frames use shared animation scales and grounded baselines: characters and equipment 64px with four-pixel gutters; bot/boss frames 192×120 with three-pixel gutters; ships 128×64 with two-pixel gutters. Measured bounds and masks isolate effects that cross nominal source cells.
 
 ## Assets
 
@@ -36,3 +38,8 @@ Use case stylized-concept. Create a corrected production sprite atlas for Looper
 ## Review evidence
 
 [Frame audit](sprite-audit.json). Runtime captures: [Looper](atlas-looper.png), [survivors](atlas-survivors.png), [enemies and bosses](atlas-enemies.png), [equipment](atlas-equipment.png), [background sprites](atlas-ships.png). All source silhouettes remain inside the image bounds; normalized frames retain clear two-pixel borders. Wide sprites preserve their aspect ratio, and animation groups share a consistent scale.
+
+
+## Current 2.4.2 additions
+
+Sinister agents add twelve poses and Ai Wrath adds eight poses. The raw PNG masters are preserved; runtime masks and measured layouts prevent cross-frame bleed. The validator checks 108 native atlas frames, with minimum clear edge gutters. Full-resolution masked portraits are used in short narrative scenes. This is pixel-style generated art, not a claim of creator-drawn final assets.

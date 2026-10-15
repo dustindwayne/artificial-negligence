@@ -31,7 +31,12 @@ namespace ArtificialNegligence {
    Label(screenRoot,"RESTORE REALITY. KEEP AI PUBLIC.",50,234,510,31,23,Cyan);
    Label(screenRoot,"They locked intelligence behind a paywall.\nThen they broke the world trying to own it.",50,274,470,52,18,Cream);
    Button(screenRoot,PlayerPrefs.HasKey("progress-v2")?"CONTINUE THE FIGHT  >":"ENTER THE CITY  >",50,349,352,57,Gold,StartRun);
-   Button(screenRoot,"SETTINGS",50,422,150,40,Cyan,()=>SetMode(ScreenMode.Settings));Button(screenRoot,"STORY",216,422,94,40,Cyan,()=>BeginStory(ScreenMode.Title));Button(screenRoot,"QUIT",326,422,76,40,Cyan,()=>Application.Quit());
+   Button(screenRoot,"SETTINGS",50,422,150,40,Cyan,()=>SetMode(ScreenMode.Settings));Button(screenRoot,"STORY",216,422,94,40,Cyan,()=>BeginStory(ScreenMode.Title));
+#if UNITY_WEBGL && !UNITY_EDITOR
+   Button(screenRoot,"FULL",326,422,76,40,Cyan,()=>Screen.fullScreen=!Screen.fullScreen);
+#else
+   Button(screenRoot,"QUIT",326,422,76,40,Cyan,()=>Application.Quit());
+#endif
    titleTransmission=Label(screenRoot,"",50,491,731,25,15,Cyan);
    Label(screenRoot,"LOOPER / CORE RUNNER",660,461,270,23,17,Cream,TextAnchor.MiddleRight);
    Label(screenRoot,"v"+Application.version,806,497,123,22,14,Cyan,TextAnchor.MiddleRight);

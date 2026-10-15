@@ -12,3 +12,6 @@ __pycache__/
 /ArtificialNegligence-preview/
 *.sln
 *.csproj
+
+/ArtificialNegligence-Web/
+/ArtificialNegligence-Web-FTP.zip

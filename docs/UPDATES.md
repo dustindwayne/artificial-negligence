@@ -19,7 +19,7 @@ Actual savings depend on the build: Unity repacking or native-code changes can a
 3. Publish metadata:
 
 ```sh
-python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.3.1 --code 231 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.3.1/ArtificialNegligence.apk
+python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.4.2 --code 242 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.4.2/ArtificialNegligence.apk
 ```
 
 4. Commit the small manifests/link files. Do not commit another full APK or generate another chunk store for current clients. Keep the current release and the single bridge; obsolete Release assets may be removed after updating the manifest.
@@ -36,6 +36,13 @@ Increase the balance version and commit `apk/gameplay.json`. Validated values sa
 
 ## Validation
 
+The linked transport/storage/icon reports below are historical evidence for their recorded builds, not fresh measurements of every release. Current package hashes and sizes appear in each release's SHA256SUMS.txt and manifest.
+
 [Transport test results](range-update-validation.json) cover real player downloads against normal, transient-error, corrupt-response and range-ignoring servers; retrying verified cached data made zero requests. The public GitHub Release was then tested with the actual Unity updater: 26 grouped requests downloaded 21.1 MB and reused 19.4 MB for this build, followed by a matching full APK hash. The public full-download link and HTTP 206 byte ranges were independently verified. These numbers depend on the installed version and build.
 
 [Storage and bridge report](update-storage-validation.json) · [Android launcher resource report](android-icon-validation.json). Physical device installation testing remains outstanding.
+
+
+## Windows and web
+
+Windows uses a full ZIP. The web FTP ZIP contains a static browser edition; upload new hashed Build files before its index, then reload. No APK updater is exposed in the web game. Browser saves remain local to that browser/site. See [hosting](WEB-HOSTING.md) and [controls](CONTROLS.md).

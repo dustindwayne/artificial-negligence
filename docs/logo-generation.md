@@ -2,7 +2,7 @@
 
 Creative direction: Dustin (dustindwayne). AI-assisted artwork edited with the built-in `image_gen.imagegen` tool, using the previous brand logo and Looper's character sheet as visual references. Looper is the central character, collecting a GPU as the city rebuilds.
 
-Asset: [logo.png](logo.png). Previous logo reference: [logo-city.png](logo-city.png). Character reference: `unity/Assets/Resources/Art/looper.png`. Also used in `unity/Assets/Resources/Art/Logo.png` and the Android app icon. The complete character, title and border were visually checked for clipping.
+Asset: [logo.png](logo.png). Previous logo reference: [logo-city.png](logo-city.png). Character reference: `unity/Assets/Resources/Art/looper.png`. Also used in `unity/Assets/Resources/Art/Logo.png` as the full Looper logo. The Android launcher uses a separate Looper bust with safe-area padding; see [android-icon.md](android-icon.md). The complete character, title and border were visually checked for clipping.
 
 ## Final prompt
 

@@ -1,6 +1,8 @@
 # Artificial Negligence
 ## Story and campaign direction
 
+**Build 2.4.2:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, five playable characters, permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+
 **Restore reality. Keep AI public.**
 
 ### The explosion
@@ -35,6 +37,7 @@ Allies join through play and share the recovered inventory. Each should offer a 
 | Vale | Rooftop mechanic | Override: temporarily turn a bot or security device against its owners. |
 | Mender | Neighborhood medic | Patch Field: a limited healing and protection zone. |
 | Rook | Street survivor and resistance guide | Anchor: withstand a hit and interrupt a charging enemy. |
+| Ai Wrath | Sinister elite freed from its program; playable after liberation | Individual signature ability remains planned. |
 
 These signature powers are proposed story/mechanic designs; character selection and shared equipment already exist. Power-specific implementation is a separate step.
 
@@ -46,7 +49,7 @@ Restoration reveals the same world more clearly; it must never move a landing ed
 ### Gear and discoveries
 Weapons and armor are never granted at the start or by leveling. Each found copy is a separate inventory item; finding a stronger copy does not equip it. Players begin unarmed, with a short-range strike and no armor. The first opened supply box contains a weapon if none has been found. Existing personal training improves the player; the workshop can only improve equipped, owned gear.
 
-Weapons, armor, and outfits are salvaged from corporate supply boxes, hidden routes, liberated facilities, and challenges. Rarity describes the quality of the find. Weapon and armor tradeoffs support different approaches; cosmetic outfits express the player rather than confer mandatory advantages. Ultra equipment remains a 0.5% box roll.
+Weapons and armor currently come from supply boxes; outfit and character options unlock through gameplay milestones. Hidden-route and liberated-facility reward scenes remain narrative direction. Rarity describes the quality of the find. Weapon and armor tradeoffs support different approaches; cosmetic outfits express the player rather than confer mandatory advantages. Ultra equipment remains a 0.5% box roll.
 
 Logic terminals contain damaged public systems. A correct solution restores a useful service and grants its powerup. An incorrect answer gives no powerup. Puzzles should teach a rule, then test that rule with changing inputs rather than memorized answers.
 
@@ -66,3 +69,10 @@ The monopoly is broken, but other cities remain disconnected. Further campaign c
 
 ### Closing line
 > Reality is not a subscription.
+
+
+## The Sinister and Ai Wrath
+
+The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. Defeating him breaks that control; he joins the resistance and becomes playable. Short two-line artwork scenes carry this turn, with occasional checkpoint radio lines between major encounters.
+
+GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.

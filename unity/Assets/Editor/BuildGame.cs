@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.1";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=241;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.2";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=242;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -105,8 +105,8 @@ public static class BuildGame {
             var frames=SpriteAtlas.Load(spec[0],int.Parse(spec[1]),int.Parse(spec[2]),int.Parse(spec[3]),int.Parse(spec[4]),int.Parse(spec[5]),spec[0]!="items-v3"&&spec[0]!="ai_ships",spec[0]=="enemies-v3"?3:spec[0]=="ai_ships"?2:4);
             foreach(var frame in frames){var texture=frame.texture;var pixels=texture.GetPixels32();Assert(pixels.Any(c=>c.a>24),"Empty normalized sprite");for(int y=0;y<texture.height;y++)for(int x=0;x<texture.width;x++)if(x<2||y<2||x>=texture.width-2||y>=texture.height-2)Assert(pixels[y*texture.width+x].a==0,"Sprite gutter clipped / "+frame.name);}
         }
-        Debug.Log("AN_COLLECTION_PASS / migration, zero starter/XP gear, individual finds, manual equipping, duplicates, armor swaps, gameplay character unlocks, saves, 88 sprite gutters");
-        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 60 unique routes using Unity Physics2D; 88 isolated sprite frames with clear gutters; independent equipment rarities, duplicates and armor swaps; legacy save migration; Looper starter and gameplay character unlocks; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
+        Debug.Log("AN_COLLECTION_PASS / migration, zero starter/XP gear, individual finds, manual equipping, duplicates, armor swaps, gameplay character unlocks, saves, 108 sprite gutters");
+        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 60 unique routes using Unity Physics2D; 108 isolated sprite frames with clear gutters; independent equipment rarities, duplicates and armor swaps; legacy save migration; Looper starter and gameplay character unlocks; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
         Debug.Log("AN_VALIDATION_PASS / puzzles, drops, upgrades, collection, sprite gutters, 60 levels, Unity Physics2D reachability");
     }
     static string ExpectedPuzzle(LogicPuzzle p){
