@@ -11,7 +11,7 @@ namespace ArtificialNegligence {
         public string CurrentTrack {get;private set;}
         public static string Pick(ScreenMode mode,bool boss){
             if(mode==ScreenMode.Title||mode==ScreenMode.Settings||mode==ScreenMode.CityMap)return "menu";
-            if(mode==ScreenMode.Shop||mode==ScreenMode.Gear)return "upgrades";
+            if(mode==ScreenMode.Shop||mode==ScreenMode.Gear||mode==ScreenMode.Characters)return "upgrades";
             if(mode==ScreenMode.Clear||mode==ScreenMode.Win)return "victory";
             if(mode==ScreenMode.Dead)return "gameover";
             return boss?"bosscombat":"gameplay";

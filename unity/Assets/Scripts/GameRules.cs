@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace ArtificialNegligence {
-    [Serializable] public class RunStats {
+    [Serializable] public partial class RunStats {
         public int points, score, speed, vitality, health = 5, maxHealth = 5;
         public int[] gear = {0,1,1};
         public System.Collections.Generic.List<string> graphicsCores=new System.Collections.Generic.List<string>();
@@ -17,10 +17,10 @@ namespace ArtificialNegligence {
         public static readonly string[] Suits={"BALANCED", "KINETIC", "INSULATED", "LIGHT"};
         public static readonly string[] Modules={"SPRINTER", "CAPACITOR", "STABILIZER"};
         public int XpNeeded {get{return 60+(rank-1)*35;}}
-        public int WeaponCount {get{return Math.Min(4,1+(rank-1)/2);}}
-        public int SuitCount {get{return Math.Min(4,1+(rank-1)/2);}}
+        public int WeaponCount {get{EnsureCollection();return weaponRarities.Count(v=>v>0);}}
+        public int SuitCount {get{EnsureCollection();return armorRarities.Count(v=>v>0);}}
         public int ModuleCount {get{return Math.Min(3,1+(rank-1)/2);}}
-        public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}return rank>before?"LEVEL "+rank+" / +TALENT / LOADOUTS UNLOCKED":"+"+amount+" XP";}
+        public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}EnsureCollection();return rank>before?"LEVEL "+rank+" / +TALENT / LOADOUTS UNLOCKED":"+"+amount+" XP";}
         public string Train(bool offense){int value=offense?power:defense;if(value>=20)return "TRAINING MAXED";int price=50+value*30;if(talents<1||points<price)return "NEED 1 TALENT + "+price+" PTS";points-=price;talents--;if(offense)power++;else defense++;return offense?"WEAPON MASTERY +1":"DEFENSE TRAINING +1";}
         public int HitDamage(int family){int damage=gear[1]+power;bool shield=family==3||family==6,heavy=family==2||family==8;
             if(weapon==1)damage=shield?damage*2:heavy?Math.Max(1,damage/2):damage;
@@ -40,13 +40,14 @@ namespace ArtificialNegligence {
             int cost=Cost(slot); if(points<cost)return "NEED "+cost+" POINTS";
             points-=cost;
             if(slot==0) { speed++; return "RUNNING SPEED / LEVEL "+speed; }
-            if(slot==1) {gear[1]++;return Tiers[gear[1]]+" PULSE / TIER "+gear[1];}
-            if(slot==2) {gear[2]++;maxHealth++;health++;return Tiers[gear[2]]+" ARMOR / TIER "+gear[2];}
+            if(slot==1) {EnsureCollection();gear[1]++;weaponRarities[weapon]=gear[1];return Tiers[gear[1]]+" "+Weapons[weapon]+" / TIER "+gear[1];}
+            if(slot==2) {EnsureCollection();gear[2]++;armorRarities[suit]=gear[2];maxHealth++;health++;return Tiers[gear[2]]+" "+Suits[suit]+" ARMOR / TIER "+gear[2];}
             vitality++;maxHealth++;health++;return "VITALITY / LEVEL "+vitality;
         }
         public static int RollTier(int roll) { if(roll<0||roll>=200)throw new ArgumentOutOfRangeException();return roll==0?5:roll<10?4:roll<30?3:roll<80?2:1; }
         public string Equip(int slot,int tier) {
-            string name=new[]{"BOOTS","PULSE","ARMOR"}[slot];
+            if(slot>0)return Discover(slot,slot==1?weapon:suit,tier);
+            string name="BOOTS";
             if(tier<=gear[slot]) {points+=5;score+=5;return Tiers[tier]+" "+name+" SALVAGED / +5 PTS";}
             int gain=tier-gear[slot];gear[slot]=tier;
             if(slot==2) {maxHealth+=gain;health=Math.Min(maxHealth,health+gain);}
@@ -89,7 +90,7 @@ namespace ArtificialNegligence {
             }
         }
     }
-    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult}
+    public enum ScreenMode {Title,Play,Pause,Shop,Gear,Puzzle,Clear,Win,Dead,Settings,CityMap,PuzzleResult,Characters}
     public class TerminalData {
         public LogicPuzzle puzzle;public bool attempted,solved;
         public bool Answer(int choice) {if(attempted)return false;attempted=true;solved=choice==(puzzle.circuit?puzzle.circuitTarget:puzzle.correct);return solved;}

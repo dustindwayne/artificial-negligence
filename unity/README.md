@@ -66,3 +66,11 @@ Collecting distinct GPUs permanently rebuilds the world's renderer. Graphics upg
 Controls, text and menus remain clear at every tier. The art stays a pixel-art platformer; higher tiers reveal more detail in the existing artwork. GPU identities and renderer progression save with the character and survive restarts. Existing saves retain gameplay progress; distinct graphics-core tracking begins with this version.
 
 The progression concept and creative direction came from Dustin. AI assisted implementation, consistent with the project's credits and artist-led art roadmap.
+
+## Collection and survivors (2.2)
+
+Looper is the starting character, based on the supplied character reference. Vale unlocks at 24 distinct GPUs; Mender after stage 6; Rook after stage 12. Choose survivors from City Map > Survivor or Pause > Gear > Survivor. Thread colors are cosmetic, unlocked by rank 3, 75 GPUs and 12 stages. All survivors share progression and equipment.
+
+Boxes discover specific weapon or armor families with their own rarity. The collection keeps each family's highest found tier. Duplicates salvage for points; switching armor cannot heal or grow maximum health repeatedly. Rank 3/5/7 grants Common loadouts; boxes can discover them sooner. Points improve the equipped item through Legend, while Ultra remains a 0.5% box outcome. Existing saves migrate their shared tiers onto previously unlocked families.
+
+The HUD has compact health/core/points status, direction hints, contextual notices and translucent movement/fire controls. XP and graphics progression are in Pause. Six route motifs vary geometry, encounters and objectives. Sprite layouts and masks isolate all 88 active frames; normalized frames use clear two-pixel gutters and shared animation scales. Legacy art remains in Assets/ArtArchive outside Resources.

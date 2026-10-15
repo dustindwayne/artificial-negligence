@@ -1,0 +1,57 @@
+[
+  {
+    "atlas": "survivors-v3",
+    "frames": 24,
+    "size": [
+      2048,
+      768
+    ],
+    "sourceEdgeClipping": false,
+    "frameIsolation": "connected silhouettes, 4px antialias fringe",
+    "runtimeGutterPixels": 2
+  },
+  {
+    "atlas": "enemies-v3",
+    "frames": 36,
+    "size": [
+      1182,
+      1330
+    ],
+    "sourceEdgeClipping": false,
+    "frameIsolation": "connected silhouettes, 4px antialias fringe",
+    "runtimeGutterPixels": 2
+  },
+  {
+    "atlas": "items-v3",
+    "frames": 16,
+    "size": [
+      1437,
+      1095
+    ],
+    "sourceEdgeClipping": false,
+    "frameIsolation": "connected silhouettes, 4px antialias fringe",
+    "runtimeGutterPixels": 2
+  },
+  {
+    "atlas": "ai_ships",
+    "frames": 4,
+    "size": [
+      512,
+      64
+    ],
+    "sourceEdgeClipping": false,
+    "frameIsolation": "connected silhouettes, 4px antialias fringe",
+    "runtimeGutterPixels": 2
+  },
+  {
+    "atlas": "looper",
+    "frames": 8,
+    "size": [
+      1774,
+      887
+    ],
+    "sourceEdgeClipping": false,
+    "frameIsolation": "connected silhouettes, 4px antialias fringe",
+    "runtimeGutterPixels": 2
+  }
+]

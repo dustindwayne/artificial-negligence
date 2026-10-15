@@ -9,3 +9,5 @@ The enemy and boss atlas includes AI-generated artwork. The retro pixel style an
 The VT323 font is distributed under the SIL Open Font License included with the project.
 
 The refreshed GPU/city logo is AI-generated artwork based on the creator’s game and art direction. See the repository’s logo generation record.
+
+Looper is based on a character sheet supplied by the creator, adapted with AI assistance to the game’s pixel style. Refreshed survivor, enemy and equipment atlases also use AI-assisted artwork. Source sheets and prompt records are retained.

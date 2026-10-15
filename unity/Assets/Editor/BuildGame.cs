@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.1.1";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=211;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.2.0";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=220;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -85,8 +85,20 @@ public static class BuildGame {
         }
         Assert(across.Count>300&&positions.All(x=>x>400),"Puzzles do not vary");
         var stats=new RunStats{points=500};stats.Upgrade(1);stats.Upgrade(2);Assert(stats.gear[1]==2&&stats.gear[2]==2&&stats.maxHealth==6,"Upgrade logic");stats.gear[1]=4;stats.Upgrade(1);Assert(stats.gear[1]==4,"Ultra can be purchased");
-        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 30 unique routes using Unity Physics2D; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
-        Debug.Log("AN_VALIDATION_PASS / puzzles, drops, upgrades, 3 levels, Unity Physics2D reachability");
+        var inventory=new RunStats();inventory.EnsureCollection();Assert(!inventory.SelectEquipment(1,3),"Locked weapon selectable");
+        inventory.Discover(1,3,3);inventory.SelectEquipment(1,3);Assert(inventory.gear[1]==3&&inventory.weaponRarities[0]==1,"Rarities leak across weapons");
+        inventory.SelectEquipment(1,0);Assert(inventory.gear[1]==1&&inventory.weaponRarities[3]==3,"Switch loses rarity");int beforePoints=inventory.points;inventory.Discover(1,3,2);Assert(inventory.points==beforePoints+5&&inventory.weaponRarities[3]==3,"Duplicate downgrades item");
+        inventory.Discover(2,2,4);inventory.SelectEquipment(2,2);int hp=inventory.maxHealth;inventory.SelectEquipment(2,0);inventory.SelectEquipment(2,2);Assert(inventory.maxHealth==hp,"Armor switch farms health");
+        var oldSave=new RunStats{rank=7,gear=new[]{2,4,3},weapon=3,suit=2};oldSave.EnsureCollection();Assert(oldSave.weaponRarities.All(v=>v==4)&&oldSave.armorRarities.All(v=>v==3),"Legacy equipment lost");
+        Assert(inventory.character==0&&RunStats.Characters[0]=="LOOPER"&&!inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"Starter or locked characters wrong");inventory.graphicsCores=Enumerable.Range(0,24).Select(i=>"unlock:"+i).ToList();Assert(inventory.CharacterUnlocked(1)&&!inventory.CharacterUnlocked(2),"GPU character unlock");inventory.cityUnlocked=6;Assert(inventory.CharacterUnlocked(2)&&!inventory.CharacterUnlocked(3),"Boss character unlock");
+        var inventorySave=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(inventory));inventorySave.EnsureCollection();Assert(inventorySave.weaponRarities[3]==3&&inventorySave.armorRarities[2]==4&&inventorySave.CharacterUnlocked(2),"Collection save failed");
+        foreach(var spec in new[]{new[]{"looper","4","2","32","32","16"},new[]{"survivors-v3","8","3","32","32","16"},new[]{"enemies-v3","4","9","128","80","40"},new[]{"items-v3","4","4","32","32","16"},new[]{"ai_ships","4","1","128","64","16"}}){
+            var frames=SpriteAtlas.Load(spec[0],int.Parse(spec[1]),int.Parse(spec[2]),int.Parse(spec[3]),int.Parse(spec[4]),int.Parse(spec[5]),spec[0]!="items-v3"&&spec[0]!="ai_ships");
+            foreach(var frame in frames){var texture=frame.texture;var pixels=texture.GetPixels32();Assert(pixels.Any(c=>c.a>24),"Empty normalized sprite");for(int y=0;y<texture.height;y++)for(int x=0;x<texture.width;x++)if(x<2||y<2||x>=texture.width-2||y>=texture.height-2)Assert(pixels[y*texture.width+x].a==0,"Sprite gutter clipped / "+frame.name);}
+        }
+        Debug.Log("AN_COLLECTION_PASS / migration, independent rarities, locked equipment, duplicates, armor swaps, gameplay character unlocks, saves, 88 sprite gutters");
+        CheckReachability();File.WriteAllText(Path.Combine(Root,"unity-validation.txt"),"PASS: 1800 puzzle solutions; one-attempt rewards; shuffled answers; 0.5% Ultra; upgrade rules; all generated GPUs, rooftop landings and gaps across 60 unique routes using Unity Physics2D; 88 isolated sprite frames with clear gutters; independent equipment rarities, duplicates and armor swaps; legacy save migration; Looper starter and gameplay character unlocks; safe boxes, checkpoints, enemies and terminals; XP leveling, talent purchases, weapon counters, armor weaknesses, save roundtrip.\n");
+        Debug.Log("AN_VALIDATION_PASS / puzzles, drops, upgrades, collection, sprite gutters, 60 levels, Unity Physics2D reachability");
     }
     static string ExpectedPuzzle(LogicPuzzle p){
         if(p.family<6)return Expected(p.question);var n=Regex.Matches(p.question,"\\d+").Cast<Match>().Select(m=>int.Parse(m.Value)).ToArray();
@@ -103,7 +115,7 @@ public static class BuildGame {
         var oldGravity=Physics2D.gravity;var oldMode=Physics2D.simulationMode;Physics2D.gravity=new Vector2(0,-550f/16);Physics2D.simulationMode=SimulationMode2D.Script;
         int gpuCount=0,gaps=0;
         try{
-            for(int level=0;level<30;level++){
+            for(int level=0;level<60;level++){
                 var rows=CityRoute.Generate(level);var floors=rows.Where(r=>r.kind=="platform"&&r.y==218).OrderBy(r=>r.x).ToList();
                 var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);var physics=scene.GetPhysicsScene2D();
                 foreach(var row in rows.Where(r=>r.kind=="platform")){
@@ -134,7 +146,7 @@ public static class BuildGame {
                 EditorSceneManager.CloseScene(scene,true);Debug.Log("AN_ROUTE_PASS / "+level);
             }
         }finally{Physics2D.gravity=oldGravity;Physics2D.simulationMode=oldMode;}
-        Debug.Log("AN_GENERATED_REACHABILITY_PASS / "+gpuCount+" GPUs / "+gaps+" gaps / 30 generated levels");
+        Debug.Log("AN_GENERATED_REACHABILITY_PASS / "+gpuCount+" GPUs / "+gaps+" gaps / 60 generated levels");
     }
     public static void Desktop(){Configure();Validate();Build("ArtificialNegligence-preview/ArtificialNegligence.exe",BuildTarget.StandaloneWindows64);}
     public static void Android(){

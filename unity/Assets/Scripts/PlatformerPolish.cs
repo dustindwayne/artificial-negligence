@@ -5,24 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ArtificialNegligence {
     public partial class GameController {
-        float dashTime,dashCooldown,trailClock,followVelocity;bool dashUsed,wasGrounded;Vector2 checkpointPosition;
+        float dashTime,dashCooldown,trailClock,followVelocity,landingTimer;bool dashUsed,wasGrounded;Vector2 checkpointPosition;
         class DepthObject {public Transform transform;public Vector3 start;public float parallax;}
         readonly List<DepthObject> depth=new List<DepthObject>();readonly List<SpriteRenderer> rain=new List<SpriteRenderer>();
         readonly List<SpriteRenderer> checkpoints=new List<SpriteRenderer>();readonly List<SpriteRenderer> hazards=new List<SpriteRenderer>();
         public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);}
         public void Dash(){if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
-        Sprite[] LoadEnemyAtlas(){
-            var texture=Resources.Load<Texture2D>("Art/enemy-atlas-v2");float[] cuts={0,113,244,367,503,645,780,957,1100,1330};var sprites=new Sprite[36];
-            for(int row=0;row<9;row++)for(int col=0;col<4;col++){
-                float top=cuts[row]/1330*texture.height,bottom=cuts[row+1]/1330*texture.height,h=bottom-top;
-                sprites[row*4+col]=Sprite.Create(texture,new Rect(col*texture.width/4f,texture.height-bottom,texture.width/4f,h),Vector2.one*.5f,h/2);
-            }
-            return sprites;
-        }
         public void BuildSceneDepth(){
             depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=followVelocity=0;dashUsed=false;wasGrounded=false;
             var random=new System.Random(814+level*127);int area=CityRoute.Area(level);
-            Color[] accents={Cyan,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};Color accent=accents[area];background.color=Color.Lerp(Color.white,accent,.16f);
+            Color[] accents={Cyan,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};Color accent=Color.Lerp(accents[area],accents[(area+level%6)%5],(level%6)*.055f);background.color=Color.Lerp(Color.white,accent,.2f);
             for(int layer=0;layer<3;layer++)for(float x=-100;x<worldLength+200;x+=random.Next(100,170)){
                 float width=random.Next(42,94),height=random.Next(65,180);var building=SpriteObject("City depth / "+layer,white,PixelCenter(x+width/2,215-height/2),-95+layer*12,false);building.transform.localScale=new Vector3(width/PPU,height/PPU,1);building.color=new Color(.02f+layer*.008f,.075f+layer*.014f,.105f+layer*.015f,.35f+layer*.1f);
                 depth.Add(new DepthObject{transform=building.transform,start=building.transform.position,parallax=.12f+layer*.09f});
@@ -36,6 +28,11 @@ namespace ArtificialNegligence {
                     float x=floor.x+25+i*(floor.w-50)/3;var pole=SpriteObject("Street conduit",white,PixelCenter(x,235),-5,false);pole.transform.localScale=new Vector3(4/PPU,50/PPU,1);pole.color=new Color(.075f,.22f,.25f);
                     var lamp=SpriteObject("Street marker",glowSprite,PixelCenter(x,212),-4,false);lamp.transform.localScale=Vector3.one*.45f;lamp.color=new Color(accent.r,accent.g,accent.b,.32f);
                 }
+            }
+            foreach(var roof in rows.Where(r=>r.kind=="platform"&&r.y<218)){
+                float x=roof.x+roof.w*.18f;
+                var prop=SpriteObject(area==3?"Garden canopy":"Rooftop relay",white,PixelCenter(x,roof.y-10),-3,false);prop.color=Color.Lerp(accent,Ink,.55f);prop.transform.localScale=new Vector3((area==3?19:9)/PPU,18/PPU,1);
+                var sign=SpriteObject("District accent strip",white,PixelCenter(x,roof.y-17),-2,false);sign.color=new Color(accent.r,accent.g,accent.b,.55f);sign.transform.localScale=new Vector3((area==3?23:15)/PPU,3/PPU,1);
             }
             foreach(var row in rows.Where(r=>r.kind=="checkpoint")){
                 var marker=SpriteObject("Checkpoint beacon",itemFrames[2],PixelCenter(row.x+8,205),4,false);marker.transform.localScale=Vector3.one*.55f;marker.color=new Color(.45f,.6f,.7f);checkpoints.Add(marker);
@@ -59,7 +56,7 @@ namespace ArtificialNegligence {
         }
         void TickPlatformer(float dt){
             dashTime=Mathf.Max(0,dashTime-dt);dashCooldown=Mathf.Max(0,dashCooldown-dt);
-            if(grounded){dashUsed=false;if(!wasGrounded)Burst(playerBody.position+Vector2.down*.65f,Cream,5);}wasGrounded=grounded;
+            landingTimer=Mathf.Max(0,landingTimer-dt);if(grounded){dashUsed=false;if(!wasGrounded){landingTimer=.14f;Burst(playerBody.position+Vector2.down*.65f,Cream,5);}}wasGrounded=grounded;
             trailClock-=dt;if(dashTime>0&&trailClock<=0){Burst(playerBody.position,Cyan,2);trailClock=.04f;}
             foreach(var cp in checkpoints){if(cp&&Mathf.Abs(cp.transform.position.x-playerBody.position.x)<.7f&&Mathf.Abs(cp.transform.position.y-playerBody.position.y)<1&&cp.color!=Cyan){checkpointPosition=new Vector2(cp.transform.position.x,-201/PPU);cp.color=Cyan;Toast("CHECKPOINT SYNCED");}}
             if(Time.time%3>=1.1f)foreach(var hazard in hazards)if(hazard&&Mathf.Abs(hazard.transform.position.x-playerBody.position.x)<.75f&&Mathf.Abs(hazard.transform.position.y-playerBody.position.y)<.8f)Damage(1,Mathf.Sign(playerBody.position.x-hazard.transform.position.x),true);
@@ -91,7 +88,7 @@ namespace ArtificialNegligence {
             }
             Label(window,"UNLOCKED "+(stats.cityUnlocked+1)+" / LV "+stats.rank+" / "+stats.points+" POINTS",24,435,570,35,23,Cream);
             Label(window,RendererProgress.Progress(stats)+" / ABSORB NEW CORES TO UPGRADE",24,472,690,25,20,Cyan);
-            Button(window,"CONTINUE",698,445,197,47,Gold,()=>StartStage(stats.cityUnlocked));
+            Button(window,"SURVIVOR",24,391,218,38,Cyan,()=>{characterReturn=ScreenMode.CityMap;SetMode(ScreenMode.Characters);});Button(window,"CONTINUE",698,445,197,47,Gold,()=>StartStage(stats.cityUnlocked));
         }
         void BuildCircuit(RectTransform window){
             var puzzle=activeTerminal.data.puzzle;
