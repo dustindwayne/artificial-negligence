@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/looper-vs-wrath-banner.png" width="960" alt="Artificial Negligence â€” Looper confronts Ai Wrath. Promotional artwork.">
+  <img src="docs/looper-vs-wrath-banner.png" width="960" alt="Artificial Negligence — Looper confronts Ai Wrath. Promotional artwork.">
 </p>
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
@@ -11,13 +11,13 @@
 <p align="center">
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
-<p align="center">v2.4.1 Â· Playtest build Â· Android 8+ ARM64 Â· Windows 64-bit</p>
+<p align="center">v2.4.1 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
 The global AI explosion gave ordinary people freedom. The corporations fought to reclaim it, hoarding GPUs and reserving intelligence for the elite. Their control system glitched reality itself: color disappeared, motion lost its frames, and whole neighborhoods fell into crude pixels.
 
-You are **Looper**. Recover the GPUs, restore the world, and keep AI in the hands of the people. Cross the city, find your equipment, and confront **the Sinister**â€”human agents and bots enforcing corporate control.
+You are **Looper**. Recover the GPUs, restore the world, and keep AI in the hands of the people. Cross the city, find your equipment, and confront **the Sinister**—human agents and bots enforcing corporate control.
 
 The story continues through a first-run opening, short skippable artwork scenes, and occasional checkpoint transmissions. **Ai Wrath** begins as a Sinister elite. Break him free of the program, and he becomes an ally you can play. [Read the campaign outline](STORY.md).
 
@@ -56,7 +56,7 @@ Explore **30 generated stages across five districts**, followed by further cycle
 
 Distinct GPUs permanently improve the world's graphics:
 
-**Bootstrap â†’ 8-bit â†’ 16-bit â†’ Neon â†’ HD Pixel â†’ Ultra**
+**Bootstrap → 8-bit → 16-bit → Neon → HD Pixel → Ultra**
 
 Revisited districts keep your earned visual quality. Recollecting the same core does not grant duplicate restoration credit. Each pickup also adds to a **separate compute bank** for temporary AI support; spending compute never reduces visual restoration. Chat support must be earned through momentum, and taking damage drains that meter.
 
@@ -73,7 +73,7 @@ Revisited districts keep your earned visual quality. Recollecting the same core 
 
 Balanced, Kinetic, Insulated, and Light armor provide different protection and movement tradeoffs. Keep finds in the inventory, equip deliberately, and spend points to improve equipment you own. Personal upgrades and talents add longer-term progression.
 
-**Common â†’ Rare â†’ Epic â†’ Legend â†’ Ultra**
+**Common → Rare → Epic → Legend → Ultra**
 
 The workshop upgrades owned equipment through Legend. **Ultra is found only in boxes, with a 0.5% chance per box.**
 
@@ -115,7 +115,7 @@ Older saves from the menu-granted loadout system have that equipment cleared on 
 
 ### Updates
 
-On Android, use **Settings â†’ Check for Updates**. The updater reuses matching regions from the installed APK, downloads missing regions in parallel, verifies the completed package, and hands installation to Android. Actual savings depend on what changed; unchanged music and art can be reused. Small balance updates can arrive separately.
+On Android, use **Settings → Check for Updates**. The updater reuses matching regions from the installed APK, downloads missing regions in parallel, verifies the completed package, and hands installation to Android. Actual savings depend on what changed; unchanged music and art can be reused. Small balance updates can arrive separately.
 
 The current APK is hosted once in GitHub Releases. [`apk/`](apk/) provides its link and update manifest. One v2.3.0 bridge remains for older clients. Windows updates are full ZIP downloads.
 
@@ -127,7 +127,7 @@ The current APK is hosted once in GitHub Releases. [`apk/`](apk/) provides its l
 
 **AI was used to build this game.** Codex/ChatGPT assisted with programming, generated visual assets, implementation, integration, and testing. This is an AI-assisted playtest build, not a claim of entirely hand-coded or hand-drawn production.
 
-The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator's review. [Credits and disclosure](CREDITS.md) Â· [Art roadmap](ROADMAP.md) Â· [Banner generation record](docs/banner-generation-v241.md).
+The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator's review. [Credits and disclosure](CREDITS.md) · [Art roadmap](ROADMAP.md) · [Banner generation record](docs/banner-generation-v241.md).
 
 ## Development and testing
 
@@ -135,4 +135,4 @@ Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Android Build Support. `Bui
 
 Windows runtime checks cover the opening, dialogue completion and replay prevention, inventory, character locks, graphics tiers, upgrades, terminals, bosses, music rotation, and Ai Wrath's hostile encounter, liberation, and playable unlock. Android package metadata and signing are checked separately; a physical Android device playtest has not been performed for this release.
 
-[Changelog](CHANGELOG.md) Â· [Story](STORY.md) Â· [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)
+[Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)
