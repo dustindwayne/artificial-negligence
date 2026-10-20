@@ -54,7 +54,9 @@ namespace ArtificialNegligence {
             music=gameObject.AddComponent<MusicDirector>();music.Initialize(this);
             updater=gameObject.AddComponent<GameUpdater>();updater.Initialize(this);
             BuildCanvas();puzzleFactory=new PuzzleFactory(rng);LoadLevel(0);SetMode(ScreenMode.Title);
-            if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
+            if(Environment.GetCommandLineArgs().Contains("-qa-wonder")){qaMode=true;StartCoroutine(WonderWrathQa());}
+            else if(Environment.GetCommandLineArgs().Contains("-qa-campaign")){qaMode=true;StartCoroutine(CampaignQa());}
+            else if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
         }
 
         public static Vector2 PixelCenter(float x,float y){return new Vector2(x/PPU,-y/PPU);}
@@ -121,7 +123,7 @@ namespace ArtificialNegligence {
             totalGpus=pickups.Count(p=>p.gpu);activeTerminal=null;ClearInput();shotCooldown=hurtCooldown=knockback=jumpBuffer=coyote=0;Array.Clear(buffs,0,buffs.Length);
             gameCamera.transform.position=new Vector3(15,-8.4375f,-20);Toast("LEVEL "+(index+1)+" / "+CityRoute.Name(index));
         }
-        public void SetMode(ScreenMode next){if(mode==ScreenMode.Play&&supportDirty&&next!=ScreenMode.Play){supportDirty=false;SaveProgress();}if(next==ScreenMode.Clear||next==ScreenMode.Dead)RecordDifficultyResult(next==ScreenMode.Dead);padGate=true;mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
+        public void SetMode(ScreenMode next){if(mode==ScreenMode.Play&&supportDirty&&next!=ScreenMode.Play){supportDirty=false;SaveProgress();}if(next==ScreenMode.Clear||next==ScreenMode.Win||next==ScreenMode.Dead)RecordDifficultyResult(next==ScreenMode.Dead);padGate=true;mode=next;Time.timeScale=mode==ScreenMode.Play?1:0;ClearInput();BuildScreen();}
         public void ClearInput(){leftHeld=rightHeld=jumpHeld=fireHeld=jumpLatch=duckHeld=false;}
         public void Pause(){if(mode==ScreenMode.Play)SetMode(ScreenMode.Pause);}
         public void NextLevel(){stats.health=Math.Min(stats.maxHealth,stats.health+2);level=stats.cityUnlocked;SetMode(ScreenMode.CityMap);}
@@ -129,6 +131,7 @@ namespace ArtificialNegligence {
         void OnApplicationPause(bool value){if(value&&!qaMode)Pause();}
         void OnApplicationFocus(bool value){if(!value&&!qaMode)Pause();}
         void Update(){
+            if(SecretCodeOpen)return;
             if(TickController())return;
             if(mode==ScreenMode.Narrative){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceNarrative();else if(Input.GetKeyDown(KeyCode.Escape))FinishNarrative();return;}
             if(mode==ScreenMode.Story){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceStory();if(Input.GetKeyDown(KeyCode.Escape))FinishStory();UpdateUi();return;}
@@ -149,13 +152,17 @@ namespace ArtificialNegligence {
             playerVisual.color=hurtCooldown>0&&((int)(hurtCooldown*12)%2==0)?new Color(1,1,1,.35f):Color.white;playerLight.intensity=.4f+flash*2;playerLight.color=buffs[1]>0||buffs[5]>0?Gold:Cyan;
             TickPickups(dt);TickBullets(dt);TickEffects(dt);TickPlatformer(dt);TickPublicAI(dt);UpdateUi();
             if(playerBody.position.y<-20)Respawn();
-            if(playerBody.position.x>(worldLength-90)/PPU&&collected>=RequiredGpus){
-                if(enemies.Any(e=>(e.IsBoss||e.type==12)&&e.hp>0)){if(toastTime<=0)Toast("DEFEAT THE UPLINK BOSS FIRST");return;}
-                stats.points+=50+level*5+(collected==totalGpus?50:0);stats.GainXp(60+level*5);
-                stats.stageStars[level%30]=Math.Max(stats.stageStars[level%30],collected==totalGpus?3:collected>=totalGpus*.85f?2:1);
-                stats.cityUnlocked=Math.Max(stats.cityUnlocked,level+1);stats.EnsureCollection();SaveProgress();Sound(successSound);SetMode(ScreenMode.Clear);
-            }
+            TryCompleteStage();
 
+        }
+
+        void TryCompleteStage(){
+            if(mode!=ScreenMode.Play||playerBody.position.x<=(worldLength-90)/PPU||collected<RequiredGpus)return;
+            if(enemies.Any(e=>(e.IsBoss||e.type==12)&&e.hp>0)){if(toastTime<=0)Toast("DEFEAT THE UPLINK BOSS FIRST");return;}
+            stats.points+=50+level*5+(collected==totalGpus?50:0);stats.GainXp(60+level*5);
+            stats.stageStars[level%CityRoute.Stages]=Math.Max(stats.stageStars[level%CityRoute.Stages],collected==totalGpus?3:collected>=totalGpus*.85f?2:1);
+            stats.cityUnlocked=Math.Max(stats.cityUnlocked,level+1);stats.EnsureCollection();SaveProgress();Sound(successSound);
+            SetMode((level+1)%CityRoute.Stages==0?ScreenMode.Win:ScreenMode.Clear);
         }
         void FixedUpdate(){
             if(mode!=ScreenMode.Play)return;

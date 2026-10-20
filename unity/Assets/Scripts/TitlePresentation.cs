@@ -23,7 +23,7 @@ namespace ArtificialNegligence {
    if(titleTransmission){string[] lines={"PUBLIC SIGNAL / OPEN CHANNEL","THEY BROKE REALITY TRYING TO OWN IT.","RECOVER THE CORES. KEEP AI PUBLIC."};titleTransmission.text=lines[(int)(t/5)%lines.Length];titleTransmission.color=new Color(.46f,.88f,.9f,.7f+.2f*Mathf.Sin(t*.7f));}
   }
   void BuildLivingTitle(){
-   BeginTitlePresentation();
+   BeginTitlePresentation();AddSecretSpot();
    var texture=new Texture2D(128,2,TextureFormat.RGBA32,false){wrapMode=TextureWrapMode.Clamp};for(int x=0;x<128;x++)for(int y=0;y<2;y++)texture.SetPixel(x,y,new Color(.004f,.025f,.035f,Mathf.SmoothStep(.98f,0,Mathf.Clamp01((x-38)/89f))));texture.Apply();
    var gradient=Sprite.Create(texture,new Rect(0,0,128,2),Vector2.one*.5f,1);Image(screenRoot,"Title readability gradient",0,0,790,540,Color.white,gradient);
    Image(screenRoot,"Signal marker",48,34,22,3,Gold);Label(screenRoot,"A PUBLIC INTELLIGENCE UPRISING",82,24,463,24,16,Cyan);

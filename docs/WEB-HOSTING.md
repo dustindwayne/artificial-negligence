@@ -1,4 +1,4 @@
-# Web build and FTP hosting — 2.4.3
+# Web build and FTP hosting — 2.4.5
 
 The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL build. It contains a `play/` folder and upload instructions. No database or server application is required.
 

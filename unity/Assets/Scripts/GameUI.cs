@@ -143,7 +143,7 @@ namespace ArtificialNegligence {
                 var select=Button(card,unlocked?stats.character==i?"ACTIVE":"SWITCH":"LOCKED",6,176,84,28,stats.character==i?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});select.GetComponentInChildren<Text>().fontSize=16;select.interactable=unlocked&&stats.character!=i;
             }
             var preview=Panel(window,"Equipped loadout",562,102,286,216,Gold,.8f);
-            Image(preview,"Selected character",5,13,100,140,Color.white,CharacterFrame(stats.character,0)).preserveAspect=true;
+            Image(preview,"Selected character",5,13,100,140,Color.white,playerFrames[0]).preserveAspect=true;
             Label(preview,RunStats.Characters[stats.character],8,167,101,28,20,Gold,TextAnchor.MiddleCenter);
             for(int i=0;i<3;i++){int slot=i==0?1:i==1?2:0;int family=slot==1?stats.weapon:slot==2?stats.suit:0;int tier=stats.gear[slot];
                 if(tier>0||slot==0)Image(preview,"Equipped item",119,10+i*55,35,35,Color.white,EquipmentIcon(slot,family)).preserveAspect=true;else Label(preview,"--",119,10+i*55,35,35,18,Cyan,TextAnchor.MiddleCenter);
@@ -151,9 +151,9 @@ namespace ArtificialNegligence {
                 Label(preview,tier==0?(slot==0?"WORN SHOES":"FIND IN CITY"):RunStats.Tiers[tier],160,30+i*55,119,18,12,TierColor(tier));
             }
             Button(preview,"CHANGE GEAR",118,181,157,27,Cyan,()=>SetMode(ScreenMode.Gear)).GetComponentInChildren<Text>().fontSize=15;
-            Label(window,"OUTFITS / COSMETIC",30,328,790,26,21,Cream);
+            Label(window,"OUTFITS / COSMETIC",30,328,420,26,21,Cream);AddWonderWrathChoice(window);
             string[] conditions={"STARTER","LEVEL 3","75 GPUS","12 STAGES"};
-            for(int i=0;i<4;i++){int choice=i;bool open=stats.OutfitUnlocked(i);var b=Button(window,RunStats.Outfits[i]+"\n"+(open?stats.outfit==i?"EQUIPPED":"UNLOCKED":conditions[i]),30+i*208,363,193,55,stats.outfit==i?Gold:Cyan,()=>{stats.outfit=choice;ApplyCharacter();SaveProgress();BuildScreen();});b.GetComponentInChildren<Text>().fontSize=17;b.interactable=open&&stats.outfit!=i;}
+            for(int i=0;i<4;i++){int choice=i;bool open=stats.OutfitUnlocked(i),active=stats.outfit==i&&!(stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped);var b=Button(window,RunStats.Outfits[i]+"\n"+(open?active?"EQUIPPED":"UNLOCKED":conditions[i]),30+i*208,363,193,55,active?Gold:Cyan,()=>SelectStandardOutfit(choice));b.GetComponentInChildren<Text>().fontSize=17;b.interactable=open&&!active;}
             Label(window,"ALL ALLIES SHARE YOUR INVENTORY AND PROGRESS.",30,435,582,29,17,Cyan);Button(window,"BACK",645,432,202,37,Cyan,()=>SetMode(characterReturn));
         }
         void BuildPuzzle(RectTransform window){
@@ -185,8 +185,8 @@ namespace ArtificialNegligence {
             Color accent=mode==ScreenMode.Dead?Pink:Gold;Label(window,mode==ScreenMode.Clear?CityRoute.Name(level)+" / COMPLETE":mode==ScreenMode.Win?"THE PUBLIC AI BELONGS TO EVERYONE.":"THE CITY STILL NEEDS YOU.",38,102,800,55,28,Cyan,TextAnchor.MiddleCenter);
             string[] labels={"GPUs","SCORE","DISTRICT"},values={collected+"/"+totalGpus,stats.score.ToString("N0"),(level+1).ToString()};
             for(int i=0;i<3;i++){var card=Panel(window,labels[i],56+i*263,181,235,116,accent);Image(card,"Stat icon",13,25,56,56,Color.white,itemFrames[i==0?0:i==1?7:3]);Label(card,labels[i],79,14,139,34,22,Cyan);Label(card,values[i],79,50,139,47,34,Cream);}
-            Label(window,mode==ScreenMode.Clear?"ROUTE CLEARED / UPGRADES SAVED / +2 HEALTH":"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
-            Button(window,mode==ScreenMode.Clear?"CITY MAP":"RETRY / CITY MAP",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear)NextLevel();else StartRun();});
+            Label(window,mode==ScreenMode.Clear?"ROUTE CLEARED / UPGRADES SAVED / +2 HEALTH":mode==ScreenMode.Win?"REALITY RESTORED. THE SINISTER ACCESS LOCK IS BROKEN.":"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
+            Button(window,mode==ScreenMode.Clear?"CITY MAP":mode==ScreenMode.Win?"CONTINUE / NEXT CITY CYCLE":"RETRY / CITY MAP",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear||mode==ScreenMode.Win)NextLevel();else StartRun();});
         }
     }
 }

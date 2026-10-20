@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.3 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.5 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -26,12 +26,12 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **Ai Wrath is a recurring boss:** encounter him in boss levels **6 and 12**, then confront him a third time in **level 13**. He retreats from the first two fights; the final defeat frees and unlocks him.
-- **Three combat phases:** scaled boss health, burst protection, phase transitions, aimed volleys, sustained bursts, rushes and ground waves. Arc can disrupt his guard; Rail counters his armor. Attack tells and recovery windows reward dodging and timing.
-- **Harder opposition:** stronger bots and human agents, multi-shot gunner/shield attacks, faster pursuit and reduced hit-stun locking. Other bosses also have more health and burst protection.
-- **Less repetitive gameplay music:** each track plays once, then crossfades into a shuffled four-track rotation. Tracks never repeat immediately; menus and stage changes preserve playback.
+- **A proper city ending:** finish stage 30 to see the public AI liberated, then continue into another city cycle with your progress intact.
+- **Android update repair:** fixes the installer handoff, restores verified downloads after a restart, and recovers from failed partial downloads. Players on 2.4.3 or earlier whose Install button fails need one manual APK install over the existing game.
+- **A hidden Ai Wrath cosmetic:** a secret code unlocks a creator-supplied costume. Wrath still has to be freed through the story before he can wear it. All eight poses use isolated masks, shared scale and transparent gutters.
+- **Completion checks:** physics route checks plus scripted progression cover 60 stages, 11 boss encounters, GPU/boss gates, saved unlocks, victory screens and next-cycle continuation. This is automated regression testing, not a human playthrough.
 
-Windows/web controller support, the self-hosted browser edition and optional Ko-fi support link remain available. [Full changelog](CHANGELOG.md).
+Three Wrath encounters, tougher opposition, the shuffled gameplay soundtrack, controller support and the browser edition remain available. [Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -49,15 +49,19 @@ These are actual Windows captures. The banner above is promotional artwork.
 | --- | --- |
 | ![Animated city start screen](docs/title-v241.png) | ![Logic puzzle terminal](docs/puzzle-v241.png) |
 
+### City liberated
+
+![Victory after completing the city](docs/city-victory-v245.png)
+
 ### Browser edition
 
-![Browser edition running the actual 2.4.2 game](docs/web-v242.png)
+![Browser edition running the actual 2.4.5 game](docs/web-v245.png)
 
 ## Built around exploration and choice
 
 ### Run, jump, restore
 
-Explore **30 generated stages across five districts**, followed by further cycles of increasing resistance. Varied platform surfaces, stacked ledges, ground gaps, rooftop climbs, hazards, checkpoints, low passages, and airborne GPUs give each route a different rhythm. Route validation covers **60 routes, 1,960 GPUs, and 443 ground gaps**, using base movement and ducking for low routes without equipment upgrades.
+Explore **30 generated stages across five districts**, reach the city victory screen, then continue into further cycles of increasing resistance. Varied platform surfaces, stacked ledges, ground gaps, rooftop climbs, hazards, checkpoints, low passages, and airborne GPUs give each route a different rhythm. Route validation covers **60 routes, 1,960 GPUs, and 443 ground gaps**, using base movement and ducking for low routes without equipment upgrades.
 
 Distinct GPUs permanently improve the world's graphics:
 

@@ -1,0 +1,36 @@
+{
+  "release": "2.4.5",
+  "builds": "PASS: Windows, Android ARM64, WebGL",
+  "windowsRuntime": "PASS",
+  "campaign": {
+    "physicsRoutes": 60,
+    "gpus": 1960,
+    "groundGaps": 443,
+    "scriptedStages": 60,
+    "bossEncounters": 11,
+    "cityVictories": 2,
+    "wrathUnlocked": true,
+    "humanPlaythrough": false
+  },
+  "spriteFrames": 116,
+  "secretOutfit": "PASS: exact and wrong code, single-tap modal, story gate, toggle, all eight gutters",
+  "androidInstaller": "Packaged narrow FileProvider paths and matching signing certificate verified",
+  "androidTransport": "Prior patch tests passed normal, resume, retry/corruption, range rejection and full fallback; not a physical in-app installation test",
+  "physicalControllerTest": false,
+  "physicalAndroid245Test": false,
+  "webBrowserSmokeTest": "PASS: final 2.4.5 player rendered in browser; no startup console errors",
+  "packages": {
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 41244558,
+      "sha256": "e99934976b1fc6ad4b834e05e4ac96489d036b3e1c4940c31dd09e5e4d5fe313"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 64840068,
+      "sha256": "2b5d0a4da33ff95d7c3472afe836bc050de711e053bde824c7128be923dad2e2"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 49990191,
+      "sha256": "ab1d0d4096ccd955a16142f56aa8b509e62cbadb4378d9aadfce0604ebc01c6c"
+    }
+  }
+}

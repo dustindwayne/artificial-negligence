@@ -4,9 +4,17 @@
 
 `apk/latest-v2.json` points to one immutable APK in GitHub Releases. Its SHA-256 region map uses `gear32-v1` content boundaries. The client indexes the installed APK on a background worker and caches the index by installed version, size and modification time.
 
-Verified local and cached regions are reused. Adjacent missing regions are grouped into requests of at most 1 MiB, with four downloads in flight. The client checks HTTP 206, the exact Content-Range, length and each region hash. Interrupted/corrupt requests retry up to three times; cached verified regions survive restarts. Obsolete cached chunks are pruned. An ignored Range header triggers one bounded full-file fallback. The complete APK is verified on a background worker before Android checks its signing key and asks to install it.
+Verified local and cached regions are reused. Adjacent missing regions are grouped into requests of at most 1 MiB, with four downloads in flight. The client checks HTTP 206, the exact Content-Range, length and each region hash. Interrupted/corrupt requests retry up to three times; cached verified regions survive restarts. Obsolete cached chunks are pruned. An ignored Range header or three failed range attempts triggers a streaming full-file fallback, with up to three full-download attempts. All completed files still require the expected size and SHA-256. The complete APK is verified on a background worker before Android checks its signing key and asks to install it.
 
 Actual savings depend on the build: Unity repacking or native-code changes can affect many regions. The updater does not promise zero music bytes in every release.
+
+## Android installer repair (2.4.5)
+
+The APK is saved under Unity's Android external app files directory. The FileProvider now grants read access to its `updates/` subfolder, in addition to the internal equivalent. The installer receives a content URI, temporary read permission and ClipData. No broad storage access is granted.
+
+After checking for updates, an already completed APK is verified again and restored to the Install button, including after the app was closed for Android's unknown-source settings. Installer errors are logged, and the verified download is retained for retry.
+
+Versions through 2.4.3 have an installer path mismatch. If tapping Install Update fails, download the newer APK from Releases and install it over the existing app once. Do not uninstall first; installing over it preserves progress. The transport bridge remains available, but cannot repair installer code already running on a device.
 
 ## Older clients
 
@@ -19,7 +27,7 @@ Actual savings depend on the build: Unity repacking or native-code changes can a
 3. Publish metadata:
 
 ```sh
-python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.4.2 --code 242 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.4.2/ArtificialNegligence.apk
+python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.4.5 --code 245 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.4.5/ArtificialNegligence.apk
 ```
 
 4. Commit the small manifests/link files. Do not commit another full APK or generate another chunk store for current clients. Keep the current release and the single bridge; obsolete Release assets may be removed after updating the manifest.

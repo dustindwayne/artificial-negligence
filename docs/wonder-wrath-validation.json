@@ -1,0 +1,35 @@
+{
+  "frames": 8,
+  "grid": [
+    4,
+    2
+  ],
+  "nativeFramePixels": [
+    64,
+    64
+  ],
+  "nativeTransparentGutter": 4,
+  "sharedScale": true,
+  "redrawn": false,
+  "sourcePreserved": true,
+  "runtimeCodeAndSelection": "PASS",
+  "storyUnlockPreserved": true,
+  "androidBuild": "PASS",
+  "Wonder-Wrath-clean-sprite-sheet.png": {
+    "pixels": [
+      1280,
+      640
+    ],
+    "transparent": true,
+    "allEightCellsPadded": true
+  },
+  "Wonder-Wrath-game-sprite-sheet.png": {
+    "pixels": [
+      256,
+      128
+    ],
+    "transparent": true,
+    "allEightCellsPadded": true
+  },
+  "release": "2.4.5"
+}

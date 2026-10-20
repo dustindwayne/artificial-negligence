@@ -14,3 +14,7 @@ Looper is based on a character sheet supplied by the creator, adapted with AI as
 
 
 Ai Wrath and the Sinister agent sheets were generated with AI from creator-specified character direction and references. The Looper versus Ai Wrath README banner is AI-generated promotional artwork, with its exact prompt recorded in docs/banner-generation-v241.md. Gameplay screenshots are direct captures.
+
+### Wonder Wrath costume
+
+Costume sprite sheet supplied by Dustin Wann. The supplied artwork is preserved; frame masks and the game importer handle background isolation, shared scaling and transparent gutters.

@@ -1,0 +1,104 @@
+{
+  "sourceUnchanged": true,
+  "maskThreshold": 14,
+  "sharedScale": true,
+  "runtimeGutterPixels": 4,
+  "frames": [
+    {
+      "frame": 0,
+      "sourceBounds": [
+        13,
+        73,
+        206,
+        339
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": false,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 1,
+      "sourceBounds": [
+        231,
+        83,
+        508,
+        340
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": true,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 2,
+      "sourceBounds": [
+        543,
+        83,
+        763,
+        340
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": false,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 3,
+      "sourceBounds": [
+        780,
+        65,
+        1014,
+        315
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": false,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 4,
+      "sourceBounds": [
+        8,
+        395,
+        272,
+        640
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": true,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 5,
+      "sourceBounds": [
+        266,
+        391,
+        524,
+        640
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": true,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 6,
+      "sourceBounds": [
+        514,
+        461,
+        742,
+        645
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": false,
+      "isolatedByMask": true
+    },
+    {
+      "frame": 7,
+      "sourceBounds": [
+        758,
+        465,
+        1015,
+        640
+      ],
+      "sourceEdgeClipping": false,
+      "regularGridBleed": true,
+      "isolatedByMask": true
+    }
+  ]
+}

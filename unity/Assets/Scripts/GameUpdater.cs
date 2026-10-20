@@ -26,7 +26,7 @@ namespace ArtificialNegligence {
     }
     public partial class GameUpdater:MonoBehaviour {
         const string Root="https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/";
-        const int Version=230;
+        const int Version=245;
         [Serializable] public class Chunk {public string sha256;public int size;}
         [Serializable] public class Manifest {public int versionCode,protocol;public string version,sha256,downloadUrl;public long size;public Chunk[] chunks;}
         struct Local {public long offset;public int size;}
@@ -35,6 +35,13 @@ namespace ArtificialNegligence {
         public string ButtonText {get{return busy?"WORKING...":ready!=null?"INSTALL UPDATE":available!=null?"DOWNLOAD UPDATE":"CHECK FOR UPDATES";}}
         public void Initialize(GameController controller){game=controller;var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qa-update-manifest");if(at>=0&&at+1<args.Length)StartCoroutine(QaUpdate(args[at+1]));}
         public void Begin(){if(busy)return;if(ready!=null){Install();return;}StartCoroutine(available==null?Check():Download());}
+        string UpdateDirectory {get{
+#if UNITY_STANDALONE || UNITY_EDITOR
+            var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qa-update-dir");
+            if(Array.IndexOf(args,"-qa-update-manifest")>=0&&at>=0&&at+1<args.Length)return Path.GetFullPath(args[at+1]);
+#endif
+            return Path.Combine(Application.persistentDataPath,"updates");
+        }}
         IEnumerator Check(){
             busy=true;Status="Checking for updates...";string stamp="?check="+DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             using(var contentRequest=UnityWebRequest.Get(Root+"gameplay.json"+stamp))using(var request=UnityWebRequest.Get(Root+"latest-v2.json"+stamp)){
@@ -44,7 +51,12 @@ namespace ArtificialNegligence {
                 Manifest manifest=null;try{manifest=JsonUtility.FromJson<Manifest>(request.downloadHandler.text);}catch{}
                 if(!Valid(manifest)){Fail("Update information is invalid.");yield break;}
                 if(manifest.versionCode<=InstalledVersion()){Status=contentUpdated?"Gameplay balance updated. No APK download needed.":"Your game is up to date ("+Application.version+").";busy=false;yield break;}
-                available=manifest;Status="Version "+manifest.version+" is available. Only missing data will download.";
+                available=manifest;
+                string existing=Path.Combine(UpdateDirectory,"latest.apk");
+                var verify=System.Threading.Tasks.Task.Run(()=>File.Exists(existing)&&new FileInfo(existing).Length==manifest.size&&UpdateChunks.HashFile(existing)==manifest.sha256);
+                while(!verify.IsCompleted){Status="Checking saved update...";yield return null;}
+                if(!verify.IsFaulted&&!verify.IsCanceled&&verify.Result){ready=existing;Status="Saved update verified. Tap Install Update.";busy=false;yield break;}
+                Status="Version "+manifest.version+" is available. Only missing data will download.";
             }busy=false;
         }
         static bool Valid(Manifest m){
@@ -52,7 +64,7 @@ namespace ArtificialNegligence {
             long sum=0;foreach(var c in m.chunks){if(c==null||!IsHash(c.sha256)||c.size<1||c.size>UpdateChunks.Max)return false;sum+=c.size;}return sum==m.size&&(m.protocol<2||RangeProtocol.SafeUrl(m.downloadUrl));
         }
         static bool IsHash(string hash){return hash!=null&&Regex.IsMatch(hash,"^[a-f0-9]{64}$");}
-        void Fail(string text){Status=text;busy=false;}
+        void Fail(string text){Status=text;busy=false;Debug.LogWarning("AN_UPDATE / "+text);}
         string InstalledApk(){
 #if UNITY_ANDROID && !UNITY_EDITOR
             using(var player=new AndroidJavaClass("com.unity3d.player.UnityPlayer"))using(var activity=player.GetStatic<AndroidJavaObject>("currentActivity"))using(var info=activity.Call<AndroidJavaObject>("getApplicationInfo"))return info.Get<string>("sourceDir");
@@ -77,7 +89,7 @@ namespace ArtificialNegligence {
             while(true){bool more=false;try{more=scan.MoveNext();}catch{scan.Dispose();Fail("Could not read the installed game.");yield break;}
                 if(!more)break;var block=scan.Current;local[block.hash]=new Local{offset=block.offset,size=block.data.Length};yield return null;}
             scan.Dispose();
-            string dir=Path.Combine(Application.persistentDataPath,"updates"),cache=Path.Combine(dir,"chunks"),target=Path.Combine(dir,"latest.apk");
+            string dir=UpdateDirectory,cache=Path.Combine(dir,"chunks"),target=Path.Combine(dir,"latest.apk");
             try{Directory.CreateDirectory(cache);}catch{Fail("Not enough space or storage is unavailable.");yield break;}
             long reused=0,received=0,total=0;foreach(var chunk in available.chunks)if(local.ContainsKey(chunk.sha256))reused+=chunk.size;else total+=chunk.size;
             FileStream output=null,input=null;try{output=File.Create(target);input=File.OpenRead(source);}catch{output?.Dispose();input?.Dispose();Fail("Could not prepare update storage.");yield break;}
@@ -106,6 +118,7 @@ namespace ArtificialNegligence {
             ready=target;Status="Update verified. Tap Install Update; your progress is preserved.";busy=false;
         }
         void Install(){
+            if(ready==null||!File.Exists(ready)){ready=null;Status="Saved update is missing. Tap Download Update again.";return;}
 #if UNITY_ANDROID && !UNITY_EDITOR
             try{
                 using(var player=new AndroidJavaClass("com.unity3d.player.UnityPlayer"))using(var activity=player.GetStatic<AndroidJavaObject>("currentActivity")){
@@ -116,10 +129,12 @@ namespace ArtificialNegligence {
                         }
                     }
                     using(var provider=new AndroidJavaClass("androidx.core.content.FileProvider"))using(var file=new AndroidJavaObject("java.io.File",ready))using(var uri=provider.CallStatic<AndroidJavaObject>("getUriForFile",activity,Application.identifier+".updates",file))using(var intent=new AndroidJavaObject("android.content.Intent","android.intent.action.VIEW")){
-                        intent.Call<AndroidJavaObject>("setDataAndType",uri,"application/vnd.android.package-archive");intent.Call<AndroidJavaObject>("addFlags",1);activity.Call("startActivity",intent);
+                        intent.Call<AndroidJavaObject>("setDataAndType",uri,"application/vnd.android.package-archive");intent.Call<AndroidJavaObject>("addFlags",1);
+                        using(var clipClass=new AndroidJavaClass("android.content.ClipData"))using(var clip=clipClass.CallStatic<AndroidJavaObject>("newRawUri","Game update",uri))intent.Call("setClipData",clip);
+                        activity.Call("startActivity",intent);Status="Android installer opened. Confirm Update to finish.";
                     }
                 }
-            }catch{Status="Could not open Android installer. Download the APK from GitHub.";}
+            }catch(Exception error){Debug.LogError("AN_UPDATE_INSTALL / "+error);Status="Android could not open the installer. Check Allow from this source in Settings, then retry. Your verified download is saved.";}
 #else
             Status="Install updates on your Android device.";
 #endif

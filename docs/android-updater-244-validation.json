@@ -1,0 +1,17 @@
+{
+  "version": "2.4.4",
+  "androidBuild": "PASS",
+  "providerPaths": "PASS: packaged updates-only internal and external app paths",
+  "signature": "same certificate as 2.4.3",
+  "tests": {
+    "normal": "PASS",
+    "resume": "PASS",
+    "flaky": "PASS",
+    "reject": "PASS",
+    "full": "PASS"
+  },
+  "physicalAndroidInstallationTest": false,
+  "apkBytes": 49135705,
+  "sha256": "3e9c2ea09ca0ea6df542fa226f6d8ef3e020fc9084f1016782822c468203e873",
+  "published": false
+}

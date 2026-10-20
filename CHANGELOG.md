@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.4.5 — Android updater, campaign ending and hidden outfit
+
+- Correct Android FileProvider access to downloaded APKs and grant the installer read access explicitly.
+- Recover verified downloads after restarting the game.
+- Recover from repeated partial-download failures with a verified full download; fix a missing-release error that could leave updating stuck.
+- Keep the existing progress data and compatibility bridge. Affected older apps require one manual APK install over the existing game.
+- Finish each 30-stage city cycle with a victory screen and continue into the next cycle; preserve quotas, boss gates and saved progress.
+- Add a hidden cosmetic unlock for Ai Wrath, with creator-supplied costume artwork isolated into eight padded animation frames.
+
+
 ## 2.4.3 — Wrath escalation and gameplay music
 
 - Ai Wrath fights in boss levels 6 and 12; the third encounter in level 13 grants the unlock. First two victories cause retreats.

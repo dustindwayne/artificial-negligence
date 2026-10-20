@@ -47,7 +47,7 @@ namespace ArtificialNegligence {
         IEnumerator DownloadRanges(){
             busy=true;string source=null;try{source=InstalledApk();}catch{}
             if(string.IsNullOrEmpty(source)){Fail("Install updates on Android, or download the APK from GitHub Releases.");yield break;}
-            string dir=Path.Combine(Application.persistentDataPath,"updates"),cache=Path.Combine(dir,"chunks"),target=Path.Combine(dir,"latest.apk"),part=target+".part",indexPath=Path.Combine(dir,"installed-index.json");
+            string dir=UpdateDirectory,cache=Path.Combine(dir,"chunks"),target=Path.Combine(dir,"latest.apk"),part=target+".part",indexPath=Path.Combine(dir,"installed-index.json");
             string key=null;try{Directory.CreateDirectory(cache);var info=new FileInfo(source);key=InstalledVersion()+":"+info.Length+":"+info.LastWriteTimeUtc.Ticks;}catch{Fail("Update storage is unavailable.");yield break;}
             Interlocked.Exchange(ref scannedBytes,0);var scan=Index(source,indexPath,key);
             while(!scan.IsCompleted){Status="Finding reusable game data... "+(Interlocked.Read(ref scannedBytes)/1000000f).ToString("0.0")+" MB";yield return null;}
@@ -78,7 +78,7 @@ namespace ArtificialNegligence {
                         if(ok){int cursor=0;foreach(int n in job.chunks){var chunk=available.chunks[n];var block=new byte[chunk.size];Buffer.BlockCopy(bytes,cursor,block,0,chunk.size);cursor+=chunk.size;if(UpdateChunks.Hash(block)!=chunk.sha256){ok=false;break;}}}
                         if(ok){try{output.Position=job.start;output.Write(bytes,0,bytes.Length);int cursor=0;foreach(int n in job.chunks){var chunk=available.chunks[n];var block=new byte[chunk.size];Buffer.BlockCopy(bytes,cursor,block,0,chunk.size);cursor+=chunk.size;File.WriteAllBytes(Path.Combine(cache,chunk.sha256+".bin"),block);}received+=bytes.Length;completed++;}catch{failed=true;}}
                         long response=request.responseCode;request.Dispose();active.RemoveAt(j);
-                        if(!ok){if(job.attempts<3)queue.Enqueue(job);else{failed=true;if(response==404)available=null;}}
+                        if(!ok){if(job.attempts<3)queue.Enqueue(job);else{fallback=true;Debug.LogWarning("AN_UPDATE_RANGE / HTTP "+response+"; switching to verified full download");}}
                     }
                     if(fallback||failed)break;
                     long inFlight=active.Sum(x=>(long)x.request.downloadedBytes);
@@ -89,7 +89,13 @@ namespace ArtificialNegligence {
             if(failed){Fail("Download interrupted. Retry to reuse verified data, or check for a newer update.");yield break;}
             if(fallback){
                 Status="This connection needs a full download. Downloading safely...";
-                using(var request=UnityWebRequest.Get(available.downloadUrl)){request.downloadHandler=new DownloadHandlerFile(part);request.timeout=120;request.SendWebRequest();while(!request.isDone){Status="Downloading full update... "+(request.downloadedBytes/1000000f).ToString("0.0")+" MB";yield return null;}if(request.result!=UnityWebRequest.Result.Success){Fail("Download interrupted. Please retry.");yield break;}}
+                bool downloaded=false;string reason="";
+                for(int attempt=0;attempt<3&&!downloaded;attempt++){
+                    if(attempt>0)yield return new WaitForSecondsRealtime(attempt*2);
+                    string url=available.downloadUrl+(available.downloadUrl.Contains("?")?"&":"?")+"update="+DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    using(var request=UnityWebRequest.Get(url)){request.downloadHandler=new DownloadHandlerFile(part);request.timeout=180;request.SendWebRequest();while(!request.isDone){Status="Downloading full update... "+(request.downloadedBytes/1000000f).ToString("0.0")+" MB";yield return null;}downloaded=request.result==UnityWebRequest.Result.Success;reason="HTTP "+request.responseCode+" / "+request.error;}
+                }
+                if(!downloaded){Fail("Download failed ("+reason+"). Check your connection and retry; verified data is saved.");yield break;}
             }
             var verify=Task.Run(()=>new FileInfo(part).Length==available.size&&UpdateChunks.HashFile(part)==available.sha256);
             while(!verify.IsCompleted){Status="Verifying update...";yield return null;}
