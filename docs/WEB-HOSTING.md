@@ -1,4 +1,4 @@
-# Web build and FTP hosting — 2.4.10
+# Web build and FTP hosting — 2.4.11
 
 The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL build. It contains a `play/` folder and upload instructions. No database or server application is required.
 
@@ -11,7 +11,7 @@ The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL 
 
 The release provides static files for self-hosting.
 
-The supplied full HTML embeds the page CSS. Existing `hero.png` and the complete `Build/` directory must remain beside `index.html`. A separate CSS version is also kept in the source under `web/`. Do not open the game via `file://`; serve it through HTTP/HTTPS.
+The supplied full HTML embeds the page CSS. The versioned `hero-*.png` cover and the complete `Build/` directory must remain beside `index.html`. A separate CSS version is also kept in the source under `web/`. Do not open the game via `file://`; serve it through HTTP/HTTPS.
 
 ## Hosting settings
 

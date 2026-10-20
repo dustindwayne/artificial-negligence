@@ -2,6 +2,7 @@ using UnityEngine;
 namespace ArtificialNegligence {
  public static class CombatBalance {
   public static int Health(int type,int level,int mastery,int tier,int encounter){
+   if(type==13||type==14)return 150+level*7+Mathf.Clamp(mastery,0,20)*4;
    if(type==12)return Mathf.RoundToInt((160+level*9+Mathf.Clamp(mastery,0,20)*7+tier*8)*(1+Mathf.Clamp(encounter,0,2)*.2f));
    if(type>=6&&type<=8)return 80+level*7+Mathf.Clamp(mastery,0,20)*4;
    if(type>=9)return new[]{24,28,22}[type-9]+level*2+Mathf.Clamp(mastery,0,20);
@@ -13,7 +14,7 @@ namespace ArtificialNegligence {
   int wrathPhase=1,wrathPattern,wrathBurst;float damageGate,staggerGate,phaseLock,wrathDash,wrathRecovery,wrathBurstClock;Vector2 wrathHome;float arenaLeft,arenaRight;
   public int CombatPhase=>type==12?wrathPhase:hp<=maxHp/2?2:1;
   public string CombatTell=>type!=12?"":phaseLock>0?"REBOOT":humanShield>0?"GUARD / ARC":humanWindup>0?(wrathPattern%3==2?"RUSH / JUMP":"TARGET LOCK"):wrathDash>0?"RUSH":wrathRecovery>0?"EXPOSED":"PHASE "+wrathPhase;
-  void InitializeCombat(LevelRow floor){if(type!=12)return;wrathHome=humanBody.position;arenaLeft=(floor.x+12)/GameController.PPU;arenaRight=(floor.x+floor.w-12)/GameController.PPU;humanAttack=1;humanAbility=4;}
+  void InitializeCombat(LevelRow floor){if(type<12)return;wrathHome=humanBody.position;arenaLeft=(floor.x+12)/GameController.PPU;arenaRight=(floor.x+floor.w-12)/GameController.PPU;humanAttack=1;humanAbility=4;}
   void TickCombatTimers(float dt){damageGate=Mathf.Max(0,damageGate-dt);staggerGate=Mathf.Max(0,staggerGate-dt);}
   int MitigateHit(int damage,int kind){
    if(damage<=0||damageGate>0||type==12&&phaseLock>0)return 0;
@@ -23,7 +24,7 @@ namespace ArtificialNegligence {
     damage=Mathf.Min(damage,Mathf.Max(1,Mathf.CeilToInt(maxHp*.065f)));
     if(wrathPhase<3){int floor=Mathf.CeilToInt(maxHp*(wrathPhase==1?.66f:.33f));damage=Mathf.Min(damage,Mathf.Max(0,hp-floor));}
     damageGate=.14f;
-   }else if(IsBoss){damage=Mathf.Min(damage,Mathf.Max(1,Mathf.CeilToInt(maxHp*.12f)));damageGate=.1f;}
+   }else if(type>=13){if(type==14&&humanShield>0&&kind!=1)damage=Mathf.Max(1,damage/2);damage=Mathf.Min(damage,Mathf.Max(1,Mathf.CeilToInt(maxHp*.08f)));damageGate=.13f;}else if(IsBoss){damage=Mathf.Min(damage,Mathf.Max(1,Mathf.CeilToInt(maxHp*.12f)));damageGate=.1f;}
    else if(IsHuman){if(humanShield>0&&kind!=1)damage=Mathf.Max(1,damage-3);damage=Mathf.Min(damage,Mathf.Max(1,Mathf.CeilToInt(maxHp*.4f)));damageGate=.08f;}
    return damage;
   }
@@ -47,7 +48,7 @@ namespace ArtificialNegligence {
    }}else if(sight&&humanAttack<=0&&wrathBurst==0){humanAim=(game.PlayerHitCenter+game.playerBody.linearVelocity*.18f-humanBody.position).normalized;if(wrathPattern%3==2)humanAim=new Vector2(humanAim.x>=0?1:-1,0);humanWindup=wrathPattern%3==2?1.05f:.85f;}
   }
   void FireWrathShot(Vector2 aim,float speed,int damage){game.SpawnBullet(humanBody.position+aim*.65f,aim*speed,true,damage);}
-  bool RecoverWrath(){if(type!=12||humanBody.position.y>=-18)return false;humanBody.position=wrathHome;humanBody.linearVelocity=Vector2.zero;phaseLock=.9f;humanWindup=wrathDash=0;wrathBurst=0;game.Burst(wrathHome,GameController.Gold,16);return true;}
+  bool RecoverWrath(){if(type<12||humanBody.position.y>=-18)return false;humanBody.position=wrathHome;humanBody.linearVelocity=Vector2.zero;phaseLock=.9f;humanWindup=wrathDash=0;wrathBurst=0;game.Burst(wrathHome,GameController.Gold,16);return true;}
   public void QaVerifyFallRecovery(){int before=hp;humanBody.position=new Vector2(wrathHome.x,-25);if(!RecoverWrath()||hp!=before||humanBody.position.y<-18)throw new System.Exception("Wrath pit recovery failed");}
   // QA uses normal damage/phase gates, not an instant-kill route.
   public void QaStepCombat(float dt){TickCombatTimers(dt);if(type==12)TickWrath(dt,false);}

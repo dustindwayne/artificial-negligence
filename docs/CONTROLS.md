@@ -1,8 +1,9 @@
-# Controls — 2.4.10
+# Controls — 2.4.11
 
 ## Supported targets
 
 - **Windows:** Xbox controllers and other controllers exposing XInput. Up to four device slots are scanned; one connected controller controls this single-player game. DirectInput-only devices require an XInput-compatible mode or mapper.
+- **Linux:** Unity Input System-recognized gamepads use the same action mapping, including D-pad priority, triggers, menu navigation and disconnect-to-pause. Controller compatibility depends on device and Linux drivers.
 - **Web:** browser-recognized gamepads with the standard Gamepad API mapping, including Xbox-style controllers. Click the page/game, then press a controller button so the browser exposes the device. Use HTTPS on the public website. Nonstandard browser mappings are not guessed.
 - **Android:** touch controls remain the supported input for this release; native Android controller support is not implemented.
 

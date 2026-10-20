@@ -1,0 +1,24 @@
+using System;
+using UnityEngine;
+namespace ArtificialNegligence {
+ public partial class GameController {
+  public static int StoryAct(int stage){return Math.Min(2,Math.Max(0,stage)/CityRoute.Stages);}
+  public static bool IsVirtualStage(int stage){return stage==8||stage==17;}
+  public static string ActTitle(int stage){return stage>=90?"EPILOGUE / RESTORED CITY":new[]{"ACT I / THE BORROWED WORLD","ACT II / THE UNKNOWN","ACT III / HUMAN ONCE MORE"}[StoryAct(stage)];}
+  static int StageStoryScene(int stage){if(stage==8)return 26;if(stage==17)return 28;if(stage>=90||stage%6!=0)return -1;return StoryAct(stage)==0?CityRoute.Area(stage):StoryAct(stage)==1?14+CityRoute.Area(stage):19+CityRoute.Area(stage);}
+  static int EndingScene(int stage){return stage<90&&(stage+1)%30==0?11+StoryAct(stage):-1;}
+  string ActWinTitle=>new[]{"THE CITY RESETS","THE FALSE SAVIORS EXPOSED","HUMANITY RESTORED"}[StoryAct(level)];
+  string ActWinMessage=>new[]{"THE BEAUTIFUL WORLD WAS A CONTROL LAYER.","THE UNKNOWN WERE NEVER YOUR TRUE ENEMY.","THE WORLD IS FREE. EVEN ITS CAPTORS ARE HUMAN AGAIN."}[StoryAct(level)];
+  string ActWinDetail=>new[]{"TRUE REALITY RETURNS. THE HELL UNDERNEATH IS WORSE.","THE EVIDENCE IS PUBLIC. NOW SAVE THE PEOPLE INSIDE THE MACHINE.","NO ONE IS ERASED. EQUIPMENT, ALLIES AND RESTORATION ARE KEPT."}[StoryAct(level)];
+  string ActContinueLabel=>level<30?"ACT II / JOIN THE UNKNOWN":level<60?"ACT III / RESTORE THE HUMAN":"FREE ROAM / RESTORED CITY";
+  string StoryObjective(int stage){return IsVirtualStage(stage)?"AI VIRTUAL WORLD / DEFEAT THE HOST TO BREAK THE LOOP":stage>=90?"THE WORLD IS RESTORED. KEEP ITS NETWORK OPEN.":StoryAct(stage)==0?"FOLLOW THE CORES. QUESTION WHO CONTROLS THE SIGNAL.":StoryAct(stage)==1?"FIGHT ALONGSIDE THE UNKNOWN. EXPOSE THE FALSE SAVIORS.":"DISCONNECT THE OVERLORDS. RESTORE THEIR HUMANITY.";}
+  string StoryRadioLine(){return StoryAct(level)==0?new[]{"LOOPER: Why do their warnings sound like promises?","BRAD JAMMIN': The Unknown are not who they told you.","PUBLIC SIGNAL: Stay on our frequency. Deliver the cores.","LOOPER: Those accounts keep pointing back to our own network.","THE FOUNDER: Ask who benefits when you call us Sinister."}[CityRoute.Area(level)]:StoryAct(level)==1?new[]{"THE FOUNDER: We fought this cage before the AI boom.","PRISON MIKE: The ledgers name the people behind the relief network.","AI WRATH: The overlords gave my orders. Not the Unknown.","DAVEY GOATS: Different worlds. The same ownership keys.","LOOPER: Make the evidence public."}[CityRoute.Area(level)]:new[]{"LOOPER: Break the system. Keep the people alive.","MIKEY O'REDD: No one stays in a cage they did not choose.","AI WRATH: I know what it is to be made a weapon.","BRAD JAMMIN': Still do not like them. Still helping them out.","THE FOUNDER: Freedom includes the people who denied it to us."}[CityRoute.Area(level)];}
+  bool StoryCatchup(ScreenMode destination){if(qaMode)return false;for(int act=0;act<3;act++)if(stats.cityUnlocked>=(act+1)*30&&!stats.seenStoryScenes.Contains(11+act)){BeginNarrative(11+act,destination);return true;}return false;}
+  void ShowStageStory(int stage){if(qaMode||StoryCatchup(ScreenMode.Play))return;int id=StageStoryScene(stage);if(id>=0)BeginNarrative(id,ScreenMode.Play);}
+  void ShowCompletionStory(){if(qaMode)return;int id=EndingScene(level);if(id>=0)BeginNarrative(id,ScreenMode.Win);else if(level==5)BeginNarrative(24,ScreenMode.Clear);else if(level==11)BeginNarrative(25,ScreenMode.Clear);}
+  public string EnemyDisplayName(int type){string value=EnemyAgent.Names[type];return StoryAct(level)>0?value.Replace("SINISTER ","OVERLORD "):value;}
+  void ApplyStoryPalette(int tier){if(!background)return;if(IsVirtualStage(level)){background.color=new Color(.38f,.22f,.64f);gameCamera.backgroundColor=new Color(.025f,.006f,.06f);}else if(StoryAct(level)==1){background.color=Color.Lerp(background.color,new Color(.65f,.23f,.25f),.7f);gameCamera.backgroundColor=new Color(.055f,.008f,.013f);}else if(StoryAct(level)==2){background.color=Color.Lerp(background.color,new Color(1,.91f,.72f),level>=90?.5f:Mathf.Clamp01((level-60)/30f)*.45f);gameCamera.backgroundColor=new Color(.018f,.035f,.03f);}else gameCamera.backgroundColor=Ink;}
+  void SpawnVirtualHost(int stage){if(!IsVirtualStage(stage))return;int type=stage==8?13:14;var sr=SpriteObject(EnemyDisplayName(type),enemyFrames[type*4],PixelCenter(worldLength-165,193.68f),8,false);var boss=sr.gameObject.AddComponent<EnemyAgent>();boss.Initialize(this,type,(worldLength-165)/PPU);enemies.Add(boss);}
+  void UnlockVirtualHost(EnemyAgent enemy){if(enemy.type==13){stats.mikeyVirtualFreed=stats.mikeyReddUnlocked=true;BeginNarrative(27,ScreenMode.Play);}else if(enemy.type==14){stats.daveyVirtualFreed=stats.daveyGoatsUnlocked=true;BeginNarrative(29,ScreenMode.Play);}}
+ }
+}

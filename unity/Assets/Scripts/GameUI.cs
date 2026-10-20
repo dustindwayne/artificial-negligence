@@ -52,7 +52,7 @@ namespace ArtificialNegligence {
             if(mode==ScreenMode.Play){BuildHud();return;}
             if(mode==ScreenMode.Narrative){BuildNarrative();return;}if(mode==ScreenMode.Story){BuildStory();return;}if(mode==ScreenMode.Title){BuildTitle();return;}if(mode==ScreenMode.CityMap){BuildCityMap();return;}
             Image(screenRoot,"Dim world",0,0,960,540,new Color(.001f,.01f,.02f,.75f));
-            string title=mode==ScreenMode.PuzzleResult?"TERMINAL RESULT":mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Characters?"CHARACTER / LOADOUT":mode==ScreenMode.Gear?"INVENTORY":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?"AI LIBERATED":mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
+            string title=mode==ScreenMode.PuzzleResult?"TERMINAL RESULT":mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Characters?"CHARACTER / LOADOUT":mode==ScreenMode.Gear?"INVENTORY":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?ActWinTitle:mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
             Color accent=mode==ScreenMode.Dead?Pink:Cyan;var window=Panel(screenRoot,title,42,30,876,480,accent,.91f);
             Label(window,title,28,19,710,45,36,Cream);Image(window,"Header track",26,77,821,2,accent);
             if(mode!=ScreenMode.Win&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Clear)Button(window,"X",807,15,45,44,accent,()=>SetMode(mode==ScreenMode.Characters?characterReturn:mode==ScreenMode.Settings?settingsReturn:ScreenMode.Play));
@@ -100,7 +100,7 @@ namespace ArtificialNegligence {
             if(updateButtonLabel&&updater)updateButtonLabel.text=updater.ButtonText;
             if(mode!=ScreenMode.Play||!gpuLabel)return;UpdateSupportHud();
             if(xpHud)xpHud.text="LV "+stats.rank+" / XP "+stats.xp;if(xpFill)xpFill.rectTransform.sizeDelta=new Vector2(105*stats.xp/(float)stats.XpNeeded,4);
-            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>(e.IsBoss||e.type==12)&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyAgent.Names[boss.type]+"  "+boss.hp+" / "+boss.maxHp+(boss.type==12?" / "+boss.CombatTell:""):"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
+            gpuLabel.text=collected+"/"+totalGpus;var boss=enemies.FirstOrDefault(e=>(e.IsBoss||e.type==12)&&e.hp>0);if(bossHealthHud)bossHealthHud.text=boss!=null&&Mathf.Abs(boss.transform.position.x-playerBody.position.x)<16?EnemyDisplayName(boss.type)+"  "+boss.hp+" / "+boss.maxHp+(boss.type==12?" / "+boss.CombatTell:""):"";pointsLabel.text=stats.points+" PTS";pointsLabel.fontSize=16;healthLabel.text=stats.health+"/"+stats.maxHealth+" HP";
             for(int i=0;i<10;i++)healthCells[i].color=i<Mathf.CeilToInt(stats.health/(float)stats.maxHealth*10)?Pink:new Color(.13f,.055f,.12f);
             if(miniPlayer)miniPlayer.rectTransform.anchoredPosition=new Vector2(60+playerBody.position.x/(worldLength/PPU)*572,-5);int count=0;
             foreach(var pickup in pickups.Where(p=>p.gpu)){if(count<miniGpus.Count)miniGpus[count].gameObject.SetActive(!pickup.taken);count++;}
@@ -113,16 +113,17 @@ namespace ArtificialNegligence {
         }
         void BuildShop(RectTransform window){
             Label(window,"LV "+stats.rank+" / XP "+stats.xp+"/"+stats.XpNeeded+" / "+stats.talents+" TALENTS",30,84,815,32,23,Gold);
-            string[] names={"SPEED","WEAPON TIER","ARMOR TIER","VITALITY","WEAPON MASTERY","DEFENSE TRAINING"};
+            Label(window,stats.points+" POINTS / "+stats.salvage+" SALVAGE / SPARES CAN BE SALVAGED IN INVENTORY",30,107,815,15,12,Cyan);
+            string[] names={"SPEED","WEAPON LEVEL","ARMOR LEVEL","VITALITY","WEAPON MASTERY","DEFENSE TRAINING"};
             for(int i=0;i<6;i++){int slot=i;int value=i<4?stats.Level(i):i==4?stats.power:stats.defense;int cap=i<4?stats.Cap(i):20;
                 var row=Panel(window,names[i],29,123+i*45,818,41,i==1||i==4?Gold:Cyan);
                 Label(row,names[i]+" / LV "+value,14,3,495,34,23,Cream);
                 int cost=i<4?stats.Cost(i):50+value*30;
-                var buy=Button(row,i==1&&!stats.HasWeapon||i==2&&!stats.HasArmor?"FIND ITEM FIRST":value>=cap?"MAX":cost+" PTS"+(i>=4?" + TALENT":""),511,3,292,35,Gold,()=>{Toast(slot<4?stats.Upgrade(slot):stats.Train(slot==4));SaveProgress();BuildScreen();});
-                buy.interactable=value<cap&&stats.points>=cost&&(i<4||stats.talents>0)&&(i!=1||stats.HasWeapon)&&(i!=2||stats.HasArmor);
+                var buy=Button(row,i==1&&!stats.HasWeapon||i==2&&!stats.HasArmor?"FIND ITEM FIRST":value>=cap?"MAX":cost+" PTS"+(i==1||i==2?" + "+stats.UpgradeSalvageCost(i)+" SALVAGE":i>=4?" + TALENT":""),511,3,292,35,Gold,()=>{Toast(slot<4?stats.Upgrade(slot):stats.Train(slot==4));SaveProgress();BuildScreen();});
+                buy.GetComponentInChildren<Text>().fontSize=17;buy.interactable=(i!=1&&i!=2||stats.CanUpgradeItem(i))&&value<cap&&stats.points>=cost&&(i<4||stats.talents>0)&&(i!=1||stats.HasWeapon)&&(i!=2||stats.HasArmor);
             }
             Label(window,toastTime>0?toast:"XP: GPU +8 / PUZZLE +20 / KILL +12 / BOSS +80",30,398,805,30,20,Cyan);
-            Label(window,"ULTRA 0.5% BOX ONLY / PROGRESS AUTO-SAVES",30,433,490,27,19,Gold);
+            Label(window,"RARITY IS FOUND. ITEM LEVELS ARE UPGRADED.",30,433,490,27,19,Gold);
             Button(window,"BACK TO RUN",560,432,287,35,Cyan,()=>SetMode(ScreenMode.Play));
         }
         void BuildGear(RectTransform window){
@@ -132,12 +133,13 @@ namespace ArtificialNegligence {
             if(found.Count==0){Label(window,armorCollection?"NO ARMOR FOUND":"NO WEAPONS FOUND",40,196,790,40,29,Cream,TextAnchor.MiddleCenter);Label(window,"SEARCH THE CITY. OPEN SUPPLY BOXES. KEEP WHAT YOU FIND.",40,248,790,45,20,Cyan,TextAnchor.MiddleCenter);}
             for(int cell=0;cell<4;cell++){int at=inventoryPage*4+cell;if(at>=found.Count)break;var item=found[at];float x=30+cell%2*416,y=150+cell/2*113;var card=Panel(window,item.Name,x,y,400,103,TierColor(item.tier));
                 Image(card,"Found equipment",10,18,58,58,Color.white,EquipmentIcon(slot,item.family)).preserveAspect=true;
-                Label(card,item.Name,82,7,300,28,22,Cream);Label(card,RunStats.Tiers[item.tier]+" / TIER "+item.tier,82,35,299,22,17,TierColor(item.tier));
-                string detail=slot==1?new[]{"BALANCED FIRE","BREAKS SHIELDS","SPREAD / SHORT RANGE","PIERCES ARMOR"}[item.family]:new[]{"BALANCED PROTECTION","RESISTS CONTACT","RESISTS ENERGY","MOBILITY / LESS DEFENSE"}[item.family];Label(card,detail,13,69,228,24,14,Cyan);
+                Label(card,item.Name,82,7,300,28,22,Cream);Label(card,RunStats.Tiers[item.tier]+" / LEVEL "+item.level+" / MAX "+item.MaxLevel,82,31,299,22,17,TierColor(item.tier));
+                string detail=slot==1?new[]{"BALANCED FIRE","BREAKS SHIELDS","SPREAD / SHORT RANGE","PIERCES ARMOR"}[item.family]:new[]{"BALANCED PROTECTION","RESISTS CONTACT","RESISTS ENERGY","MOBILITY / LESS DEFENSE"}[item.family];Label(card,detail,13,80,228,19,12,Cyan);
                 bool active=(slot==1?stats.weaponItemId:stats.armorItemId)==item.id;var equip=Button(card,active?"EQUIPPED":"EQUIP",252,65,135,29,active?Gold:Cyan,()=>{stats.EquipItem(item.id);SaveProgress();BuildScreen();});equip.GetComponentInChildren<Text>().fontSize=17;equip.interactable=!active;
+                if(!active){var salvageButton=Button(card,"SALVAGE +"+stats.SalvageValue(item),82,54,150,22,Pink,()=>{stats.SalvageItem(item.id);SaveProgress();BuildScreen();});salvageButton.GetComponentInChildren<Text>().fontSize=12;}else Label(card,"PROTECTED / EQUIPPED",82,54,150,22,12,Gold);
             }
             if(pages>1){Button(window,"<",30,385,49,33,Cyan,()=>{inventoryPage--;BuildScreen();}).interactable=inventoryPage>0;Label(window,(inventoryPage+1)+" / "+pages,88,385,100,33,18,Cream);Button(window,">",194,385,49,33,Cyan,()=>{inventoryPage++;BuildScreen();}).interactable=inventoryPage<pages-1;}
-            Label(window,"FOUND ITEMS ONLY. EACH COPY KEEPS ITS OWN TIER.",30,430,565,34,17,Cyan);Button(window,"BACK TO RUN",615,431,232,37,Cyan,()=>SetMode(ScreenMode.Play));
+            Label(window,"FOUND ITEMS / LEVELS STAY WITH EACH COPY.",30,430,565,34,17,Cyan);Button(window,"BACK TO RUN",615,431,232,37,Cyan,()=>SetMode(ScreenMode.Play));
         }
         void BuildCharacters(RectTransform window){
             stats.EnsureCollection();cosmeticPopup=null;float step=318f/RunStats.ActiveCharacters.Length;
@@ -146,7 +148,7 @@ namespace ArtificialNegligence {
                 var select=Button(window,"",28,103+row*step,260,step-3,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
                 Image(select.transform,"Character silhouette or portrait",5,3,44,44,unlocked?Color.white:Color.black,CharacterFrame(choice,0)).preserveAspect=true;
                 Label(select.transform,RunStats.Characters[choice],57,1,195,25,20,unlocked?Cream:new Color(.5f,.6f,.65f));
-                string requirement=choice==4?"FREE AI WRATH":choice==5?"24 DISTINCT GPUS":choice==6?"CLEAR STAGE 6":choice==8?"CLEAR STAGE 12":"SECRET CODE";
+                string requirement=choice==4?"FREE AI WRATH":choice==5?"DEFEAT VIRTUAL HOST":choice==6?"CLEAR STAGE 6":choice==8?"CLEAR STAGE 12":"DEFEAT VIRTUAL HOST";
                 Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):requirement,57,29,195,18,12,active?Gold:Cyan);
                 select.interactable=unlocked&&!active;
             }
@@ -194,11 +196,12 @@ namespace ArtificialNegligence {
             Button(window,"BACK TO TITLE",263,411,350,47,Gold,()=>SetMode(ScreenMode.Title));
         }
         void BuildEnd(RectTransform window){
-            Color accent=mode==ScreenMode.Dead?Pink:Gold;Label(window,mode==ScreenMode.Clear?CityRoute.Name(level)+" / COMPLETE":mode==ScreenMode.Win?"THE PUBLIC AI BELONGS TO EVERYONE.":"THE CITY STILL NEEDS YOU.",38,102,800,55,28,Cyan,TextAnchor.MiddleCenter);
+            Color accent=mode==ScreenMode.Dead?Pink:Gold;Label(window,mode==ScreenMode.Clear?CityRoute.Name(level)+" / COMPLETE":mode==ScreenMode.Win?ActWinMessage:"THE CITY STILL NEEDS YOU.",38,102,800,55,28,Cyan,TextAnchor.MiddleCenter);
             string[] labels={"GPUs","SCORE","DISTRICT"},values={collected+"/"+totalGpus,stats.score.ToString("N0"),(level+1).ToString()};
+            if(mode==ScreenMode.Win&&StoryAct(level)==2){labels[2]="RESTORED";values[2]=stats.restoredOverlords.Count+" / 5";}
             for(int i=0;i<3;i++){var card=Panel(window,labels[i],56+i*263,181,235,116,accent);Image(card,"Stat icon",13,25,56,56,Color.white,itemFrames[i==0?0:i==1?7:3]);Label(card,labels[i],79,14,139,34,22,Cyan);Label(card,values[i],79,50,139,47,34,Cream);}
-            Label(window,mode==ScreenMode.Clear?"ROUTE CLEARED / UPGRADES SAVED / +2 HEALTH":mode==ScreenMode.Win?"REALITY RESTORED. THE SINISTER ACCESS LOCK IS BROKEN.":"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
-            Button(window,mode==ScreenMode.Clear?"CITY MAP":mode==ScreenMode.Win?"CONTINUE / NEXT CITY CYCLE":"RETRY / CITY MAP",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear||mode==ScreenMode.Win)NextLevel();else StartRun();});
+            Label(window,mode==ScreenMode.Clear?(string.IsNullOrEmpty(clearBonus)?"ROUTE CLEARED / UPGRADES SAVED / +2 HEALTH":clearBonus):mode==ScreenMode.Win?ActWinDetail:"PULSE TIER "+stats.gear[1]+" / ARMOR TIER "+stats.gear[2],35,328,806,46,24,accent,TextAnchor.MiddleCenter);
+            Button(window,mode==ScreenMode.Clear?"CITY MAP":mode==ScreenMode.Win?ActContinueLabel:"RETRY / CITY MAP",231,401,414,60,accent,()=>{if(mode==ScreenMode.Clear||mode==ScreenMode.Win)NextLevel();else StartRun();});
         }
     }
 }

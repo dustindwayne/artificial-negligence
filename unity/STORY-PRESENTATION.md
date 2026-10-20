@@ -1,16 +1,11 @@
 # Story presentation
 
-Keep scenes to two short spoken lines. Let the platforming carry the pace.
+Use brief artwork conversations, normally two lines; major act turns may use four. Scenes pause combat, allow skipping and retain completion in the save.
 
-- District arrivals introduce what the Sinister took from that neighborhood.
-- Checkpoints occasionally carry a single radio exchange; once per stage visit.
-- Ai Wrath first appears as a programmed Sinister elite. He retreats from boss levels 6 and 12. Only his third defeat in level 13 frees him and unlocks him as playable. Each confrontation and retreat uses two brief lines.
-- Major scenes use the original detailed character artwork. Gameplay keeps readable pixel sprites.
-- Scenes pause combat, can be skipped, and stay completed in the save.
-- GPUs permanently restore visual quality. Their separate compute charge supports earned temporary AI help; spending compute never removes visual progress.
+The opening visibly fractures the clear world without granting or removing permanent GPU restoration. District arrivals and once-per-visit checkpoint dialogue develop the three-act story. The Unknown are the same Act I group outsiders call Sinister. Ai Wrath serves the true overlords; survivors misidentify him. Encounters 6/12/13 free him only after the last defeat.
 
-Example:
+Mikey and Davey are virtual-world boss recruits in stages 9 and 18. Brad fights alongside the Unknown and joins after stage 6. Prison Mike joins after stage 12 and supplies accounting evidence. The Founder is a portrait NPC, not a playable selection.
 
-**AI WRATH:** The orders... they're gone. I can hear myself again.
+Act endings: stage 30 resets reality, stage 60 exposes the false saviors, stage 90 restores the world and the overlords’ humanity. Previously completed saves receive missed act-ending scenes on continuation. See STORY.md for canonical spoilers.
 
-**LOOPER:** Then help us keep it that way. You're with us now.
+GPUs retain permanent graphics restoration and separate compute for earned AI support. The title cycles unlocked characters without granting progress.

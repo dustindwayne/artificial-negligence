@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 namespace ArtificialNegligence {
     public static class CityRoute {
-        public const int Stages=30;
+        public const int Stages=30;public const float UplinkGpuGap=180;
         public static readonly string[] Areas={"STREET SETTLEMENT","MARKET ROOFTOPS","TRANSIT WORKS","DATA GARDENS","CORPORATE SPIRE"};
         static readonly string[] Routes={"Salvage streets","Rooftop sprint","Swarm crossing","Skyline ascent","Armored perimeter","Boss uplink"};
         public static int Area(int stage){return (stage%Stages)/6;}
         public static bool Boss(int stage){return stage%6==5;}
-        public static string Name(int stage){return Areas[Area(stage)]+" / "+Routes[stage%6];}
+        public static string Name(int stage){return stage==8?"AI WORLD / THE GOLD LOOP":stage==17?"AI WORLD / THE MIRROR PRISON":Areas[Area(stage)]+" / "+Routes[stage%6];}
         public static List<LevelRow> Generate(int stage){
             var rng=new Random(17731+stage*997);var rows=new List<LevelRow>();
             Action<string,float,float,float,float> add=(kind,x,y,w,h)=>rows.Add(new LevelRow{level=stage,kind=kind,x=x,y=y,w=w,h=h});
@@ -37,6 +37,11 @@ namespace ArtificialNegligence {
                 int gap=i==count-1?0:rng.Next(motif==1?40:28,47);
                 if(gap>0&&i%2==0)add("gpu",cursor+width+gap/2-6,166,0,0);
                 cursor+=width+gap;
+            }
+            float uplink=Width(rows)-63;var lastFloor=rows.Last(r=>r.kind=="platform"&&r.y==218);int moved=0;
+            for(int i=0;i<rows.Count;i++){
+                var row=rows[i];if(row.kind=="gpu"&&uplink-(row.x+6)<UplinkGpuGap){row.x=Math.Min(lastFloor.x+30+(moved++)*22,uplink-UplinkGpuGap-6);row.y=193;row.h=0;rows[i]=row;}
+                if(row.kind=="box"&&rows.Any(r=>r.kind=="crawl"&&row.x+15>r.x&&row.x<r.x+r.w)){var floor=rows.First(r=>r.kind=="platform"&&r.y==218&&row.x>=r.x&&row.x<r.x+r.w);row.x=floor.x+24;rows[i]=row;}
             }
             return rows;
         }

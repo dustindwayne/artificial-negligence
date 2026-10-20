@@ -33,6 +33,7 @@ namespace ArtificialNegligence {
    if(humanAbility<=0&&(type==10)&&humanAlert>0){humanAbility=8;humanShield=2.5f;game.Burst(transform.position,GameController.Pink,8);}
    if(humanOrb){humanOrb.transform.localPosition=new Vector3(-direction*.65f,1.2f+Mathf.Sin(Time.time*4)*.12f,0);humanOrb.color=humanShield>0?GameController.Gold:GameController.Pink;}
    if(type==12)TickWrath(dt,sight);
+   else if(type>=13)TickVirtualHost(dt,sight);
    else if(humanWindup>0){humanWindup-=dt;if(humanWindup<=0){
      int shots=type==9?3:type==12?5:1;for(int i=0;i<shots;i++){float angle=(i-(shots-1)*.5f)*(type==12?10:6);Vector2 shot=Quaternion.Euler(0,0,angle)*humanAim;game.SpawnBullet(humanBody.position+shot*.65f,shot*(type==11?12:10),true,type==12?3:2);}volley++;humanAttack=type==11?.85f:1.2f;
     }}else if(sight&&humanAttack<=0&&stun<=0){humanAim=(game.PlayerHitCenter+game.playerBody.linearVelocity*.15f-humanBody.position).normalized;humanWindup=type==12?1:type==11?.45f:.6f;}
@@ -46,18 +47,18 @@ namespace ArtificialNegligence {
    if(!IsHuman||!game||game.mode!=ScreenMode.Play||hp<=0||!humanBody)return;
    humanGrounded=Physics2D.BoxCast(humanBody.position+Vector2.down*.59f,new Vector2(.62f,.12f),0,Vector2.down,.16f,1<<8).collider;
    if(RecoverWrath())return;
-   float target=type==12?Mathf.Clamp(game.playerBody.position.x,arenaLeft,arenaRight):game.playerBody.position.x;var velocity=humanBody.linearVelocity;
+   float target=type>=12?Mathf.Clamp(game.playerBody.position.x,arenaLeft,arenaRight):game.playerBody.position.x;var velocity=humanBody.linearVelocity;
    if(humanAlert<=0){velocity.x=0;humanBody.linearVelocity=velocity;return;}
-   if(type!=12&&nextNode>=0){var next=navigation[nextNode];target=(next.x+next.w*.5f)/GameController.PPU;}
+   if(type<12&&nextNode>=0){var next=navigation[nextNode];target=(next.x+next.w*.5f)/GameController.PPU;}
    float move=Mathf.Abs(target-humanBody.position.x)>.15f?Mathf.Sign(target-humanBody.position.x):0;if(nextNode<0&&Mathf.Abs(game.playerBody.position.x-humanBody.position.x)<(type==11?1.1f:2.2f))move=0;
    if(move!=0)direction=move;
    humanLow=false;foreach(var hit in Physics2D.OverlapBoxAll(humanBody.position+new Vector2(direction*.65f,.34f),new Vector2(.7f,.68f),0,1<<8))if(!hit.usedByEffector)humanLow=true;
    humanBox.size=new Vector2(.75f,humanLow?.625f:1.375f);humanBox.offset=humanLow?Vector2.down*.375f:Vector2.zero;
    float speed=(type==11?5.7f:type==12?4.6f+wrathPhase*.45f:5.6f)*Mathf.Lerp(1,game.EncounterDifficulty,.4f);if(humanLow)speed=2.4f;
-   if(stun>0||humanWindup>0&&humanGrounded||type==12&&(phaseLock>0||wrathRecovery>0))move=0;
+   if(stun>0||humanWindup>0&&humanGrounded||type>=12&&(phaseLock>0||wrathRecovery>0))move=0;
    velocity.x=Mathf.MoveTowards(velocity.x,move*speed,50*Time.fixedDeltaTime);
    if(type==12&&wrathDash>0){bool safe=Physics2D.Raycast(humanBody.position+new Vector2(direction*.9f,-.6f),Vector2.down,1,1<<8).collider;if(safe)velocity.x=direction*11.5f;else wrathDash=0;}
-   if(type==12){var pos=humanBody.position;pos.x=Mathf.Clamp(pos.x,arenaLeft,arenaRight);humanBody.position=pos;}
+   if(type>=12){var pos=humanBody.position;pos.x=Mathf.Clamp(pos.x,arenaLeft,arenaRight);humanBody.position=pos;}
    bool climb=nextNode>=0&&Mathf.Abs(target-humanBody.position.x)<2.1f&&navigation[nextNode].y<-((humanBody.position.y-.6875f)*GameController.PPU)-8;
    if(humanGrounded&&(move!=0||climb)&&!humanLow){bool edge=!Physics2D.Raycast(humanBody.position+new Vector2(move*.8f,-.6f),Vector2.down,.8f,1<<8).collider;bool wall=Physics2D.Raycast(humanBody.position,Vector2.right*move,.65f,1<<8).collider;if(edge||climb||wall)velocity.y=235f/GameController.PPU;}
    velocity.y=Mathf.Max(-28,velocity.y);humanBody.linearVelocity=velocity;

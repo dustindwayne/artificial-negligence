@@ -9,7 +9,7 @@ namespace ArtificialNegligence {
         class DepthObject {public Transform transform;public Vector3 start;public float parallax;}
         readonly List<DepthObject> depth=new List<DepthObject>();readonly List<SpriteRenderer> rain=new List<SpriteRenderer>();
         readonly List<SpriteRenderer> checkpoints=new List<SpriteRenderer>();readonly List<SpriteRenderer> hazards=new List<SpriteRenderer>();
-        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);if(index%6==0&&!qaMode)BeginNarrative((index/6)%5,ScreenMode.Play);}
+        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);ShowStageStory(index);}
         public void Dash(){if(grounded&&(lowStance||duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow))){Slide();return;}if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
         public void BuildSceneDepth(){
             depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=followVelocity=0;dashUsed=false;wasGrounded=false;
@@ -64,8 +64,8 @@ namespace ArtificialNegligence {
         void BuildCityMap(){
             Image(screenRoot,"Dim city",0,0,960,540,new Color(.003f,.01f,.02f,.87f));var window=Panel(screenRoot,"City route",18,15,924,511,Cyan);
             int page=stats.cityUnlocked/30,offset=page*30;
-            Label(window,"CITY ROUTE / CYCLE "+(page+1),24,15,667,45,36,Cream);Button(window,"MENU",773,15,124,43,Cyan,()=>SetMode(ScreenMode.Title));
-            Label(window,new[]{"RECONNECT THE STREETS. RESTORE THE FIRST PUBLIC RELAY.","FREE THE ROOFTOPS. KEEP KNOWLEDGE IN PUBLIC HANDS.","BREAK THE HARVESTER. REOPEN THE CITY NETWORK.","SAVE THE PUBLIC ARCHIVES. RESTORE MORE THAN SURVIVAL.","NO PREMIUM REALITY. BREAK THE CORPORATE ACCESS LAYER."}[CityRoute.Area(stats.cityUnlocked)],24,65,865,29,19,Gold);
+            Label(window,ActTitle(stats.cityUnlocked),24,15,667,45,36,Cream);Button(window,"MENU",773,15,124,43,Cyan,()=>SetMode(ScreenMode.Title));
+            Label(window,StoryObjective(stats.cityUnlocked),24,65,865,29,19,Gold);
             // Street blocks, a canal and a continuous winding route form an actual city overview.
             Image(window,"Canal",620,104,21,305,new Color(.1f,.45f,.55f,.14f));
             var mapRandom=new System.Random(741);for(int r=0;r<8;r++)for(int c=0;c<12;c++){
@@ -81,7 +81,7 @@ namespace ArtificialNegligence {
                 for(int col=0;col<6;col++){
                     int n=row*6+col,index=offset+n;var node=nodes[n];bool open=index<=stats.cityUnlocked;
                     Color accent=!open?(CityRoute.Boss(index)?new Color(.42f,.2f,.31f):new Color(.15f,.31f,.35f)):CityRoute.Boss(index)?Pink:index==stats.cityUnlocked?Gold:Cyan;
-                    var button=Button(window,CityRoute.Boss(index)?"BOSS":(index+1).ToString(),node.x,node.y,63,40,accent,()=>StartStage(index));button.GetComponentInChildren<Text>().fontSize=22;button.interactable=open;
+                    var button=Button(window,IsVirtualStage(index)?"AI":CityRoute.Boss(index)?"BOSS":(index+1).ToString(),node.x,node.y,63,40,accent,()=>StartStage(index));button.GetComponentInChildren<Text>().fontSize=22;button.interactable=open;
                     if(index==stats.cityUnlocked)Image(window,"Survivor on city route",node.x+18,node.y-27,28,28,Color.white,playerFrames[0]);
                     if(stats.stageStars!=null&&stats.stageStars[index%30]>0)Label(window,new string('*',stats.stageStars[index%30]),node.x,node.y+39,63,16,16,Gold,TextAnchor.MiddleCenter);
                 }

@@ -13,7 +13,7 @@ namespace ArtificialNegligence {
    var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qaOutput");string path=at>=0&&at+1<args.Length?args[at+1]:Application.persistentDataPath;Directory.CreateDirectory(path);
    stats=new RunStats();stats.EnsureCollection();buffs=new float[7];stats.storySeen=true;
    int bosses=0,wins=0;
-   for(int stage=0;stage<60;stage++){
+   for(int stage=0;stage<90;stage++){
     if(stats.cityUnlocked!=stage)throw new Exception("Campaign unlock sequence / "+stage);
     StartStage(stage);yield return null;
     if(mode==ScreenMode.Narrative)FinishNarrative();
@@ -51,7 +51,7 @@ namespace ArtificialNegligence {
     NextLevel();if(mode!=ScreenMode.CityMap||level!=stage+1)throw new Exception("Next city cycle inaccessible");
     Debug.Log("AN_CAMPAIGN_STAGE_PASS / "+(stage+1));
    }
-   if(wins!=2||bosses!=11||!stats.CharacterUnlocked(4))throw new Exception("Campaign totals incorrect / bosses "+bosses);
+   if(wins!=3||bosses!=17||!stats.CharacterUnlocked(4))throw new Exception("Campaign totals incorrect / bosses "+bosses);
    foreach(int legacyStage in new[]{12,18,35}){
     stats=new RunStats{cityUnlocked=legacyStage,district=legacyStage};stats.EnsureCollection();
     if(stats.wrathEncounters!=2||stats.CharacterUnlocked(4))throw new Exception("Legacy save auto-unlocked Wrath");
@@ -65,8 +65,8 @@ namespace ArtificialNegligence {
     LoadLevel(legacyStage);if(enemies.Any(e=>e.type==12))throw new Exception("Recovered final fight repeated after unlock");
    }
    Debug.Log("AN_WRATH_SAVE_RECOVERY_PASS / level 13, later stage, next city cycle, real final defeat required, persisted playable unlock");
-   File.WriteAllText(Path.Combine(path,"campaign-result.json"),"{\"stages\":60,\"bosses\":11,\"victories\":2,\"wrathUnlocked\":true,\"scriptedProgression\":true,\"humanPlaythrough\":false,\"legacyWrathRecoveryCases\":3}");
-   Debug.Log("AN_CAMPAIGN_QA_PASS / 60 stages, all quota/boss/exit gates, found weapon, three Wrath encounters, two victories, saved progression, next cycles");Application.Quit(0);
+   File.WriteAllText(Path.Combine(path,"campaign-result.json"),"{\"stages\":90,\"bosses\":17,\"victories\":3,\"wrathUnlocked\":true,\"scriptedProgression\":true,\"humanPlaythrough\":false,\"legacyWrathRecoveryCases\":3}");
+   Debug.Log("AN_CAMPAIGN_QA_PASS / 90 stages, all quota/boss/exit gates, found weapon, three Wrath encounters, three act endings, saved progression, next cycles");Application.Quit(0);
   }
  }
 }

@@ -3,9 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ArtificialNegligence {
  public partial class GameController {
-  SpriteRenderer titleRunner;Text titleTransmission;float titleStarted;bool titleWasVisible;
+  SpriteRenderer titleRunner;Text titleTransmission,titleCharacterLabel;int[] titleRoster=new[]{0};float titleStarted;bool titleWasVisible;
   void BeginTitlePresentation(){
    titleStarted=Time.unscaledTime;
+   var profile=stats;
+   if(!qaMode&&PlayerPrefs.HasKey("progress-v2")){try{profile=JsonUtility.FromJson<RunStats>(PlayerPrefs.GetString("progress-v2"));}catch{profile=new RunStats();}}
+   profile.EnsureCollection();
+   titleRoster=RunStats.ActiveCharacters.Where(id=>profile.CharacterUnlocked(id)||id==5&&daveyAccountUnlocked||id==6&&bradAccountUnlocked||id==7&&mikeyAccountUnlocked||id==8&&prisonMikeAccountUnlocked).ToArray();
    if(!titleRunner){titleRunner=SpriteObject("Title scene / Looper",looperFrames[0],Vector2.zero,12,false);titleRunner.sharedMaterial=unlit;titleRunner.transform.localScale=Vector3.one*1.2f;}
   }
   void TickTitlePresentation(){
@@ -16,11 +20,15 @@ namespace ArtificialNegligence {
    float t=Time.unscaledTime-titleStarted;
    var floor=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x/PPU>12&&r.x/PPU<27).FirstOrDefault();
    float left=floor.w>0?(floor.x+22)/PPU:18,right=floor.w>0?(floor.x+floor.w-22)/PPU:25;
+   gameCamera.transform.position=new Vector3((left+right)*.5f-9,-8.4375f,-20);
    float span=Mathf.Max(1,right-left),walk=Mathf.PingPong(t*1.1f,span),jumpCycle=t%6;
    float lift=jumpCycle>3.5f&&jumpCycle<4.5f?Mathf.Sin((jumpCycle-3.5f)*Mathf.PI)*2.3f:0;
    titleRunner.transform.position=new Vector3(left+walk,-218/PPU+.9f+lift,0);titleRunner.flipX=(t*1.1f)%(span*2)>span;
-   titleRunner.sprite=looperFrames[lift>.1f?3:1+(int)(t*7)%2];
-   if(titleTransmission){string[] lines={"PUBLIC SIGNAL / OPEN CHANNEL","THEY BROKE REALITY TRYING TO OWN IT.","RECOVER THE CORES. KEEP AI PUBLIC."};titleTransmission.text=lines[(int)(t/5)%lines.Length];titleTransmission.color=new Color(.46f,.88f,.9f,.7f+.2f*Mathf.Sin(t*.7f));}
+   int actor=titleRoster[(int)(t/7)%titleRoster.Length];
+   int pose=lift>.1f?3:jumpCycle>5.2f?4:jumpCycle<.65f?6:1+(int)(t*7)%2;
+   titleRunner.sprite=CharacterFrame(actor,pose);
+   if(titleCharacterLabel)titleCharacterLabel.text=RunStats.Characters[actor]+" / UNLOCKED";
+   if(titleTransmission){string[] lines={"PUBLIC SIGNAL / OPEN CHANNEL","A CLEARER PICTURE IS NOT ALWAYS THE TRUTH.","RECOVER THE CORES. KEEP AI PUBLIC."};titleTransmission.text=lines[(int)(t/5)%lines.Length];titleTransmission.color=new Color(.46f,.88f,.9f,.7f+.2f*Mathf.Sin(t*.7f));}
   }
   void BuildLivingTitle(){
    BeginTitlePresentation();AddSecretSpot();
@@ -29,7 +37,7 @@ namespace ArtificialNegligence {
    Image(screenRoot,"Signal marker",48,34,22,3,Gold);Label(screenRoot,"A PUBLIC INTELLIGENCE UPRISING",82,24,463,24,16,Cyan);
    Label(screenRoot,"ARTIFICIAL",45,79,520,73,65,Cream);Label(screenRoot,"NEGLIGENCE",45,145,550,73,65,Gold);
    Label(screenRoot,"RESTORE REALITY. KEEP AI PUBLIC.",50,234,510,31,23,Cyan);
-   Label(screenRoot,"They locked intelligence behind a paywall.\nThen they broke the world trying to own it.",50,274,470,52,18,Cream);
+   Label(screenRoot,"Your world just broke. Follow the signal.\nQuestion who owns the picture.",50,274,470,52,18,Cream);
    Button(screenRoot,PlayerPrefs.HasKey("progress-v2")?"CONTINUE THE FIGHT  >":"ENTER THE CITY  >",50,349,352,57,Gold,StartRun);
    Button(screenRoot,"SETTINGS",50,422,150,40,Cyan,()=>{settingsReturn=ScreenMode.Title;SetMode(ScreenMode.Settings);});Button(screenRoot,"STORY",216,422,94,40,Cyan,()=>BeginStory(ScreenMode.Title));
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -38,7 +46,7 @@ namespace ArtificialNegligence {
    Button(screenRoot,"QUIT",326,422,76,40,Cyan,()=>Application.Quit());
 #endif
    titleTransmission=Label(screenRoot,"",50,491,731,25,15,Cyan);
-   Label(screenRoot,"LOOPER / CORE RUNNER",660,461,270,23,17,Cream,TextAnchor.MiddleRight);
+   titleCharacterLabel=Label(screenRoot,"LOOPER / UNLOCKED",660,461,270,23,17,Cream,TextAnchor.MiddleRight);
    Label(screenRoot,"v"+Application.version,806,497,123,22,14,Cyan,TextAnchor.MiddleRight);
   }
  }

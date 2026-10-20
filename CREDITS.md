@@ -26,3 +26,5 @@ Davey Goats and Brad Jammin’ were requested and creatively directed by Dustin 
 Mikey O’Redd: character concept and direction by Dustin Wann; sprite artwork generated with AI, with measured pose masks and runtime gutter validation.
 
 Prison Mike: creator-directed likeness and costume from a supplied reference; AI-generated sprite artwork. The six-character README ensemble is generated promotional artwork. Original private photographs are not included. [Banner prompt](docs/cast-banner-generation-v250.md).
+
+The Founder story portrait was AI-generated from creator-directed design and a creator-provided likeness. The private reference photo is excluded. [Generation record](docs/founder-art-generation.md).

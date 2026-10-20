@@ -43,7 +43,7 @@ namespace ArtificialNegligence {
             enemyFrames=SpriteAtlas.Load("enemies-v3",4,9,192,120,60,true,3);
             var agents=SpriteAtlas.Load("sinister-agents",4,3,64,64,32,true,4);enemyFrames=enemyFrames.Concat(agents).Concat(new[]{wrathFrames[0],wrathFrames[1],wrathFrames[2],wrathFrames[5]}).ToArray();
             itemFrames=SpriteAtlas.Load("items-v3",4,4,64,64,PPU*2,false,4);
-            shipFrames=SpriteAtlas.Load("ai_ships",4,1,128,64,PPU,false);InitializeWonderWrath();InitializeGuests();ApplyCharacter();
+            shipFrames=SpriteAtlas.Load("ai_ships",4,1,128,64,PPU,false);InitializeWonderWrath();InitializeGuests();enemyFrames=enemyFrames.Concat(new[]{mikeyReddFrames[0],mikeyReddFrames[1],mikeyReddFrames[2],mikeyReddFrames[4],daveyGoatsFrames[0],daveyGoatsFrames[1],daveyGoatsFrames[2],daveyGoatsFrames[4]}).ToArray();ApplyCharacter();
         }
         public void ApplyCharacter(){
             ApplyGuestUnlocks();stats.EnsureCollection();if(stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped){playerFrames=wonderWrathFrames;if(playerVisual)playerVisual.sprite=playerFrames[0];return;}int id=stats.character*4+stats.outfit;

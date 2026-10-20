@@ -11,6 +11,7 @@ namespace ArtificialNegligence {
   float PadMove=>pad.connected?pad.x:0;
   bool PadDuck=>pad.connected&&pad.y<-.5f;
   void VerifyControllerRouting(){
+   ControllerDevice.VerifyPlatformAdapter();
    if(ControllerDevice.Axis(.15f)!=0||ControllerDevice.Axis(-.15f)!=0||ControllerDevice.Axis(1)!=1||ControllerDevice.Axis(-1)!=-1)throw new System.Exception("Controller deadzone failed");
    SetMode(ScreenMode.Pause);HandleController(new PadFrame{connected=true});controllerInUse=true;
    var resume=screenRoot.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<Text>().text=="RESUME");EventSystem.current.SetSelectedGameObject(resume.gameObject);

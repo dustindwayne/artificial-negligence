@@ -9,7 +9,7 @@ def package(build,source,out):
   files=list((build/'Build').glob('*'+suffix))
   if len(files)!=1:raise ValueError('Expected exactly one current file for '+suffix)
   return 'Build/'+files[0].name
- config={'dataUrl':pick('.data.unityweb'),'frameworkUrl':pick('.framework.js.unityweb'),'codeUrl':pick('.wasm.unityweb'),'streamingAssetsUrl':'StreamingAssets','companyName':'Artificial Negligence','productName':'Artificial Negligence','productVersion':'2.4.10','autoSyncPersistentDataPath':True}
+ config={'dataUrl':pick('.data.unityweb'),'frameworkUrl':pick('.framework.js.unityweb'),'codeUrl':pick('.wasm.unityweb'),'streamingAssetsUrl':'StreamingAssets','companyName':'Artificial Negligence','productName':'Artificial Negligence','productVersion':'2.4.11','autoSyncPersistentDataPath':True}
  html=(source/'web/index.template.html').read_text(encoding='utf-8').replace('__UNITY_CONFIG__',json.dumps(config)).replace('__LOADER_URL__',json.dumps(pick('.loader.js')))
  hero='hero-'+config['productVersion'].replace('.','-')+'.png'
  css=(source/'web/style.css').read_text(encoding='utf-8').replace('hero.png',hero)

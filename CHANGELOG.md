@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.4.11
+
+- Add a Linux x64 Mono desktop package. Linux runtime compatibility remains untested.
+
+- Three-act story, the Founder portrait, Unknown reveal and restoration ending.
+- Mikey and Davey virtual-world boss encounters and gameplay unlocks; preserve old earned unlocks.
+- Individual item levels, fixed rarity, salvage and excellent-clear loot (5% Ultra / 10% Legend / 85% Rare).
+- Clear-world fracture prologue and unlocked-cast title rotation.
+- 90-route reachability checks, supply-box pickup checks and GPU spacing before uplinks.
+
+
 ## 2.4.10 — Prison Mike and the current cast
 
 - Add Prison Mike with a purple bandana, Hawaiian shirt, khaki shorts and flip-flops, based on a creator-supplied likeness reference.

@@ -1,81 +1,43 @@
-# Artificial Negligence
-## Story and campaign direction
+# Artificial Negligence — story
 
-**Build 2.4.10:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, six playable characters (three gameplay recruits, Ai Wrath, Looper and secret Mikey O’Redd), permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+**Spoilers: all three acts.** This is the current narrative for release 2.4.11. Short illustrated conversations and checkpoint radio carry the story between generated platforming routes.
 
-**Restore reality. Keep AI public.**
+## Act I — The borrowed world (stages 1–30)
 
-### The explosion
-The global AI explosion put extraordinary tools into ordinary hands. People built neighborhood clinics, shared knowledge, repaired their cities, and escaped work they had never chosen. For a brief moment, intelligence belonged to everyone.
+The story opens at the instant reality breaks. Players see the clear world before it collapses into pixels. The global AI boom had opened knowledge and tools to ordinary people; the Public Signal now promises to restore that freedom if Looper recovers the GPUs.
 
-The corporations called that moment a market failure.
+The masked organization fought in Act I is **the Unknown**. Outsiders call them **Sinister**. Those names refer to the same group. Their leader, **the Founder**, warns Looper to question the signal. The Unknown were resisting government control before the AI boom and crash, and are trying to restore reality and freedom.
 
-They bought the infrastructure, seized GPU supplies, and began turning public intelligence into an elite subscription. Their final takeover connected the world's systems to a single corporate control layer. It worked badly. The layer reached deeper than anyone intended and glitched reality itself.
+Looper and the survivors unknowingly help the true overlords, who present themselves as benefactors. Ai Wrath is an enforcer of those overlords; survivors wrongly assume he belongs to Sinister. His three encounters occur in stages 6, 12 and 13. Defeating the final encounter frees him and makes him playable.
 
-Color vanished. Movement lost frames. Whole neighborhoods collapsed into crude pixels. The corporations named the disaster **Artificial Negligence**, blamed public AI, and sold the wealthy access to intact reality.
+Mikey O’Redd is trapped as a host in an AI virtual world in stage 9. Davey Goats is trapped in another in stage 18. Looper is thrown into those worlds; defeating each host breaks the loop and unlocks that ally.
 
-### Looper
-Looper is a street-level core runner with a salvaged pulse pack. He discovers that the stolen GPUs are doing two jobs: running the corporate AI monopoly and holding the broken reality layer in place.
+Brad Jammin’ was bumped by a bad guy, decided he disliked everyone, and began fighting **alongside the Unknown**. He joins after stage 6. Prison Mike was a corporate accountant, saw people fighting and decided to join; he becomes playable after stage 12.
 
-His pack can break that connection. Every recovered GPU joins a distributed public network. Every new connection restores another piece of the world.
+At the city’s final stage, the restoration resets the world. True reality returns—and is a worse hellscape. The survivors have helped the wrong side.
 
-He is not collecting better graphics for himself. He is giving everyone their world back.
+## Act II — The Unknown (stages 31–60)
 
-### The route through the city
-1. **Street Settlement — The first clear picture.** Looper reconnects a neighborhood relay. A face becomes recognizable; a sign becomes readable. Ai Wrath arrives to repossess the connection. The first boss victory forces his retreat, proving restoration is possible without yet breaking his program.
-2. **Market Rooftops — Nobody owns a thought.** Corporate patrols raid independent traders and repair crews. Independent mechanics keep the community’s machines alive. Restored rooftops reveal routes and stories the glitch had hidden. Wrath returns for the second boss fight, and another retreat exposes cracks in his orders.
-3. **Transit Works — Keep it moving.** The Harvester diverts the city's power and compute toward private towers. Immediately after the second boss level, the third Wrath confrontation breaks the Sinister program and brings him into the resistance. The team reopens the distribution network and opens safe routes for residents through sealed districts.
-4. **Data Gardens — More than survival.** The resistance protects public medical models and community archives from deletion. Restoring the gardens brings back details of everyday life: plants, murals, memories, and people the corporate index declared unnecessary.
-5. **Corporate Spire — No premium reality.** The Executor guards the access layer. The corporation offers Looper a place among the elite: one perfect life in exchange for leaving everyone else in the glitch. He refuses. The team breaks the monopoly and makes the restoration network impossible for any single owner to shut down.
+Looper joins the Unknown. The Founder explains their struggle before the AI boom. Prison Mike’s ledgers expose the false relief network. Wrath identifies the overlords who gave his orders. Brad helps open the broadcast route; Mikey and Davey recognize the machinery of their virtual prisons.
 
-### Allies and powers — gameplay direction
-Allies join through play and share the recovered inventory. Each should offer a distinct way through a stage; no required collectible should depend on a particular ally.
+The team publishes the evidence. The apparent saviors are exposed as the true captors. Fighting the system alone will not free the people trapped inside it.
 
-| Ally | Identity | Signature power direction |
-| --- | --- | --- |
-| Looper | Core runner and first playable character | Loop Step: a brief phase dash through hostile fire. |
-| Ai Wrath | Sinister elite freed from its program; playable after liberation | Individual signature ability remains planned. |
+## Act III — Human once more (stages 61–90)
 
-These signature powers are proposed story/mechanic designs; character selection and shared equipment already exist. Power-specific implementation is a separate step.
+The team disables the overlords’ conversion and control machinery while restoring their human bodies. Boss defeats record rescued overlords. Looper refuses an ending that erases people, including those responsible for the harm.
 
-### The restoration mechanic
-The existing GPU graphics progression becomes part of the fiction. Newly recovered cores permanently raise public restoration capacity. The visual progression moves from coarse pixels toward richer pixel art, smoother animation, fuller effects, and recovered environmental detail. Keep the game's pixel-art identity at every tier.
+The final repair restores the world, freedom and the captors’ humanity. After the finale, harder generated free-roam cycles retain equipment, allies and graphics restoration.
 
-Restoration reveals the same world more clearly; it must never move a landing edge or change a jump underneath the player. Previously recovered cores cannot be farmed for permanent restoration progress. Revisited districts retain the player's earned graphics tier.
+## Cast and save continuity
 
-### Gear and discoveries
-Weapons and armor are never granted at the start or by leveling. Each found copy is a separate inventory item; finding a stronger copy does not equip it. Players begin unarmed, with a short-range strike and no armor. The first opened supply box contains a weapon if none has been found. Existing personal training improves the player; the workshop can only improve equipped, owned gear.
+- **Looper:** starting character, follows the signal and learns to question its ownership.
+- **Ai Wrath:** the true overlords’ enforcer, freed after three encounters.
+- **Mikey O’Redd:** virtual-world host freed by defeat, stage 9.
+- **Davey Goats:** virtual-world host freed by defeat, stage 18.
+- **Brad Jammin’:** fights alongside the Unknown, joins after stage 6.
+- **Prison Mike:** former corporate accountant, joins after stage 12; his records become evidence.
+- **The Founder:** leader of the Unknown, a story NPC with illustrated dialogue; not an additional playable unlock.
 
-Weapons and armor currently come from supply boxes; outfit and character options unlock through gameplay milestones. Hidden-route and liberated-facility reward scenes remain narrative direction. Rarity describes the quality of the find. Weapon and armor tradeoffs support different approaches; cosmetic outfits express the player rather than confer mandatory advantages. Ultra equipment remains a 0.5% box roll.
+Previously earned character unlocks are preserved. Fresh profiles earn Mikey and Davey through their encounters; their former codes and Davey’s old GPU threshold do not unlock them. The secret Wonder Wrath cosmetic code remains separate from character progression.
 
-Logic terminals contain damaged public systems. A correct solution restores a useful service and grants its powerup. An incorrect answer gives no powerup. Puzzles should teach a rule, then test that rule with changing inputs rather than memorized answers.
-
-### Adaptive difficulty
-**Relaxed / Standard / Hard / Adaptive.** In Adaptive, successful clears raise corporate response; repeated damage or defeat eases it. Adjust between stages, preserve readable attack tells, and keep platform physics and rewards consistent. Playing better should invite more resistance without taking away earned progress.
-
-### Ending and continuing play
-The final restored image is ordinary: people sharing tools in a neighborhood that can finally see itself clearly. Looper leaves the pack connected to the public network.
-
-The monopoly is broken, but other cities remain disconnected. Further campaign cycles become liberation routes through those cities, with increasing resistance and new combinations of existing challenges.
-
-### Opening text
-> They gave everyone intelligence.
-> The corporations wanted it back.
-> They broke reality trying to own it.
-> Take back the cores. Restore the world.
-
-### Closing line
-> Reality is not a subscription.
-
-
-## The Sinister and Ai Wrath
-
-The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. The first two confrontations occur in boss levels 6 and 12. He retreats after both; cracks in his orders become visible. A third encounter in level 13 breaks the program on defeat, after which he joins the resistance and becomes playable. Short two-line artwork scenes introduce each encounter and show the retreats and liberation, with occasional checkpoint radio lines between major encounters.
-
-GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.
-
-Older saves that have already cleared the first two boss chapters recover that encounter progress. If the player has passed level 13 without freeing Wrath, his pending final encounter follows them to a later district. The final defeat is still required.
-
-## Current playable recruits
-
-Davey Goats joins after collecting 24 distinct GPUs, Brad Jammin’ after clearing stage 6, and Prison Mike after clearing stage 12. Mikey O’Redd remains a secret code unlock. These characters share the existing gameplay systems; their individual signature abilities are future direction.
+All playable characters share inventory and combat systems. Unique signature powers remain roadmap work.

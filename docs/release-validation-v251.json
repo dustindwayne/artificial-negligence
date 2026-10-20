@@ -1,0 +1,54 @@
+{
+  "release": "2.4.11",
+  "builds": [
+    "Windows x64",
+    "Android ARM64",
+    "WebGL",
+    "Linux x64 Mono"
+  ],
+  "automatedChecks": {
+    "nativeRuntime": "PASS: current gameplay regression",
+    "secretCharacters": "PASS: virtual-host unlocks, stage gates, rejected old recruit codes, JSON persistence, prior unlock retention, retired ID migration, no starting gear",
+    "characterPreviewAndCosmetics": "PASS: current roster/cosmetics regression",
+    "touchHUDAndControllerRouting": "PASS: current regression",
+    "spriteFrames": 124,
+    "newCharacterGutters": "4px on all 32 guest poses",
+    "reachableGPUs": 2945,
+    "groundGaps": 666,
+    "physicsRoutes": 90,
+    "gpuUplinkExclusionPixels": 180,
+    "excellentClearDistribution": {
+      "Ultra": 5,
+      "Legend": 10,
+      "Rare": 85
+    },
+    "campaignStages": 90,
+    "campaignBosses": 17,
+    "actEndings": 3
+  },
+  "newStoryAndEquipment": "PASS: virtual-host fights, fixed rarity, independent item levels, salvage, reward distribution, prologue and title",
+  "physicalControllerTest": false,
+  "physicalAndroid251Test": false,
+  "physicalInAppUpdaterTest": false,
+  "webBrowserSmokeTest": "pending",
+  "packages": {
+    "ArtificialNegligence-Linux.tar.gz": {
+      "bytes": 74198729,
+      "sha256": "cf4082652d851ed3b95048d497877db64a2f7c41ab5576d40577ec5c572d970d"
+    },
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 55903553,
+      "sha256": "02255f37b4b42a81202f09863d86364a097ab9166c0c4324a035f248fe65b991"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 77603611,
+      "sha256": "7c206a1a2e1d8841961f538af4403d46f3b8ba78b7bb0c93bdd5f32eb640652d"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 67670655,
+      "sha256": "a3548f8dbd5b4f5a37c52ef552d02edbf1b81c23d38062cddb3fbb821732fa0b"
+    }
+  },
+  "linuxRuntime": "PASS: Ubuntu/WSL rendered guest sprite checks and virtual Input System gamepad adapter with shared HUD/controller routing",
+  "physicalLinuxDeviceTest": false
+}

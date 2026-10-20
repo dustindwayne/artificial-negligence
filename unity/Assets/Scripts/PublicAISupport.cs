@@ -16,7 +16,7 @@ namespace ArtificialNegligence {
   void SayToChat(string text){speech="HEY CHAT, A LITTLE HELP.\n"+text;speechTime=3;}
   public void AskChat(){
    if(mode!=ScreenMode.Play)return;
-   if(stats.momentum<100){SayToChat("EARN IT: DODGE CLOSE / DEFEAT SINISTER");return;}
+   if(stats.momentum<100){SayToChat("EARN IT: DODGE CLOSE / DEFEAT PURSUERS");return;}
    if(stats.compute<RunStats.SupportCost){SayToChat("NEED 3 COMPUTE / COLLECT GPUS");return;}
    if(supportCooldown>0){SayToChat("NETWORK RECOVERING...");return;}
    if(supportKind==0&&publicDrone){SayToChat("DRONE ALREADY ACTIVE");return;}

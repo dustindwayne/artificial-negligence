@@ -29,27 +29,27 @@ namespace ArtificialNegligence {
         public int ModuleCount {get{return Math.Min(3,1+(rank-1)/2);}}
         public string GainXp(int amount){amount=Math.Max(1,Mathf.RoundToInt(amount*GameplayContent.Current.xp));xp+=amount;int before=rank;while(xp>=XpNeeded){xp-=XpNeeded;rank++;talents++;points+=25;}EnsureCollection();return rank>before?"LEVEL "+rank+" / +TALENT":"+"+amount+" XP";}
         public string Train(bool offense){int value=offense?power:defense;if(value>=20)return "TRAINING MAXED";int price=50+value*30;if(talents<1||points<price)return "NEED 1 TALENT + "+price+" PTS";points-=price;talents--;if(offense)power++;else defense++;return offense?"WEAPON MASTERY +1":"DEFENSE TRAINING +1";}
-        public int HitDamage(int family){int damage=gear[1]+power;bool shield=family==3||family==6,heavy=family==2||family==8||family==12;
+        public int HitDamage(int family){int damage=gear[1]+power+Math.Max(0,EquipmentLevel(1)-1);bool shield=family==3||family==6,heavy=family==2||family==8||family==12;
             if(weapon==1)damage=shield?damage*2:heavy?Math.Max(1,damage/2):damage;
             else if(weapon==3)damage=heavy?damage*2:shield?Math.Max(1,damage/2):damage+1;
             else if(shield)damage=Math.Max(1,damage/2);
             if(module==1&&weapon==1)damage+=2;if(module==2&&weapon==3)damage+=2;return Math.Max(1,Mathf.RoundToInt(damage*GameplayContent.Current.weaponDamage));
         }
-        public int Incoming(int raw,bool energy){if(HasArmor&&suit==1)raw+=energy?1:-1;if(HasArmor&&suit==2)raw+=energy?-1:1;if(HasArmor&&suit==3)raw++;return Math.Max(1,raw-defense/3);}
+        public int Incoming(int raw,bool energy){if(HasArmor&&suit==1)raw+=energy?1:-1;if(HasArmor&&suit==2)raw+=energy?-1:1;if(HasArmor&&suit==3)raw++;return Math.Max(1,raw-defense/3-Math.Max(0,EquipmentLevel(2)-1)/2);}
         public string Matchup {get{return weapon==1?"ARC breaks shields; weak vs heavy armor":weapon==2?"SCATTER clears swarms; short range":weapon==3?"RAIL breaks armor; weak vs shields":"PULSE is balanced; shields resist it";}}
 
         public static readonly string[] Tiers = {"NONE","COMMON","RARE","EPIC","LEGEND","ULTRA"};
-        public int Cost(int slot) { return slot==0?30+speed*20:slot==1?40+(gear[1]-1)*25:slot==2?35+(gear[2]-1)*25:35+vitality*25; }
-        public int Level(int slot) { return slot==0?speed:slot==3?vitality:gear[slot]; }
-        public int Cap(int slot) { return slot==0?5:slot==3?3:4; }
+        public int Cost(int slot) { return slot==0?30+speed*20:slot==1?40+EquipmentLevel(1)*30:slot==2?35+EquipmentLevel(2)*25:35+vitality*25; }
+        public int Level(int slot) { return slot==0?speed:slot==3?vitality:EquipmentLevel(slot); }
+        public int Cap(int slot) { return slot==0?5:slot==3?3:EquipmentCap(slot); }
         public string Upgrade(int slot) {
             EnsureCollection();if(slot==1&&!HasWeapon||slot==2&&!HasArmor)return "FIND AND EQUIP AN ITEM FIRST";
-            if(Level(slot)>=Cap(slot)) return slot==1||slot==2?"ULTRA IS FOUND IN BOXES ONLY":"UPGRADE MAXED";
+            if(Level(slot)>=Cap(slot)) return "UPGRADE MAXED";
             int cost=Cost(slot); if(points<cost)return "NEED "+cost+" POINTS";
-            points-=cost;
+            int materials=slot==1||slot==2?UpgradeSalvageCost(slot):0;if(salvage<materials)return "NEED "+materials+" SALVAGE";salvage-=materials;points-=cost;
             if(slot==0) { speed++; return "RUNNING SPEED / LEVEL "+speed; }
-            if(slot==1) {UpgradeEquippedItem(1);return Tiers[gear[1]]+" "+Weapons[weapon]+" / TIER "+gear[1];}
-            if(slot==2) {UpgradeEquippedItem(2);return Tiers[gear[2]]+" "+Suits[suit]+" ARMOR / TIER "+gear[2];}
+            if(slot==1) {UpgradeEquippedItem(1);return Weapons[weapon]+" LEVEL "+EquipmentLevel(1)+" / RARITY RETAINED";}
+            if(slot==2) {UpgradeEquippedItem(2);return Suits[suit]+" ARMOR LEVEL "+EquipmentLevel(2)+" / RARITY RETAINED";}
             vitality++;maxHealth++;health++;return "VITALITY / LEVEL "+vitality;
         }
         public static int RollTier(int roll) { if(roll<0||roll>=200)throw new ArgumentOutOfRangeException();return roll==0?5:roll<10?4:roll<30?3:roll<80?2:1; }

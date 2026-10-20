@@ -3,8 +3,8 @@ using UnityEngine.Rendering.Universal;
 using System.Linq;
 namespace ArtificialNegligence {
  public partial class EnemyAgent:MonoBehaviour {
-  public static readonly string[] Names={"SINISTER SCOUT","SINISTER GUNNER","SINISTER CHARGER","SINISTER AEGIS","SINISTER SWARM","SINISTER SNIPER","SINISTER AUDITOR","SINISTER HARVESTER","SINISTER EXECUTOR","SINISTER MARSHAL","SINISTER HANDLER","SINISTER STALKER","AI WRATH"};
-  public int hp,maxHp,type;public int AttackCount {get{return volley;}}public bool IsBoss {get{return type>=6&&type<=8||type==12;}}
+  public static readonly string[] Names={"SINISTER SCOUT","SINISTER GUNNER","SINISTER CHARGER","SINISTER AEGIS","SINISTER SWARM","SINISTER SNIPER","SINISTER AUDITOR","SINISTER HARVESTER","SINISTER EXECUTOR","SINISTER MARSHAL","SINISTER HANDLER","SINISTER STALKER","AI WRATH","MIKEY O'REDD / VIRTUAL HOST","DAVEY GOATS / VIRTUAL HOST"};
+  public int hp,maxHp,type;public int AttackCount {get{return volley;}}public bool IsBoss {get{return type>=6&&type<=8||type>=12;}}
   GameController game;SpriteRenderer visual,bar;Light2D warning;
   float left,right,direction=1,cooldown,windup,charge,stun,baseY;int volley;Vector2 aim;
   public void Initialize(GameController controller,int enemyType,float origin){

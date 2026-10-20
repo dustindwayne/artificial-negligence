@@ -27,7 +27,7 @@ Versions through 2.4.3 have an installer path mismatch. If tapping Install Updat
 3. Publish metadata:
 
 ```sh
-python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.4.10 --code 250 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.4.10/ArtificialNegligence.apk
+python tools/publish_apk.py /path/to/ArtificialNegligence.apk --version 2.4.11 --code 251 --download-url https://github.com/dustindwayne/artificial-negligence/releases/download/v2.4.11/ArtificialNegligence.apk
 ```
 
 4. Commit the small manifests/link files. Do not commit another full APK or generate another chunk store for current clients. Keep the current release and the single bridge; obsolete Release assets may be removed after updating the manifest.
