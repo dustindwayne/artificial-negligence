@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -40,10 +41,6 @@ namespace ArtificialNegligence {
   }
   void SelectStandardOutfit(int choice){stats.outfit=choice;if(stats.character==4){wonderWrathEquipped=false;if(!qaMode){PlayerPrefs.SetInt("wonder-wrath-equipped",0);PlayerPrefs.Save();}}ApplyCharacter();SaveProgress();BuildScreen();}
   void ToggleWonderWrath(){wonderWrathEquipped=!wonderWrathEquipped;if(!qaMode){PlayerPrefs.SetInt("wonder-wrath-equipped",wonderWrathEquipped?1:0);PlayerPrefs.Save();}ApplyCharacter();BuildScreen();}
-  void AddWonderWrathChoice(RectTransform window){
-   if(!wonderWrathUnlocked||stats.character!=4)return;
-   var b=Button(window,"WONDER WRATH / "+(wonderWrathEquipped?"EQUIPPED":"EQUIP"),470,328,376,27,Gold,ToggleWonderWrath);b.GetComponentInChildren<Text>().fontSize=16;
-  }
   System.Collections.IEnumerator WonderWrathQa(){
    yield return null;
    var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qaOutput");string path=at>=0&&at+1<args.Length?args[at+1]:Application.persistentDataPath;System.IO.Directory.CreateDirectory(path);
@@ -66,6 +63,14 @@ namespace ArtificialNegligence {
    var export=new Texture2D(1280,640,TextureFormat.RGBA32,false);export.SetPixels32(new Color32[1280*640]);for(int i=0;i<8;i++)export.SetPixels32(i%4*320,(1-i/4)*320,320,320,large[i].texture.GetPixels32());export.Apply();
    System.IO.File.WriteAllBytes(System.IO.Path.Combine(path,"Wonder-Wrath-clean-sprite-sheet.png"),export.EncodeToPNG());
    characterReturn=ScreenMode.CityMap;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.1f);CaptureQa(System.IO.Path.Combine(path,"wonder-wrath-loadout.png"));
+   var enlarged=screenRoot.GetComponentsInChildren<Image>().Single(i=>i.name=="Selected character");if(enlarged.rectTransform.rect.width<200||enlarged.rectTransform.rect.height<200)throw new Exception("Active preview still too small");
+   cosmeticTrigger.onClick.Invoke();if(!cosmeticPopup)throw new Exception("Cosmetic dropdown failed to open");
+   var rows=cosmeticPopup.GetComponentsInChildren<Button>();if(rows.Count(b=>b.GetComponentInChildren<Text>()!=null)!=5)throw new Exception("Secret outfit dropdown options wrong");
+   if(rows.Where(b=>b.GetComponentInChildren<Text>()?.text.Contains("LEVEL 3")==true).Any(b=>b.interactable))throw new Exception("Locked cosmetic selectable");
+   yield return new WaitForSecondsRealtime(.1f);CaptureQa(System.IO.Path.Combine(path,"wonder-wrath-cosmetic-dropdown.png"));
+   rows.Single(b=>b.GetComponentInChildren<Text>()?.text.StartsWith("ORIGINAL")==true).onClick.Invoke();if(wonderWrathEquipped||playerFrames[0]!=wrathFrames[0]||cosmeticPopup)throw new Exception("Dropdown original outfit not applied");
+   cosmeticTrigger.onClick.Invoke();cosmeticPopup.GetComponentsInChildren<Button>().Single(b=>b.GetComponentInChildren<Text>()?.text.StartsWith("WONDER WRATH")==true).onClick.Invoke();if(!wonderWrathEquipped||playerFrames!=wonderWrathFrames)throw new Exception("Dropdown secret outfit not applied");
+   Debug.Log("AN_CHARACTER_PREVIEW_PASS / enlarged portrait, in-preview dropdown, locked choices disabled, normal and secret outfit selection");
    ToggleWonderWrath();if(playerFrames[0]!=wrathFrames[0])throw new Exception("Cannot restore original outfit");ToggleWonderWrath();if(playerFrames!=wonderWrathFrames)throw new Exception("Cannot re-equip costume");
    Debug.Log("AN_WONDER_WRATH_PASS / 8 isolated frames, 4px gutters, shared scale, single tap input, exact code, wrong-code rejection, story lock retained, cosmetic toggle");Application.Quit(0);
   }

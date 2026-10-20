@@ -7,7 +7,7 @@ namespace ArtificialNegligence {
   static readonly string[] SupportNames={"DRONE","BRIDGE","SHIELD"};
   int supportKind;float supportCooldown,supportSaveTimer,speechTime;bool supportDirty;
   GameObject speechBubble;Text speechText,supportLabel,supportKindLabel;Image supportFill;
-  string speech;Transform publicDrone;float droneLife,droneShot;
+  Button supportAction;string speech;Transform publicDrone;float droneLife,droneShot;
   class PublicConstruct {public Transform root;public float life;}
   readonly List<PublicConstruct> publicConstructs=new List<PublicConstruct>();
   void ResetSupportScene(){publicDrone=null;publicConstructs.Clear();supportCooldown=0;speechTime=0;}
@@ -47,17 +47,16 @@ namespace ArtificialNegligence {
    if(gap>half+.07f&&gap<half+.85f){bullet.nearMissCredited=true;EarnMomentum(8);}
   }
   void BuildSupportHud(){
-   bool touch=Application.isMobilePlatform||qaMode;
-   var b=Button(screenRoot,"",touch?381:730,touch?480:77,touch?220:212,touch?42:35,Cyan,AskChat);supportLabel=b.GetComponentInChildren<Text>();supportLabel.fontSize=18;
-   supportKindLabel=Label(screenRoot,"",touch?381:730,touch?458:116,touch?220:167,20,13,Cyan,TextAnchor.MiddleCenter);
-   Button(screenRoot,">",touch?610:901,touch?480:114,43,32,Cyan,CycleSupport).GetComponentInChildren<Text>().fontSize=20;
-   supportFill=Image(screenRoot,"Earned momentum",touch?381:730,touch?526:152,touch?220:212,3,Cyan);
+   supportAction=Button(screenRoot,"",385,484,190,37,Cyan,AskChat);supportLabel=supportAction.GetComponentInChildren<Text>();supportLabel.fontSize=17;
+   supportKindLabel=Label(screenRoot,"",385,465,190,17,11,Cyan,TextAnchor.MiddleCenter);
+   supportFill=Image(screenRoot,"Earned momentum",385,525,190,3,Cyan);
    speechBubble=Panel(screenRoot,"Looper chat bubble",0,0,280,56,Cyan,.96f).gameObject;speechText=Label(speechBubble.transform,"",10,4,260,48,15,Cream,TextAnchor.MiddleCenter);speechText.resizeTextForBestFit=true;speechText.resizeTextMinSize=11;speechText.resizeTextMaxSize=15;speechBubble.SetActive(false);
   }
   void UpdateSupportHud(){
-   if(supportLabel){supportLabel.text=stats.SupportReady&&supportCooldown<=0?"CHAT / READY":"CHAT / "+stats.momentum+"%";supportLabel.color=stats.SupportReady?Gold:Cyan;}
-   if(supportKindLabel)supportKindLabel.text=SupportNames[supportKind]+" / COMPUTE "+stats.compute+" / "+RunStats.ComputeCapacity;
-   if(supportFill)supportFill.rectTransform.sizeDelta=new Vector2((Application.isMobilePlatform||qaMode?220:212)*stats.momentum/100f,3);
+   if(supportLabel){supportLabel.text=stats.SupportReady&&supportCooldown<=0?"AI HELP / READY":"AI / "+stats.momentum+"%";supportLabel.color=stats.SupportReady?Gold:Cyan;}
+   if(supportAction)supportAction.interactable=stats.SupportReady&&supportCooldown<=0;
+   if(supportKindLabel)supportKindLabel.text=stats.momentum>=100&&stats.compute<3?"NEED 3 COMPUTE":SupportNames[supportKind]+" / "+stats.compute+" COMPUTE";
+   if(supportFill)supportFill.rectTransform.sizeDelta=new Vector2(190*stats.momentum/100f,3);
    if(speechBubble){speechBubble.SetActive(speechTime>0);if(speechTime>0){speechText.text=speech;var view=gameCamera.WorldToViewportPoint(playerBody.position+Vector2.up*2);speechBubble.GetComponent<RectTransform>().anchoredPosition=new Vector2(Mathf.Clamp(view.x*960-140,12,668),-Mathf.Clamp((1-view.y)*540-56,165,402));}}
   }
   void OnApplicationQuit(){if(!qaMode&&mode!=ScreenMode.Title)SaveProgress();}

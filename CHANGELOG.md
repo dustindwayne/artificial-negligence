@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.4.7 — Clearer controls and character preview
+
+- Enlarge the active-character preview and replace the outfit button row with an in-preview dropdown; retain cosmetic and story unlock rules.
+- Group mobile movement on the left and actions on the right. Combine duck/slide on Down and show Fire only for an equipped weapon.
+- Replace Pack/Pause shortcuts with one Menu hub, move AI type selection and full controls into it, and gate AI Help on earned readiness.
+- Keep the terminal interaction prompt contextual. Return from in-run settings to Pause, and close cosmetics with Escape/Back or an outside tap.
+- Verify touch duck/slide, found-weapon Fire, earned AI consumption, settings return, dropdown selection/locks and existing controller/gameplay routing.
+
+
 ## 2.4.6 — Restore missing Ai Wrath encounter
 
 - Recover the first two Wrath encounter credits from completed boss chapters in older saves, without granting his playable unlock.

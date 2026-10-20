@@ -1,4 +1,4 @@
-# Controller controls — 2.4.6
+# Controls — 2.4.7
 
 ## Supported targets
 
@@ -33,3 +33,9 @@ A 22% axis deadzone filters stick drift, and movement retains analog strength. D
 ## Verification and limits
 
 Windows runtime checks inject normalized controller frames to verify deadzone behavior, menu confirmation, held-button gating, movement/duck/jump/attack routing, disconnect-to-pause, and dialogue confirmation/skip. The web adapter is built as a JavaScript plugin using the standard browser mapping. This is software-level validation, not a completed physical Xbox-controller playtest. USB/Bluetooth hardware testing across browsers remains outstanding. Browser audio/fullscreen activation still requires page interaction.
+
+## Android touch layout
+
+Left/right move. Hold Down to duck; press Down while moving to slide. Jump is the large right-hand button; Dash and Fire sit beside it. Fire appears only after a found weapon is equipped. AI Help remains disabled until full momentum, enough compute and cooldown readiness. The Interact prompt appears only near an intellect terminal.
+
+Menu groups inventory, character, upgrades, AI type, settings and the full control guide. The active character has a larger preview with a cosmetics dropdown. Disabled outfits cannot be equipped; Escape/controller B closes the list first, and tapping outside also closes it. In-run settings returns to Pause.

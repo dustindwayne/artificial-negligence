@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.6 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.7 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -26,11 +26,12 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **Ai Wrath unlock repair for existing saves:** older saves could reach level 13 without the encounter counter, preventing him from appearing. Completed boss chapters now restore the first two encounters. His final fight appears in level 13 or the next district you enter after it if you have already progressed farther.
-- **Defeat still required:** save recovery never grants the playable character automatically. Win the final Wrath fight, then select him from the character screen; the unlock survives restarting the game.
-- **New runs retain the original sequence:** boss levels **6 and 12**, then the final encounter in **level 13**. Already-freed Wrath stays unlocked and does not return as an enemy.
+- **Clearer gameplay controls:** movement stays on the left; jump, equipped-weapon fire and dash stay on the right. Holding Down ducks; pressing it while moving slides. The unused unarmed attack button and separate slide button are gone.
+- **One menu hub:** inventory, character, upgrades, AI type, settings and the control guide live in the pause menu. The interaction prompt appears only near a terminal; AI help becomes available only when earned.
+- **Larger active-character preview:** a compact roster leaves space for a portrait over twice the old size, with equipped gear alongside it.
+- **Cosmetics inside the preview:** a dropdown lists regular outfit unlocks and the secret Wrath outfit when available. Locked choices remain disabled; keyboard/controller focus stays in the open list.
 
-The Android installer repair, city victory/next cycles, hidden cosmetic, stronger bosses, shuffled soundtrack, controller support and browser edition remain included. [Full changelog](CHANGELOG.md).
+The existing-save Ai Wrath encounter repair, Android updater repair, city ending and next cycles remain included. [Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -42,11 +43,15 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 | Character and loadout | Found-item inventory |
 | --- | --- |
-| ![Character selection with Ai Wrath unlocked](docs/characters-v241.png) | ![Individual weapons and armor in inventory](docs/inventory-v241.png) |
+| ![Character selection with Ai Wrath unlocked](docs/characters-v247.png) | ![Individual weapons and armor in inventory](docs/inventory-v241.png) |
 
 | Live start screen | Intellect terminal |
 | --- | --- |
 | ![Animated city start screen](docs/title-v241.png) | ![Logic puzzle terminal](docs/puzzle-v241.png) |
+
+### Clearer touch controls
+
+![Touch layout with a found weapon and earned AI help](docs/hud-v247.png)
 
 ### City liberated
 
@@ -54,7 +59,7 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 ### Browser edition
 
-![Browser edition running the actual 2.4.6 game](docs/web-v246.png)
+![Browser edition running the actual 2.4.7 game](docs/web-v247.png)
 
 ## Built around exploration and choice
 
@@ -113,14 +118,14 @@ Older saves from the menu-granted loadout system have that equipment cleared on 
 | Move | A / D or arrows | Left / right |
 | Jump | Space, W, or Up | Jump |
 | Duck | S / Down | Duck |
-| Slide while moving | Ctrl | Slide |
-| Strike / equipped weapon | J / F | Strike / Fire |
+| Slide while moving | Ctrl | Press Down while moving |
+| Equipped weapon fire | J / F | Fire (after equipping a find) |
 | Dash | Shift / K | Dash |
-| Earned AI assist / type | R / Q | Chat / type |
-| Intellect terminal | E | Connect prompt |
-| Inventory | I / G | Pack |
-| Character / upgrades | C / U | Pause menu |
-| Pause | Escape | Pause |
+| Earned AI assist / type | R / Q | AI Help / Menu → AI Type |
+| Intellect terminal | E | Nearby Interact prompt |
+| Inventory | I / G | Menu → Inventory |
+| Character / upgrades | C / U | Menu |
+| Pause | Escape | Menu |
 | Story: continue / skip | Space or Enter / Escape | Continue / Skip |
 
 ### Controllers

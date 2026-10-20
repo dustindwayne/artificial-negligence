@@ -54,7 +54,8 @@ namespace ArtificialNegligence {
             music=gameObject.AddComponent<MusicDirector>();music.Initialize(this);
             updater=gameObject.AddComponent<GameUpdater>();updater.Initialize(this);
             BuildCanvas();puzzleFactory=new PuzzleFactory(rng);LoadLevel(0);SetMode(ScreenMode.Title);
-            if(Environment.GetCommandLineArgs().Contains("-qa-wonder")){qaMode=true;StartCoroutine(WonderWrathQa());}
+            if(Environment.GetCommandLineArgs().Contains("-qa-hud")){qaMode=true;StartCoroutine(HudQa());}
+            else if(Environment.GetCommandLineArgs().Contains("-qa-wonder")){qaMode=true;StartCoroutine(WonderWrathQa());}
             else if(Environment.GetCommandLineArgs().Contains("-qa-campaign")){qaMode=true;StartCoroutine(CampaignQa());}
             else if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
         }
@@ -133,12 +134,13 @@ namespace ArtificialNegligence {
         void OnApplicationFocus(bool value){if(!value&&!qaMode)Pause();}
         void Update(){
             if(SecretCodeOpen)return;
+            if(cosmeticPopup&&Input.GetKeyDown(KeyCode.Escape)){CloseCosmeticDropdown();return;}
             if(TickController())return;
             if(mode==ScreenMode.Narrative){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceNarrative();else if(Input.GetKeyDown(KeyCode.Escape))FinishNarrative();return;}
             if(mode==ScreenMode.Story){if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))AdvanceStory();if(Input.GetKeyDown(KeyCode.Escape))FinishStory();UpdateUi();return;}
             if(mode==ScreenMode.Play&&Input.GetKeyDown(KeyCode.I))SetMode(ScreenMode.Gear);
             if(mode==ScreenMode.Play&&Input.GetKeyDown(KeyCode.C)){characterReturn=ScreenMode.Pause;SetMode(ScreenMode.Characters);}
-            if(Input.GetKeyDown(KeyCode.Escape)){if(mode==ScreenMode.Play)Pause();else if(mode==ScreenMode.Characters)SetMode(characterReturn);else if(mode==ScreenMode.CityMap)SetMode(ScreenMode.Title);else if(mode!=ScreenMode.Title&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Win&&mode!=ScreenMode.Clear)SetMode(ScreenMode.Play);}
+            if(Input.GetKeyDown(KeyCode.Escape)){if(mode==ScreenMode.Play)Pause();else if(mode==ScreenMode.Characters)SetMode(characterReturn);else if(mode==ScreenMode.CityMap)SetMode(ScreenMode.Title);else if(mode==ScreenMode.Settings)SetMode(settingsReturn);else if(mode!=ScreenMode.Title&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Win&&mode!=ScreenMode.Clear)SetMode(ScreenMode.Play);}
             TickTitlePresentation();TickSceneDepth();if(mode!=ScreenMode.Play){UpdateUi();return;}
             if(TickNarrativeEncounter())return;
             if(Input.GetKeyDown(KeyCode.U)){SetMode(ScreenMode.Shop);return;}if(Input.GetKeyDown(KeyCode.G)){SetMode(ScreenMode.Gear);return;}

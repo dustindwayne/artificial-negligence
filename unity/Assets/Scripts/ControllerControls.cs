@@ -47,13 +47,15 @@ namespace ArtificialNegligence {
     if(PadDown(PadButton.Y)){OpenNearbyPuzzle();if(mode!=ScreenMode.Play)return true;}
     if(PadDown(PadButton.B))Slide();if(PadDown(PadButton.RB))Dash();if(PadDown(PadButton.LB))AskChat();if(PadDown(PadButton.LT))CycleSupport();return false;
    }
+   if(cosmeticPopup&&PadDown(PadButton.B)){CloseCosmeticDropdown();return true;}
    if(PadDown(PadButton.B)||PadDown(PadButton.Start)&&mode==ScreenMode.Pause){
     if(mode==ScreenMode.Characters)SetMode(characterReturn);
-    else if(mode==ScreenMode.Settings||mode==ScreenMode.CityMap)SetMode(ScreenMode.Title);
+    else if(mode==ScreenMode.Settings)SetMode(settingsReturn);
+    else if(mode==ScreenMode.CityMap)SetMode(ScreenMode.Title);
     else if(mode==ScreenMode.Pause||mode==ScreenMode.Gear||mode==ScreenMode.Shop)SetMode(ScreenMode.Play);
     return true;
    }
-   var buttons=screenRoot.GetComponentsInChildren<Button>().Where(b=>b.IsActive()&&b.IsInteractable()).ToArray();if(buttons.Length==0)return false;
+   var buttons=(cosmeticPopup?cosmeticPopup.transform:screenRoot).GetComponentsInChildren<Button>().Where(b=>b.IsActive()&&b.IsInteractable()&&(!cosmeticPopup||b.navigation.mode!=Navigation.Mode.None)).ToArray();if(buttons.Length==0)return false;
    var selected=EventSystem.current?EventSystem.current.currentSelectedGameObject:null;var current=buttons.FirstOrDefault(b=>b.gameObject==selected);
    if(controllerInUse&&!current){current=buttons.FirstOrDefault(b=>b.GetComponentInChildren<Text>()?.text!="X")??buttons[0];EventSystem.current.SetSelectedGameObject(current.gameObject);}
    var direction=Mathf.Abs(pad.x)>Mathf.Abs(pad.y)?new Vector2(Mathf.Abs(pad.x)>.5f?Mathf.Sign(pad.x):0,0):new Vector2(0,Mathf.Abs(pad.y)>.5f?Mathf.Sign(pad.y):0);

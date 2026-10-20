@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D project / 2.4.6
+# Artificial Negligence — Unity 2D project / 2.4.7
 
 Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
@@ -52,3 +52,7 @@ Every 30-stage city cycle ends with the victory screen; continue preserves progr
 ## Existing-save Wrath recovery
 
 A one-time save migration restores the first two Wrath encounter credits from completed boss chapters. A pending final encounter spawns in level 13 or a later entered stage for players who have passed it. It never awards the character without a final defeat. Fresh saves retain the normal 6/12/13 encounters.
+
+## Character preview and controls
+
+The active-character preview is enlarged with a cosmetics dropdown and equipped gear. Mobile controls combine Down duck/slide, only show Fire for an equipped find, and group movement/actions at opposite corners. Menu holds inventory, character, upgrades, AI type, settings and controls; settings returns to Pause. AI Help stays earned and terminal interaction remains contextual.

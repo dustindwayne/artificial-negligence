@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 namespace ArtificialNegligence {
     public partial class GameController {
         Canvas canvas;RectTransform uiRoot,screenRoot;Font pixelFont;Sprite frameSprite,uiWhite,roundedFill;
-        Image xpFill,objectiveFill;Text xpHud;bool armorCollection;int inventoryPage;ScreenMode characterReturn=ScreenMode.CityMap;
+        Image xpFill,objectiveFill;Text xpHud;bool armorCollection;int inventoryPage;ScreenMode characterReturn=ScreenMode.CityMap,settingsReturn=ScreenMode.Title;
         Text gpuLabel,pointsLabel,healthLabel,nextLabel,buffLabel,toastLabel;GameObject toastPanel,solveDock,buffPanel;
         Text updateStatusLabel,updateButtonLabel,bossHealthHud;
         Image[] healthCells;Image miniPlayer;readonly List<Image> miniGpus=new List<Image>();
@@ -55,7 +55,7 @@ namespace ArtificialNegligence {
             string title=mode==ScreenMode.PuzzleResult?"TERMINAL RESULT":mode==ScreenMode.Shop?"UPGRADE STATION":mode==ScreenMode.Characters?"CHARACTER / LOADOUT":mode==ScreenMode.Gear?"INVENTORY":mode==ScreenMode.Puzzle?"INTELLECT TERMINAL":mode==ScreenMode.Pause?"RUN PAUSED":mode==ScreenMode.Clear?"DISTRICT LIBERATED":mode==ScreenMode.Win?"AI LIBERATED":mode==ScreenMode.Dead?"RUN TERMINATED":"SETTINGS";
             Color accent=mode==ScreenMode.Dead?Pink:Cyan;var window=Panel(screenRoot,title,42,30,876,480,accent,.91f);
             Label(window,title,28,19,710,45,36,Cream);Image(window,"Header track",26,77,821,2,accent);
-            if(mode!=ScreenMode.Win&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Clear)Button(window,"X",807,15,45,44,accent,()=>SetMode(mode==ScreenMode.Characters?characterReturn:mode==ScreenMode.Settings?ScreenMode.Title:ScreenMode.Play));
+            if(mode!=ScreenMode.Win&&mode!=ScreenMode.Dead&&mode!=ScreenMode.Clear)Button(window,"X",807,15,45,44,accent,()=>SetMode(mode==ScreenMode.Characters?characterReturn:mode==ScreenMode.Settings?settingsReturn:ScreenMode.Play));
             if(mode==ScreenMode.Characters)BuildCharacters(window);else if(mode==ScreenMode.PuzzleResult)BuildPuzzleResult(window);else if(mode==ScreenMode.Shop)BuildShop(window);else if(mode==ScreenMode.Gear)BuildGear(window);else if(mode==ScreenMode.Puzzle)BuildPuzzle(window);else if(mode==ScreenMode.Pause)BuildPause(window);else if(mode==ScreenMode.Settings)BuildSettings(window);else BuildEnd(window);
         }
         void BuildTitle(){BuildLivingTitle();}
@@ -64,7 +64,7 @@ namespace ArtificialNegligence {
             for(int y=0;y<n;y++)for(int x=0;x<n;x++){float dx=Mathf.Abs(x-31.5f),dy=Mathf.Abs(y-31.5f);float edge=Mathf.Max(Mathf.Max(dx,dy)-30,dx+dy-49);t.SetPixel(x,y,new Color(1,1,1,border?Mathf.Clamp01(.5f-edge)-Mathf.Clamp01(.5f-(edge+1.5f)):Mathf.Clamp01(.5f-edge)));}t.Apply();return Sprite.Create(t,new Rect(0,0,n,n),Vector2.one*.5f,100,0,SpriteMeshType.FullRect,new Vector4(16,16,16,16));
         }
         void ActionControl(string name,string glyph,float x,float y,float size,Color accent,Action action,Action<bool> hold=null){
-            var b=Button(screenRoot,glyph,x,y,size,size,accent,action);var shape=ControlShape();var outer=b.transform.GetChild(1).GetComponent<Image>();outer.sprite=ControlShape(true);outer.color=new Color(accent.r,accent.g,accent.b,.55f);
+            var b=Button(screenRoot,glyph,x,y,size,size,accent,action);b.name="Touch / "+name;var shape=ControlShape();var outer=b.transform.GetChild(1).GetComponent<Image>();outer.sprite=ControlShape(true);outer.color=new Color(accent.r,accent.g,accent.b,.55f);
             var fill=b.transform.GetChild(0).GetComponent<Image>();fill.sprite=shape;fill.rectTransform.anchoredPosition=new Vector2(2,-2);fill.rectTransform.sizeDelta=new Vector2(size-4,size-4);fill.color=new Color(.015f,.05f,.07f,.8f);outer.transform.SetAsFirstSibling();fill.transform.SetAsFirstSibling();
             var text=b.GetComponentInChildren<Text>();text.fontSize=name=="DASH"?22:30;text.rectTransform.anchoredPosition=new Vector2(8,-5);text.rectTransform.sizeDelta=new Vector2(size-16,size-30);
             Label(b.transform,name,5,size-28,size-10,20,15,accent,TextAnchor.MiddleCenter);if(hold!=null)b.gameObject.AddComponent<HoldControl>().changed=hold;
@@ -79,14 +79,19 @@ namespace ArtificialNegligence {
             Image(objective,"GPU",10,10,29,29,Color.white,itemFrames[0]);gpuLabel=Label(objective,"",48,4,93,24,20,Gold);
             nextLabel=Label(objective,"",149,5,209,23,16,Cream);objectiveFill=Image(objective,"Recovery progress",48,37,306,4,Gold);
             bossHealthHud=Label(screenRoot,"",320,77,390,22,14,Pink);
-            Button(screenRoot,"PACK",754,15,111,42,Cyan,()=>SetMode(ScreenMode.Gear));Button(screenRoot,"II",887,15,55,42,Cyan,Pause);
+            Button(screenRoot,"MENU",850,15,92,42,Cyan,Pause);
             buffPanel=Rect(screenRoot,"Active boosts",20,83,300,23).gameObject;buffLabel=Label(buffPanel.transform,"",0,0,300,23,16,Cyan);buffLabel.resizeTextForBestFit=true;buffLabel.resizeTextMinSize=12;buffLabel.resizeTextMaxSize=16;
             toastPanel=Panel(screenRoot,"Pickup notice",319,112,397,36,Gold,.85f).gameObject;toastLabel=Label(toastPanel.transform,"",10,2,377,32,18,Cream,TextAnchor.MiddleCenter);toastLabel.resizeTextForBestFit=true;toastLabel.resizeTextMinSize=13;toastLabel.resizeTextMaxSize=18;
             if(Application.isMobilePlatform||qaMode){
-                ActionControl("LEFT","<",18,443,77,Cyan,null,v=>leftHeld=v);ActionControl("RIGHT",">",107,443,77,Cyan,null,v=>rightHeld=v);ActionControl("DUCK","v",202,460,60,Cyan,null,v=>duckHeld=v);ActionControl("SLIDE",">>",275,460,60,Cyan,Slide);
-                ActionControl("DASH",">>",664,460,60,Cyan,Dash);ActionControl("JUMP","^",745,423,94,Cyan,null,v=>jumpHeld=v);ActionControl(stats.HasWeapon?"FIRE":"STRIKE",stats.HasWeapon?"*":"+",856,444,76,Gold,null,v=>fireHeld=v);
-            }else controlHint=Label(screenRoot,"A/D MOVE / SPACE JUMP / S DUCK / CTRL SLIDE / J ATTACK / SHIFT DASH\nR CHAT / Q SUPPORT TYPE / I INVENTORY / C CHARACTER / ESC PAUSE",28,491,904,40,13,Cyan,TextAnchor.MiddleCenter);
-            solveDock=Button(screenRoot,"CONNECT / E",381,411,220,35,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;BuildSupportHud();UpdateUi();
+                ActionControl("LEFT","<",20,450,72,Cyan,null,v=>leftHeld=v);ActionControl("RIGHT",">",106,450,72,Cyan,null,v=>rightHeld=v);
+                ActionControl("DUCK","v",194,466,56,Cyan,null,v=>{duckHeld=v;if(v&&playerBody&&Mathf.Abs(playerBody.linearVelocity.x)>.8f)Slide();});
+                ActionControl("DASH",">>",682,466,56,Cyan,Dash);
+                ActionControl("JUMP","^",844,430,94,Cyan,null,v=>jumpHeld=v);
+                if(stats.HasWeapon)ActionControl("FIRE","*",752,452,70,Gold,null,v=>fireHeld=v);
+            }
+            controlHint=null;
+            solveDock=Button(screenRoot,Application.isMobilePlatform||qaMode?"INTERACT":"INTERACT / E",405,421,150,36,new Color(.82f,.45f,1),OpenNearbyPuzzle).gameObject;solveDock.GetComponentInChildren<Text>().fontSize=18;
+            BuildSupportHud();UpdateUi();
         }
         void UpdateUi(){
             if(graphicsLabel)graphicsLabel.text=RendererProgress.Progress(stats);
@@ -135,25 +140,27 @@ namespace ArtificialNegligence {
             Label(window,"FOUND ITEMS ONLY. EACH COPY KEEPS ITS OWN TIER.",30,430,565,34,17,Cyan);Button(window,"BACK TO RUN",615,431,232,37,Cyan,()=>SetMode(ScreenMode.Play));
         }
         void BuildCharacters(RectTransform window){
-            stats.EnsureCollection();
-            for(int i=0;i<5;i++){int choice=i;bool unlocked=stats.CharacterUnlocked(i);float x=28+i*104;var card=Panel(window,"Ally / "+i,x,103,96,212,stats.character==i?Gold:Cyan);
-                Image(card,"Character silhouette or portrait",8,8,80,94,unlocked?Color.white:new Color(0,0,0,1),CharacterFrame(i,0)).preserveAspect=true;
-                Label(card,RunStats.Characters[i],3,105,90,27,18,unlocked?Cream:new Color(.5f,.6f,.65f),TextAnchor.MiddleCenter);
-                Label(card,unlocked?stats.character==i?"ACTIVE":"UNLOCKED":i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":"FREE AI WRATH",3,138,90,27,12,Cyan,TextAnchor.MiddleCenter);
-                var select=Button(card,unlocked?stats.character==i?"ACTIVE":"SWITCH":"LOCKED",6,176,84,28,stats.character==i?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});select.GetComponentInChildren<Text>().fontSize=16;select.interactable=unlocked&&stats.character!=i;
+            stats.EnsureCollection();cosmeticPopup=null;
+            for(int i=0;i<5;i++){
+                int choice=i;bool unlocked=stats.CharacterUnlocked(i),active=stats.character==i;
+                var select=Button(window,"",28,103+i*64,260,60,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
+                Image(select.transform,"Character silhouette or portrait",5,4,52,52,unlocked?Color.white:Color.black,CharacterFrame(i,0)).preserveAspect=true;
+                Label(select.transform,RunStats.Characters[i],65,3,184,27,21,unlocked?Cream:new Color(.5f,.6f,.65f));
+                Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":"FREE AI WRATH",65,32,184,20,13,active?Gold:Cyan);
+                select.interactable=unlocked&&!active;
             }
-            var preview=Panel(window,"Equipped loadout",562,102,286,216,Gold,.8f);
-            Image(preview,"Selected character",5,13,100,140,Color.white,playerFrames[0]).preserveAspect=true;
-            Label(preview,RunStats.Characters[stats.character],8,167,101,28,20,Gold,TextAnchor.MiddleCenter);
-            for(int i=0;i<3;i++){int slot=i==0?1:i==1?2:0;int family=slot==1?stats.weapon:slot==2?stats.suit:0;int tier=stats.gear[slot];
-                if(tier>0||slot==0)Image(preview,"Equipped item",119,10+i*55,35,35,Color.white,EquipmentIcon(slot,family)).preserveAspect=true;else Label(preview,"--",119,10+i*55,35,35,18,Cyan,TextAnchor.MiddleCenter);
-                Label(preview,slot==1?(stats.HasWeapon?RunStats.Weapons[family]:"UNARMED"):slot==2?(stats.HasArmor?RunStats.Suits[family]:"NO ARMOR"):"BOOTS",160,8+i*55,119,23,14,Cream);
-                Label(preview,tier==0?(slot==0?"WORN SHOES":"FIND IN CITY"):RunStats.Tiers[tier],160,30+i*55,119,18,12,TierColor(tier));
+            var preview=Panel(window,"Equipped loadout",305,102,543,316,Gold,.8f);
+            Label(preview,"ACTIVE / "+RunStats.Characters[stats.character],18,8,507,31,26,Gold);
+            Image(preview,"Selected character",12,43,218,211,Color.white,playerFrames[0]).preserveAspect=true;
+            for(int i=0;i<3;i++){
+                int slot=i==0?1:i==1?2:0;int family=slot==1?stats.weapon:slot==2?stats.suit:0;int tier=stats.gear[slot];float y=49+i*62;
+                if(tier>0||slot==0)Image(preview,"Equipped item",254,y+1,35,35,Color.white,EquipmentIcon(slot,family)).preserveAspect=true;else Label(preview,"--",254,y+1,35,35,18,Cyan,TextAnchor.MiddleCenter);
+                Label(preview,slot==1?(stats.HasWeapon?RunStats.Weapons[family]:"UNARMED"):slot==2?(stats.HasArmor?RunStats.Suits[family]:"NO ARMOR"):"BOOTS",301,y,224,24,19,Cream);
+                Label(preview,tier==0?(slot==0?"WORN SHOES":"FIND IN CITY"):RunStats.Tiers[tier],301,y+27,224,19,15,TierColor(tier));
             }
-            Button(preview,"CHANGE GEAR",118,181,157,27,Cyan,()=>SetMode(ScreenMode.Gear)).GetComponentInChildren<Text>().fontSize=15;
-            Label(window,"OUTFITS / COSMETIC",30,328,420,26,21,Cream);AddWonderWrathChoice(window);
-            string[] conditions={"STARTER","LEVEL 3","75 GPUS","12 STAGES"};
-            for(int i=0;i<4;i++){int choice=i;bool open=stats.OutfitUnlocked(i),active=stats.outfit==i&&!(stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped);var b=Button(window,RunStats.Outfits[i]+"\n"+(open?active?"EQUIPPED":"UNLOCKED":conditions[i]),30+i*208,363,193,55,active?Gold:Cyan,()=>SelectStandardOutfit(choice));b.GetComponentInChildren<Text>().fontSize=17;b.interactable=open&&!active;}
+            string outfit=stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped?"WONDER WRATH":RunStats.Outfits[stats.outfit];
+            cosmeticTrigger=Button(preview,"COSMETIC / "+outfit+"  v",18,264,248,39,Gold,()=>OpenCosmeticDropdown(preview));cosmeticTrigger.GetComponentInChildren<Text>().fontSize=16;
+            Button(preview,"CHANGE GEAR",286,264,240,39,Cyan,()=>SetMode(ScreenMode.Gear)).GetComponentInChildren<Text>().fontSize=19;
             Label(window,"ALL ALLIES SHARE YOUR INVENTORY AND PROGRESS.",30,435,582,29,17,Cyan);Button(window,"BACK",645,432,202,37,Cyan,()=>SetMode(characterReturn));
         }
         void BuildPuzzle(RectTransform window){
@@ -165,9 +172,13 @@ namespace ArtificialNegligence {
         }
         void BuildPause(RectTransform window){
             Label(window,CityRoute.Name(level),40,95,795,38,29,Cyan,TextAnchor.MiddleCenter);
-            var texture=Resources.Load<Texture2D>("Art/background_"+new[]{"settlement","datafarm","citadel"}[level%3]);var image=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100);Image(window,"District overview",65,145,746,115,Color.white,image);
-            Label(window,RunStats.Characters[stats.character]+" / XP "+stats.xp+"/"+stats.XpNeeded+" / "+RendererProgress.Progress(stats),65,258,746,22,17,Gold,TextAnchor.MiddleCenter);
-            Button(window,"RESUME",263,287,350,48,Gold,()=>SetMode(ScreenMode.Play));Button(window,"INVENTORY",46,346,247,48,Cyan,()=>SetMode(ScreenMode.Gear));Button(window,"CHARACTER",314,346,247,48,Cyan,()=>{characterReturn=ScreenMode.Pause;SetMode(ScreenMode.Characters);});Button(window,"UPGRADES",582,346,247,48,Cyan,()=>SetMode(ScreenMode.Shop));Button(window,"CITY MAP",263,411,350,47,Gold,()=>SetMode(ScreenMode.CityMap));
+            var texture=Resources.Load<Texture2D>("Art/background_"+new[]{"settlement","datafarm","citadel"}[level%3]);var image=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100);Image(window,"District overview",65,143,746,66,Color.white,image);
+            Label(window,RunStats.Characters[stats.character]+" / XP "+stats.xp+"/"+stats.XpNeeded+" / "+RendererProgress.Progress(stats),65,215,746,22,17,Gold,TextAnchor.MiddleCenter);
+            string guide=controllerInUse?"STICK MOVE / A JUMP / X FIRE / B SLIDE / RB DASH\nY INTERACT / LB AI HELP / VIEW INVENTORY":Application.isMobilePlatform||qaMode?"ARROWS MOVE / HOLD DOWN TO DUCK / MOVING DOWN SLIDES\nJUMP / FIRE WITH FOUND WEAPON / DASH / EARN AI HELP":"A/D MOVE / SPACE JUMP / S DUCK / CTRL SLIDE / J FIRE / SHIFT DASH\nE INTERACT / R AI HELP / I INVENTORY / C CHARACTER / U UPGRADES";
+            Label(window,guide,44,242,788,38,14,Cyan,TextAnchor.MiddleCenter);
+            Button(window,"RESUME",263,287,350,48,Gold,()=>SetMode(ScreenMode.Play));Button(window,"INVENTORY",46,346,247,48,Cyan,()=>SetMode(ScreenMode.Gear));Button(window,"CHARACTER",314,346,247,48,Cyan,()=>{characterReturn=ScreenMode.Pause;SetMode(ScreenMode.Characters);});Button(window,"UPGRADES",582,346,247,48,Cyan,()=>SetMode(ScreenMode.Shop));
+            Button(window,"AI TYPE / "+SupportNames[supportKind]+" >",46,411,247,47,Cyan,()=>{CycleSupport();BuildScreen();}).GetComponentInChildren<Text>().fontSize=17;
+            Button(window,"CITY MAP",314,411,247,47,Gold,()=>SetMode(ScreenMode.CityMap));Button(window,"SETTINGS",582,411,247,47,Cyan,()=>{settingsReturn=ScreenMode.Pause;SetMode(ScreenMode.Settings);});
         }
         void BuildSettings(RectTransform window){
             Button(window,"SOUND / "+(soundOn?"ON":"OFF"),199,104,478,48,Cyan,()=>{soundOn=!soundOn;PlayerPrefs.SetInt("sound",soundOn?1:0);BuildScreen();});

@@ -1,0 +1,42 @@
+{
+  "release": "2.4.7",
+  "builds": "PASS: Windows, Android ARM64, WebGL",
+  "windowsRuntime": "PASS",
+  "campaign": {
+    "physicsRoutes": 60,
+    "gpus": 1960,
+    "groundGaps": 443,
+    "scriptedStages": 60,
+    "bossEncounters": 11,
+    "cityVictories": 2,
+    "wrathUnlocked": true,
+    "legacyWrathRecoveryCases": 3,
+    "humanPlaythrough": false,
+    "runtimeRelease": "2.4.6"
+  },
+  "spriteFrames": 116,
+  "secretOutfit": "PASS: exact and wrong code, single-tap modal, story gate, toggle, all eight gutters",
+  "androidInstaller": "Packaged narrow FileProvider paths and matching signing certificate verified",
+  "androidTransport": "Prior patch tests passed normal, resume, retry/corruption, range rejection and full fallback; not a physical in-app installation test",
+  "physicalControllerTest": false,
+  "physicalAndroid247Test": false,
+  "webBrowserSmokeTest": "PASS: final 2.4.7 player rendered in browser; no startup console errors",
+  "packages": {
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 41244675,
+      "sha256": "99d1b1978a98df78a57ba8e3fbf123e9f584f4b3ef870ee5a60cda1be3b1deba"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 64841057,
+      "sha256": "0f14f90d5da62352f740b81d256eefa3f892f68c4053b82cdffa2ff3805673fd"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 49995179,
+      "sha256": "d9cd4b06934e9f684d7a803817495597d51ef100a9fc5dd580a84744a2422cd5"
+    }
+  },
+  "campaignRuntimeReference": "release-validation-v246.json",
+  "characterPreview": "PASS: enlarged portrait, dropdown open/select, locked options disabled, normal/secret outfit selection",
+  "touchControls": "PASS: 5 unarmed/6 armed actions, combined Down duck/slide, found-weapon Fire, earned AI consumption, pause hub and settings return",
+  "controllerRouting": "PASS: software-injected frames; physical controller testing outstanding"
+}

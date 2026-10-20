@@ -1,6 +1,6 @@
 # Testing and compatibility
 
-## Release 2.4.6
+## Release 2.4.7
 
 - All three Unity targets built: Windows x64, Android ARM64, WebGL.
 - Generated route checks cover 60 routes, 1,960 GPUs and 443 ground gaps; low passages use the crouched collision shape.
@@ -13,7 +13,7 @@
 
 **Not yet verified:** physical Xbox/gamepad use over USB/Bluetooth, final-release Android playtesting, and installation through the in-app updater. The 2.4.6 APK was installed over the existing Android app by USB and its installed version was verified. Software routing checks do not establish hardware compatibility for every controller.
 
-[Release verification record](release-validation-v246.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
+[Release verification record](release-validation-v247.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
 
 ## Historical evidence
 
@@ -30,3 +30,9 @@ The hidden outfit has a separate runtime check for a single-tap input box, wrong
 ## Wrath save recovery
 
 Save fixtures cover progression before/after each boss chapter, level 13, later stages, later cycles, district-only legacy saves and repeated migration. Runtime checks require the final Wrath enemy to spawn, remain locked until defeat, become selectable after defeat/reload, and stop spawning after liberation. Fresh-run campaign checks retain the 6/12/13 sequence.
+
+## Character menu and touch controls
+
+2.4.7 runtime checks cover enlarged portrait dimensions; open/select cosmetics, including the secret outfit and disabled locked choices; combined Down duck/slide; five unarmed versus six armed touch actions; earned AI readiness and consumption; in-run settings returning to Pause; and the existing controller routing regression. Actual screenshots record both closed and open dropdown layouts, the touch HUD and pause hub.
+
+The scripted 60-stage campaign/save-recovery runtime evidence remains from 2.4.6; gameplay progression code is unchanged in this UI update. Fresh physics validation still covers all 60 generated routes in 2.4.7.
