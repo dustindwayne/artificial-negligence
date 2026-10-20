@@ -4,11 +4,8 @@
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
 <p align="center">A story-driven 2D pixel platformer for Android, Windows, Linux and your browser.</p>
-<p align="center">
-  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><img src="docs/download-android.svg" width="250" height="58" alt="Download Android APK"></a>
-  <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip"><img src="docs/download-windows.svg" width="250" height="58" alt="Download Windows ZIP"></a>
-</p>
-<p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a> · <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Linux.tar.gz">Linux download</a> · <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">WebGL package</a> · <a href="https://github.com/dustindwayne/artificial-negligence/releases/tag/v2.4.11">Release notes</a></p>
+<p align="center">Find Android, Windows, Linux and WebGL downloads on the <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest">latest release page</a>.</p>
+<p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a></p>
 <p align="center">v2.4.11 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
 
 ## The world broke. Take it back.
@@ -101,12 +98,11 @@ Choose **Relaxed, Standard, Hard or Adaptive**. Adaptive adjusts pressure betwee
 
 ## Download and play
 
-- **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8+, ARM64. Install over the existing app to retain local progress.
-- **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the complete archive and run `ArtificialNegligence.exe`. Keep its Data folder and supporting files alongside it.
-- **[Linux tar.gz](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Linux.tar.gz):** extract the archive, keep its files together and launch `ArtificialNegligence.x86_64`. Same content and controls as Windows; physical device/distribution compatibility still needs playtesting.
-- **[WebGL package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** browser game and hosting files. [Hosting guide](docs/WEB-HOSTING.md).
+Find **Android, Windows, Linux and WebGL** downloads, installation details and release notes on the **[latest release page](https://github.com/dustindwayne/artificial-negligence/releases/latest)**.
 
-Progress saves locally. Android, Windows and browser saves do not sync.
+You can also **[play in your browser](https://dustinwann.com/apps/artificial-negligence/)**.
+
+Progress saves locally on each platform; saves do not sync between devices or the browser.
 
 ### Controls
 
