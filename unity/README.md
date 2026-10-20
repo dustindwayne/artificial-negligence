@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D project / 2.4.8
+# Artificial Negligence — Unity 2D project / 2.4.9
 
 Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
@@ -59,4 +59,6 @@ The active-character preview is enlarged with a cosmetics dropdown and equipped 
 
 ## Secret allies
 
-The seven-character roster includes code-unlocked Davey Goats and Brad Jammin’. Code unlocks persist across profile loads; they grant no gear, XP or campaign completion. Brad carries his boombox in all eight animation poses.
+The eight-character roster includes code-unlocked Davey Goats and Brad Jammin’. Code unlocks persist across profile loads; they grant no gear, XP or campaign completion. Brad carries his boombox in all eight animation poses.
+
+Mikey O’Redd joins the secret roster with the exact code `mikeyredd`. He retains his bucket of gold and blunt in all eight poses; code redemption grants no equipment or campaign progress.

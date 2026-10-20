@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.8 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.9 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -26,10 +26,9 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **Two secret allies:** Davey Goats brings a black coat and sunglasses; Brad Jammin’ carries his boombox through all eight animation poses. Redeem their character codes through the hidden signal decoder, then select them from the roster.
-- **A clearer character screen:** seven characters sit beside a large active preview, equipped-item details and an in-preview cosmetics dropdown. Locked characters remain silhouettes.
-- **A cleaner platforming HUD:** movement on the left, jump/dash and equipped-weapon fire on the right, with one Menu hub for inventory, characters, upgrades, AI type, settings and controls.
-- **Contextual actions:** Down combines ducking and sliding; Interact appears near terminals, and AI Help becomes usable only when earned.
+- **Mikey O’Redd joins the resistance:** a short, red-haired and red-bearded leprechaun carrying his bucket of gold and smoking a blunt. Eight animation poses preserve his outfit and bucket.
+- **Code-unlocked character:** redeem his character code through the hidden signal decoder, then select him in the character menu. Unlocking him grants no equipment or story progress.
+- **Eight-character roster:** compact entries fit beside the large active preview, equipped-item details and cosmetics dropdown. Locked characters remain silhouettes.
 
 [Full changelog](CHANGELOG.md).
 
@@ -43,7 +42,7 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 | Character and loadout | Found-item inventory |
 | --- | --- |
-| ![Seven-character roster with Brad Jammin’ selected](docs/characters-v248.png) | ![Individual weapons and armor in inventory](docs/inventory-v248.png) |
+| ![Eight-character roster with Mikey O’Redd selected](docs/characters-v249.png) | ![Individual weapons and armor in inventory](docs/inventory-v248.png) |
 
 | Live start screen | Intellect terminal |
 | --- | --- |
@@ -59,7 +58,7 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 ### Browser edition
 
-![Browser edition running the actual 2.4.8 game](docs/web-v248.png)
+![Browser edition running the actual 2.4.9 game](docs/web-v249.png)
 
 ## Built around exploration and choice
 
@@ -94,7 +93,7 @@ The workshop upgrades owned equipment through Legend. **Ultra is found only in b
 
 Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, **Rook** by clearing stage 12, and **Ai Wrath** after the third encounter in level 13. Already-unlocked saves retain him. Locked characters appear as silhouettes; the character screen shows the selected character, outfit, and equipped items.
 
-Two additional secret allies, **Davey Goats** and **Brad Jammin’**, unlock with character codes. Their outfits are visual identities; Brad’s boombox does not grant a free inventory weapon.
+Three additional secret allies, **Davey Goats**, **Brad Jammin’** and **Mikey O’Redd**, unlock with character codes. Their outfits are visual identities; Brad’s boombox does not grant a free inventory weapon.
 
 Characters currently share combat stats and inventory. Individual signature powers remain part of the [roadmap](ROADMAP.md).
 

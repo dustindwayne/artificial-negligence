@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.4.9 — Mikey O’Redd
+
+- Add Mikey O’Redd, a short red-bearded leprechaun with a bucket of gold and a smoking blunt.
+- Unlock him with the exact lowercase code `mikeyredd`; retain the unlock across profile loads and save serialization.
+- Add eight isolated animation poses with shared scale and transparent gutters.
+- Fit eight roster entries beside the enlarged active-character preview.
+- Preserve found-only equipment, existing character codes and campaign unlock gates.
+
+
 ## 2.4.8 — Secret allies
 
 - Add Davey Goats and Brad Jammin’ as code-unlocked playable characters with eight poses each.

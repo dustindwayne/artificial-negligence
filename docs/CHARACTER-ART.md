@@ -8,6 +8,10 @@ Upright white/grey goat, horns, goatee, black round sunglasses, long black coat,
 
 Friendly fair-skinned man, close-cropped receding brown hair, small front tuft, short grey/brown stubble and a stud earring. Black collared shirt without a company logo, charcoal trousers, cyan accents and sneakers. A boombox stays tucked beneath one arm in every pose; the free hand performs actions.
 
+## Mikey O’Redd
+
+Short, stocky adult leprechaun, vivid red hair and full beard, emerald hat and coat, gold buckles and dark boots. He smokes a blunt and keeps a bucket overflowing with gold tucked under one arm in all eight poses. Tough expression, clustered pixel shading and dark outlines match the cast.
+
 ## Animation and integration
 
 Four-by-two transparent sheets: idle, run A, run B, jump; fire, ability, crouch, slide. Preserve the full body, clothing, boombox and action effects. Measured masks separate poses across nominal grid boundaries. Runtime normalization uses shared scale and transparent gutters. These are visual character variants with shared gameplay systems, not new signature powers.

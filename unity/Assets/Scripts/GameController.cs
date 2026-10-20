@@ -332,7 +332,7 @@ namespace ArtificialNegligence {
             stats.character=4;ApplyCharacter();if(playerFrames[0]!=wrathFrames[0])throw new Exception("Playable Wrath art failed");
             characterReturn=ScreenMode.Play;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-unlocked.png"));
             Debug.Log("AN_WRATH_QA_PASS / boss stages 6 and 12, final level 13, three phases, burst/phase gates, distinct attacks, pit recovery, retreat scenes, persisted encounters and final-only unlock");
-            VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 132 isolated atlas frames, compact HUD, collection, seven-character roster, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
+            VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 140 isolated atlas frames, compact HUD, collection, eight-character roster, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
         }
     }
 }

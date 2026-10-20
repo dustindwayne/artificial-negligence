@@ -1,11 +1,11 @@
 # Testing and compatibility
 
-## Release 2.4.8
+## Release 2.4.9
 
 - All three Unity targets built: Windows x64, Android ARM64, WebGL.
 - Generated route checks cover 60 routes, 1,960 GPUs and 443 ground gaps; low passages use the crouched collision shape.
-- Sprite checks cover 132 isolated native atlas frames and transparent edge gutters.
-- Windows runtime checks cover inventory, story, unlocks, graphics tiers, music, puzzles, bosses and controller routing. Wrath checks exercise all three encounters/phases, huge-hit and same-frame burst protection, attacks, pit recovery, retreat scenes, save persistence and final-only unlock. Music checks force actual track endings, verify shuffle variety/no immediate repeat, and verify inventory/stage continuity.
+- Sprite checks cover 140 isolated native atlas frames and transparent edge gutters.
+- The retained 2.4.8 Windows runtime checks cover inventory, story, unlocks, graphics tiers, music, puzzles, bosses and controller routing. Wrath checks exercise all three encounters/phases, huge-hit and same-frame burst protection, attacks, pit recovery, retreat scenes, save persistence and final-only unlock. Music checks force actual track endings, verify shuffle variety/no immediate repeat, and verify inventory/stage continuity.
 - Controller tests use injected normalized input frames. Web adapter tests exercise ten button mappings, axes, D-pad priority, disconnect handling and standard-map filtering.
 - The final web player was loaded in a browser and rendered the game without startup console errors. Earlier browser checks covered keyboard movement/jumping, GPU collection and saved progress.
 - Android package version, signature and continuity with the preceding signing certificate were checked.
@@ -13,7 +13,7 @@
 
 **Not yet verified:** physical Xbox/gamepad use over USB/Bluetooth, final-release Android playtesting, and installation through the in-app updater. The 2.4.6 APK was installed over the existing Android app by USB and its installed version was verified. Software routing checks do not establish hardware compatibility for every controller.
 
-[Release verification record](release-validation-v248.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
+[Release verification record](release-validation-v249.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
 
 ## Historical evidence
 
@@ -42,3 +42,7 @@ The scripted 60-stage campaign/save-recovery runtime evidence remains from 2.4.6
 The guest-character check verifies exact code matching, rejection of incorrect codes, account unlocks surviving a fresh profile load, JSON save round trips, selection of both new characters, and sixteen nonempty poses with four-pixel gutters. It also rejects free equipment and unrelated story unlocks. Runtime captures record each character in the seven-entry roster.
 
 Historical UI, campaign and updater reports retain the versions on which their checks ran. New character code changes do not alter campaign generation or boss progression. Physical Android installation and hardware-controller playtesting of this release remain outstanding.
+
+## Mikey O’Redd (2.4.9)
+
+The current guest regression includes the lowercase Mikey code and wrong-case rejection, all three guest selections, account/profile persistence and twenty-four isolated guest poses. The eight-entry roster is captured beside the active preview. Older UI and campaign evidence retains its original version.

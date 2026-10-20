@@ -140,13 +140,13 @@ namespace ArtificialNegligence {
             Label(window,"FOUND ITEMS ONLY. EACH COPY KEEPS ITS OWN TIER.",30,430,565,34,17,Cyan);Button(window,"BACK TO RUN",615,431,232,37,Cyan,()=>SetMode(ScreenMode.Play));
         }
         void BuildCharacters(RectTransform window){
-            stats.EnsureCollection();cosmeticPopup=null;
+            stats.EnsureCollection();cosmeticPopup=null;float rosterStep=Mathf.Min(64,318f/RunStats.Characters.Length),rowHeight=rosterStep-3,portraitSize=rowHeight-6;
             for(int i=0;i<RunStats.Characters.Length;i++){
                 int choice=i;bool unlocked=stats.CharacterUnlocked(i),active=stats.character==i;
-                var select=Button(window,"",28,103+i*45,260,42,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
-                Image(select.transform,"Character silhouette or portrait",5,3,36,36,unlocked?Color.white:Color.black,CharacterFrame(i,0)).preserveAspect=true;
-                Label(select.transform,RunStats.Characters[i],49,1,203,23,18,unlocked?Cream:new Color(.5f,.6f,.65f));
-                Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":i==4?"FREE AI WRATH":"SECRET CODE",49,23,203,17,11,active?Gold:Cyan);
+                var select=Button(window,"",28,103+i*rosterStep,260,rowHeight,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
+                Image(select.transform,"Character silhouette or portrait",5,3,portraitSize,portraitSize,unlocked?Color.white:Color.black,CharacterFrame(i,0)).preserveAspect=true;
+                Label(select.transform,RunStats.Characters[i],49,0,203,21,17,unlocked?Cream:new Color(.5f,.6f,.65f));
+                Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":i==4?"FREE AI WRATH":"SECRET CODE",49,20,203,15,10,active?Gold:Cyan);
                 select.interactable=unlocked&&!active;
             }
             var preview=Panel(window,"Equipped loadout",305,102,543,316,Gold,.8f);

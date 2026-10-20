@@ -47,3 +47,7 @@ Sinister agents add twelve poses and Ai Wrath adds eight poses. The raw PNG mast
 ## Current character fitting — 2.4.8
 
 The active cast includes seven characters. Davey Goats and Brad Jammin’ each add eight poses with measured layout/mask metadata. All eight poses share one scale; normalized 64×64 frames retain four-pixel transparent gutters. Brad’s boombox remains visible in every pose. See [character art direction](CHARACTER-ART.md).
+
+## Mikey O’Redd — 2.4.9
+
+Eight additional measured poses bring validation to 140 isolated atlas frames. Mikey’s bucket, blunt and smoke are assigned to their pose masks; all guest outputs keep four-pixel gutters. The active roster now has eight characters.

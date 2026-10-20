@@ -1,7 +1,7 @@
 # Artificial Negligence
 ## Story and campaign direction
 
-**Build 2.4.8:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, seven playable characters (including two code-unlocked guests), permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+**Build 2.4.9:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, eight playable characters (including three code-unlocked guests), permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
 
 **Restore reality. Keep AI public.**
 
