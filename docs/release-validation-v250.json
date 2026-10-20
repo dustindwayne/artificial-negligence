@@ -20,7 +20,7 @@
   "physicalControllerTest": false,
   "physicalAndroid250Test": false,
   "physicalInAppUpdaterTest": false,
-  "webBrowserSmokeTest": "PASS: 2.4.10 rendered in browser with no startup console errors",
+  "webBrowserSmokeTest": "PASS: hosted 2.4.10 rendered at the public game URL with no startup console errors",
   "packages": {
     "ArtificialNegligence-Web-FTP.zip": {
       "bytes": 50911240,
@@ -35,5 +35,11 @@
       "sha256": "e233737e8d3199f70600176567904c8637abec754b356ed162e970c1fb2b1223"
     }
   },
-  "androidSigning": "PASS: versionCode 250, Android 8+ ARM64, certificate SHA-256 e6ac81d2c078c6ac7f5e084dc15d3f8947f83b6d3f1631c236332548584b704b"
+  "androidSigning": "PASS: versionCode 250, Android 8+ ARM64, certificate SHA-256 e6ac81d2c078c6ac7f5e084dc15d3f8947f83b6d3f1631c236332548584b704b",
+  "websiteDeployment": {
+    "url": "https://dustinwann.com/apps/artificial-negligence/",
+    "verifiedFiles": 21,
+    "indexVerified": true,
+    "currentCastBanner": "hero-2-4-10.png"
+  }
 }
