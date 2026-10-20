@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D project / 2.4.7
+# Artificial Negligence — Unity 2D project / 2.4.8
 
 Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
@@ -56,3 +56,7 @@ A one-time save migration restores the first two Wrath encounter credits from co
 ## Character preview and controls
 
 The active-character preview is enlarged with a cosmetics dropdown and equipped gear. Mobile controls combine Down duck/slide, only show Fire for an equipped find, and group movement/actions at opposite corners. Menu holds inventory, character, upgrades, AI type, settings and controls; settings returns to Pause. AI Help stays earned and terminal interaction remains contextual.
+
+## Secret allies
+
+The seven-character roster includes code-unlocked Davey Goats and Brad Jammin’. Code unlocks persist across profile loads; they grant no gear, XP or campaign completion. Brad carries his boombox in all eight animation poses.

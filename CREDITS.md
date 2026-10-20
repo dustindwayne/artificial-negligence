@@ -18,3 +18,7 @@ Ai Wrath and the Sinister agent sheets were generated with AI from creator-speci
 ### Wonder Wrath costume
 
 Costume sprite sheet supplied by Dustin Wann. The supplied artwork is preserved; frame masks and the game importer handle background isolation, shared scaling and transparent gutters.
+
+## Secret character artwork
+
+Davey Goats and Brad Jammin’ were requested and creatively directed by Dustin Wann. AI generated their pixel sprite artwork and assisted with integration. Brad’s likeness follows a creator-supplied reference photo; the original photo is not distributed with the game. Pose masks and normalized frames isolate animations without editing the supplied likeness.

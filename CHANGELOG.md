@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.4.8 — Secret allies
+
+- Add Davey Goats and Brad Jammin’ as code-unlocked playable characters with eight poses each.
+- Preserve Brad’s boombox through idle, running, jumping, firing, ability, crouch and slide poses.
+- Fit all seven roster entries beside the enlarged character preview and cosmetics dropdown.
+- Persist code unlocks across profile loads without granting equipment, XP or story unlocks.
+- Isolate both sprite sheets with measured pose masks, shared animation scale and clear output gutters.
+- Refresh the README and current download metadata; retain historical release evidence in versioned reports.
+
+
 ## 2.4.7 — Clearer controls and character preview
 
 - Enlarge the active-character preview and replace the outfit button row with an in-preview dropdown; retain cosmetic and story unlock rules.

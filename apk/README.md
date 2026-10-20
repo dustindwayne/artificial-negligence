@@ -1,4 +1,4 @@
-# Android — 2.4.7
+# Android — 2.4.8
 
 [Download latest APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk). Android 8+, ARM64. Install over the existing app to keep progress. Touch input is supported; controller implementation in this release targets Windows/web.
 

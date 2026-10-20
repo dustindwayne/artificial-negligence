@@ -1,0 +1,39 @@
+{
+  "release": "2.4.8",
+  "builds": [
+    "Windows x64",
+    "Android ARM64",
+    "WebGL"
+  ],
+  "automatedChecks": {
+    "nativeRuntime": "PASS",
+    "secretCharacters": "PASS: exact/wrong codes, JSON save, account persistence, both selections, no free gear or story bypass",
+    "characterPreviewAndCosmetics": "PASS",
+    "touchHUDAndControllerRouting": "PASS",
+    "spriteFrames": 132,
+    "newCharacterGutters": "4px on all 16 poses",
+    "physicsRoutes": 60,
+    "reachableGPUs": 1960,
+    "groundGaps": 443
+  },
+  "priorCampaignEvidence": "release-validation-v246.json",
+  "physicalControllerTest": false,
+  "physicalAndroid248Test": false,
+  "physicalInAppUpdaterTest": false,
+  "webBrowserSmokeTest": "PASS: 2.4.8 rendered in browser with no startup console errors",
+  "packages": {
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 47374157,
+      "sha256": "bb724ac7946e51368313f859078691c42f8fdebc7529e2aee5f564718c651312"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 71154499,
+      "sha256": "e859c30aecd69aad521bea451e80c17b57065ca427b281909f05d3c9c6fdbd25"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 56275027,
+      "sha256": "250b43c831363318e4c626e391a57f60e1088e133fa2ea6c2b88f7d3a454eb0e"
+    }
+  },
+  "androidSigning": "PASS: versionCode 248, Android 8+ ARM64, certificate SHA-256 e6ac81d2c078c6ac7f5e084dc15d3f8947f83b6d3f1631c236332548584b704b"
+}

@@ -54,7 +54,8 @@ namespace ArtificialNegligence {
             music=gameObject.AddComponent<MusicDirector>();music.Initialize(this);
             updater=gameObject.AddComponent<GameUpdater>();updater.Initialize(this);
             BuildCanvas();puzzleFactory=new PuzzleFactory(rng);LoadLevel(0);SetMode(ScreenMode.Title);
-            if(Environment.GetCommandLineArgs().Contains("-qa-hud")){qaMode=true;StartCoroutine(HudQa());}
+            if(Environment.GetCommandLineArgs().Contains("-qa-guests")){qaMode=true;StartCoroutine(GuestsQa());}
+            else if(Environment.GetCommandLineArgs().Contains("-qa-hud")){qaMode=true;StartCoroutine(HudQa());}
             else if(Environment.GetCommandLineArgs().Contains("-qa-wonder")){qaMode=true;StartCoroutine(WonderWrathQa());}
             else if(Environment.GetCommandLineArgs().Contains("-qa-campaign")){qaMode=true;StartCoroutine(CampaignQa());}
             else if(Environment.GetCommandLineArgs().Contains("-qa")){qaMode=true;StartCoroutine(PreviewQa());}
@@ -275,7 +276,7 @@ namespace ArtificialNegligence {
             yield return new WaitForSecondsRealtime(.3f);var attractStart=titleRunner.transform.position;yield return new WaitForSecondsRealtime(.7f);if(titleRunner.transform.position==attractStart)throw new Exception("Start scene actor did not animate");if(stats.GraphicsGpus!=0)throw new Exception("Title granted GPU progress");CaptureQa(System.IO.Path.Combine(path,"unity-title.png"));Debug.Log("AN_TITLE_QA_PASS / live actor movement, no progression awarded");
             StartRun();if(mode!=ScreenMode.Story)throw new Exception("First run did not start with story");yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-story.png"));for(int page=0;page<4;page++)AdvanceStory();if(!stats.storySeen||mode!=ScreenMode.CityMap)throw new Exception("Story did not lead to city map");Debug.Log("AN_STORY_QA_PASS / first-run opening and completion");BeginNarrative(0,ScreenMode.CityMap);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-narrative.png"));AdvanceNarrative();AdvanceNarrative();if(mode!=ScreenMode.CityMap||!stats.seenStoryScenes.Contains(0))throw new Exception("Narrative completion failed");BeginNarrative(0,ScreenMode.Play);if(mode!=ScreenMode.CityMap)throw new Exception("Narrative replayed");Debug.Log("AN_NARRATIVE_QA_PASS / two lines, original portrait, completion and replay guard");yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-city-map.png"));
             characterReturn=ScreenMode.CityMap;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);
-            var portraits=screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Where(i=>i.name=="Character silhouette or portrait").ToArray();if(portraits.Length!=5||portraits.Count(i=>i.color==Color.black)!=4)throw new Exception("Locked character silhouettes failed");
+            var portraits=screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Where(i=>i.name=="Character silhouette or portrait").ToArray();if(portraits.Length!=RunStats.Characters.Length||portraits.Count(i=>i.color==Color.black)!=RunStats.Characters.Length-1)throw new Exception("Locked character silhouettes failed");
             if(screenRoot.GetComponentsInChildren<UnityEngine.UI.Image>().Count(i=>i.name=="Equipped item")!=1)throw new Exception("Character equipped item preview failed");
             CaptureQa(System.IO.Path.Combine(path,"unity-characters-locked.png"));
             var feedback=screenRoot.GetComponentInChildren<ButtonFeedback>();var feedbackLabel=feedback.GetComponentInChildren<UnityEngine.UI.Text>();var labelPosition=feedbackLabel.rectTransform.anchoredPosition;
@@ -331,7 +332,7 @@ namespace ArtificialNegligence {
             stats.character=4;ApplyCharacter();if(playerFrames[0]!=wrathFrames[0])throw new Exception("Playable Wrath art failed");
             characterReturn=ScreenMode.Play;SetMode(ScreenMode.Characters);yield return new WaitForSecondsRealtime(.2f);CaptureQa(System.IO.Path.Combine(path,"unity-wrath-unlocked.png"));
             Debug.Log("AN_WRATH_QA_PASS / boss stages 6 and 12, final level 13, three phases, burst/phase gates, distinct attacks, pit recovery, retreat scenes, persisted encounters and final-only unlock");
-            VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 108 isolated atlas frames, compact HUD, collection, five characters, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
+            VerifyControllerRouting();Debug.Log("AN_RUNTIME_QA_PASS 132 isolated atlas frames, compact HUD, collection, seven-character roster, outfit selection, all six graphics tiers, city map, movement, dash, upgrades, one-attempt puzzles, all three bosses");Application.Quit(0);
         }
     }
 }

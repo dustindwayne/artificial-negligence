@@ -1,4 +1,4 @@
-# Controls — 2.4.7
+# Controls — 2.4.8
 
 ## Supported targets
 
@@ -24,7 +24,7 @@
 | Confirm menu / advance dialogue | A |
 | Back / skip dialogue | B |
 
-Character selection and upgrades are reachable from the pause menu. The character screen only allows gameplay-unlocked characters and found equipment; controller support grants no items or progress. Full momentum and sufficient compute are still required for AI assistance.
+Character selection and upgrades are reachable from the pause menu. The character screen allows gameplay-unlocked or code-unlocked characters and found equipment; controller support grants no items or progress. Full momentum and sufficient compute are still required for AI assistance.
 
 ## Behavior
 

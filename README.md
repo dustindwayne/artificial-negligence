@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.7 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.8 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -26,12 +26,12 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **Clearer gameplay controls:** movement stays on the left; jump, equipped-weapon fire and dash stay on the right. Holding Down ducks; pressing it while moving slides. The unused unarmed attack button and separate slide button are gone.
-- **One menu hub:** inventory, character, upgrades, AI type, settings and the control guide live in the pause menu. The interaction prompt appears only near a terminal; AI help becomes available only when earned.
-- **Larger active-character preview:** a compact roster leaves space for a portrait over twice the old size, with equipped gear alongside it.
-- **Cosmetics inside the preview:** a dropdown lists regular outfit unlocks and the secret Wrath outfit when available. Locked choices remain disabled; keyboard/controller focus stays in the open list.
+- **Two secret allies:** Davey Goats brings a black coat and sunglasses; Brad Jammin’ carries his boombox through all eight animation poses. Redeem their character codes through the hidden signal decoder, then select them from the roster.
+- **A clearer character screen:** seven characters sit beside a large active preview, equipped-item details and an in-preview cosmetics dropdown. Locked characters remain silhouettes.
+- **A cleaner platforming HUD:** movement on the left, jump/dash and equipped-weapon fire on the right, with one Menu hub for inventory, characters, upgrades, AI type, settings and controls.
+- **Contextual actions:** Down combines ducking and sliding; Interact appears near terminals, and AI Help becomes usable only when earned.
 
-The existing-save Ai Wrath encounter repair, Android updater repair, city ending and next cycles remain included. [Full changelog](CHANGELOG.md).
+[Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -39,19 +39,19 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 | Platforming at HD Pixel detail | Ai Wrath's liberation |
 | --- | --- |
-| ![HD Pixel platforming](docs/gameplay-v241.png) | ![Ai Wrath dialogue scene](docs/wrath-v241.png) |
+| ![HD Pixel platforming](docs/gameplay-v248.png) | ![Ai Wrath dialogue scene](docs/wrath-v248.png) |
 
 | Character and loadout | Found-item inventory |
 | --- | --- |
-| ![Character selection with Ai Wrath unlocked](docs/characters-v247.png) | ![Individual weapons and armor in inventory](docs/inventory-v241.png) |
+| ![Seven-character roster with Brad Jammin’ selected](docs/characters-v248.png) | ![Individual weapons and armor in inventory](docs/inventory-v248.png) |
 
 | Live start screen | Intellect terminal |
 | --- | --- |
-| ![Animated city start screen](docs/title-v241.png) | ![Logic puzzle terminal](docs/puzzle-v241.png) |
+| ![Animated city start screen](docs/title-v248.png) | ![Logic puzzle terminal](docs/puzzle-v248.png) |
 
 ### Clearer touch controls
 
-![Touch layout with a found weapon and earned AI help](docs/hud-v247.png)
+![Touch layout with a found weapon and earned AI help](docs/hud-v248.png)
 
 ### City liberated
 
@@ -59,7 +59,7 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 ### Browser edition
 
-![Browser edition running the actual 2.4.7 game](docs/web-v247.png)
+![Browser edition running the actual 2.4.8 game](docs/web-v248.png)
 
 ## Built around exploration and choice
 
@@ -75,7 +75,7 @@ Revisited districts keep your earned visual quality. Recollecting the same core 
 
 ### Find your build
 
-**You start unarmed and unarmored.** Strike at close range until you find a weapon. Supply boxes contain individual equipment finds, including multiple copies and different rarities. Equipment never auto-equips, and XP never grants weapons or armor.
+**You start unarmed and unarmored.** Search supply boxes for your first weapon, then equip it from the inventory. Supply boxes contain individual equipment finds, including multiple copies and different rarities. Equipment never auto-equips, and XP never grants weapons or armor.
 
 | Weapon | Strength | Tradeoff |
 | --- | --- | --- |
@@ -94,6 +94,8 @@ The workshop upgrades owned equipment through Legend. **Ultra is found only in b
 
 Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, **Rook** by clearing stage 12, and **Ai Wrath** after the third encounter in level 13. Already-unlocked saves retain him. Locked characters appear as silhouettes; the character screen shows the selected character, outfit, and equipped items.
 
+Two additional secret allies, **Davey Goats** and **Brad Jammin’**, unlock with character codes. Their outfits are visual identities; Brad’s boombox does not grant a free inventory weapon.
+
 Characters currently share combat stats and inventory. Individual signature powers remain part of the [roadmap](ROADMAP.md).
 
 ### Outthink the Sinister
@@ -109,7 +111,7 @@ Choose **Relaxed, Standard, Hard, or Adaptive**. Adaptive increases pressure aft
 - **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8.0+, ARM64. Install over the existing app to retain local progress. Android asks you to approve installation.
 - **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the entire archive, then run `ArtificialNegligence.exe`. Keep the Data folder and supporting files beside it. The optional HD preview launcher changes rendering only and grants no progress.
 
-Older saves from the menu-granted loadout system have that equipment cleared on migration, with a local backup saved as `progress-before-loot-inventory`. Levels, GPU restoration, and character progress are preserved.
+Install updates over your existing copy to keep local progress. Saves are local to each platform.
 
 ### Controls
 

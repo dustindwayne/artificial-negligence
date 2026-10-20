@@ -28,7 +28,7 @@ namespace ArtificialNegligence {
    var input=inputRoot.gameObject.AddComponent<InputField>();input.targetGraphic=background;input.characterLimit=32;input.contentType=InputField.ContentType.Alphanumeric;
    input.textComponent=Label(inputRoot,"",12,2,428,44,24,Cream);input.placeholder=Label(inputRoot,"ENTER CODE",12,2,428,44,23,new Color(.4f,.6f,.6f));
    var result=Label(panel,"",24,120,452,43,17,Cyan,TextAnchor.MiddleCenter);
-   Action submit=()=>{bool ok=SubmitWonderCode(input.text);result.text=ok?(stats.CharacterUnlocked(4)?"WONDER WRATH UNLOCKED / CHARACTER LOADOUT":"OUTFIT UNLOCKED / FREE AI WRATH TO WEAR IT"):"SIGNAL NOT RECOGNIZED";result.color=ok?Gold:Pink;};
+   Action submit=()=>{string message;bool ok=RedeemCharacterCode(input.text,out message);result.text=message;result.color=ok?Gold:Pink;};
    Button(panel,"DECODE",24,180,215,39,Gold,submit);Button(panel,"CLOSE",261,180,215,39,Cyan,()=>{Destroy(secretCodePanel);secretCodePanel=null;});
    input.onEndEdit.AddListener(value=>{if(Input.GetKeyDown(KeyCode.Return)||Input.GetKeyDown(KeyCode.KeypadEnter))submit();});
    EventSystem.current.SetSelectedGameObject(input.gameObject);input.ActivateInputField();

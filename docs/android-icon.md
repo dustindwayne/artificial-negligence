@@ -15,4 +15,4 @@ Use case logo-brand. Android adaptive launcher icon foreground based on Looper, 
 The linked resource report records an earlier APK inspection after resource shrinking: adaptive XML references both image layers, the manifest sets icon and roundIcon, and all six legacy fallback densities contain Looper rather than Unity’s placeholder. [Packaged resource report](android-icon-validation.json).
 
 
-The launcher configuration remains active in 2.4.2; final package metadata and signing are checked for each release. The historical JSON report is not a physical-device installation test. The README promotional banner is separate from the Android launcher icon.
+The launcher configuration remains active in 2.4.8; final package metadata and signing are checked for each release. The historical JSON report is not a physical-device installation test. The README promotional banner is separate from the Android launcher icon.

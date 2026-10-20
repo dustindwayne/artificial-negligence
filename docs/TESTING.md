@@ -1,10 +1,10 @@
 # Testing and compatibility
 
-## Release 2.4.7
+## Release 2.4.8
 
 - All three Unity targets built: Windows x64, Android ARM64, WebGL.
 - Generated route checks cover 60 routes, 1,960 GPUs and 443 ground gaps; low passages use the crouched collision shape.
-- Sprite checks cover 116 isolated native atlas frames and transparent edge gutters.
+- Sprite checks cover 132 isolated native atlas frames and transparent edge gutters.
 - Windows runtime checks cover inventory, story, unlocks, graphics tiers, music, puzzles, bosses and controller routing. Wrath checks exercise all three encounters/phases, huge-hit and same-frame burst protection, attacks, pit recovery, retreat scenes, save persistence and final-only unlock. Music checks force actual track endings, verify shuffle variety/no immediate repeat, and verify inventory/stage continuity.
 - Controller tests use injected normalized input frames. Web adapter tests exercise ten button mappings, axes, D-pad priority, disconnect handling and standard-map filtering.
 - The final web player was loaded in a browser and rendered the game without startup console errors. Earlier browser checks covered keyboard movement/jumping, GPU collection and saved progress.
@@ -13,7 +13,7 @@
 
 **Not yet verified:** physical Xbox/gamepad use over USB/Bluetooth, final-release Android playtesting, and installation through the in-app updater. The 2.4.6 APK was installed over the existing Android app by USB and its installed version was verified. Software routing checks do not establish hardware compatibility for every controller.
 
-[Release verification record](release-validation-v247.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
+[Release verification record](release-validation-v248.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
 
 ## Historical evidence
 
@@ -33,6 +33,12 @@ Save fixtures cover progression before/after each boss chapter, level 13, later 
 
 ## Character menu and touch controls
 
-2.4.7 runtime checks cover enlarged portrait dimensions; open/select cosmetics, including the secret outfit and disabled locked choices; combined Down duck/slide; five unarmed versus six armed touch actions; earned AI readiness and consumption; in-run settings returning to Pause; and the existing controller routing regression. Actual screenshots record both closed and open dropdown layouts, the touch HUD and pause hub.
+2.4.8 runtime checks cover enlarged portrait dimensions; open/select cosmetics, including the secret outfit and disabled locked choices; combined Down duck/slide; five unarmed versus six armed touch actions; earned AI readiness and consumption; in-run settings returning to Pause; and the existing controller routing regression. Actual screenshots record both closed and open dropdown layouts, the touch HUD and pause hub.
 
-The scripted 60-stage campaign/save-recovery runtime evidence remains from 2.4.6; gameplay progression code is unchanged in this UI update. Fresh physics validation still covers all 60 generated routes in 2.4.7.
+The scripted 60-stage campaign/save-recovery runtime evidence remains from 2.4.6; gameplay progression code is unchanged in this UI update. Fresh physics validation still covers all 60 generated routes in 2.4.8.
+
+## Secret allies (2.4.8)
+
+The guest-character check verifies exact code matching, rejection of incorrect codes, account unlocks surviving a fresh profile load, JSON save round trips, selection of both new characters, and sixteen nonempty poses with four-pixel gutters. It also rejects free equipment and unrelated story unlocks. Runtime captures record each character in the seven-entry roster.
+
+Historical UI, campaign and updater reports retain the versions on which their checks ran. New character code changes do not alter campaign generation or boss progression. Physical Android installation and hardware-controller playtesting of this release remain outstanding.

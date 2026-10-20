@@ -21,7 +21,7 @@ namespace ArtificialNegligence {
                 bounds[row*columns+col]=new RectInt(minX,minY,maxX-minX+1,maxY-minY+1);
             }
             if(measured!=null){if(measured.Length!=result.Length||mask==null||mask.Length!=pixels.Length)throw new Exception("Atlas metadata mismatch "+source.name);bounds=measured;}
-            int group=(source.name=="looper"||source.name=="wonder-wrath")?8:source.name=="items-v3"?1:columns;
+            int group=(source.name=="looper"||source.name=="wonder-wrath"||source.name=="davey-goats"||source.name=="brad-jammin")?8:source.name=="items-v3"?1:columns;
             for(int first=0;first<result.Length;first+=group){
                 float scale=float.MaxValue;for(int col=0;col<group;col++){var b=bounds[first+col];scale=Math.Min(scale,Math.Min((width-gutter*2f)/b.width,(height-gutter*2f)/b.height));}
                 for(int col=0;col<group;col++){
@@ -36,7 +36,7 @@ namespace ArtificialNegligence {
         }
     }
     public partial class GameController {
-        Sprite[] survivorAtlas,looperFrames,wrathFrames;Sprite[][] styledCharacters=new Sprite[20][];
+        Sprite[] survivorAtlas,looperFrames,wrathFrames;Sprite[][] styledCharacters=new Sprite[RunStats.Characters.Length*4][];
         public void InitializeSpriteSheets(){
             looperFrames=SpriteAtlas.Load("looper",4,2,64,64,PPU*2,true,4);
             survivorAtlas=SpriteAtlas.Load("survivors-v3",8,3,64,64,PPU*2,true,4);
@@ -44,10 +44,10 @@ namespace ArtificialNegligence {
             enemyFrames=SpriteAtlas.Load("enemies-v3",4,9,192,120,60,true,3);
             var agents=SpriteAtlas.Load("sinister-agents",4,3,64,64,32,true,4);enemyFrames=enemyFrames.Concat(agents).Concat(new[]{wrathFrames[0],wrathFrames[1],wrathFrames[2],wrathFrames[5]}).ToArray();
             itemFrames=SpriteAtlas.Load("items-v3",4,4,64,64,PPU*2,false,4);
-            shipFrames=SpriteAtlas.Load("ai_ships",4,1,128,64,PPU,false);InitializeWonderWrath();ApplyCharacter();
+            shipFrames=SpriteAtlas.Load("ai_ships",4,1,128,64,PPU,false);InitializeWonderWrath();InitializeGuests();ApplyCharacter();
         }
         public void ApplyCharacter(){
-            stats.EnsureCollection();if(stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped){playerFrames=wonderWrathFrames;if(playerVisual)playerVisual.sprite=playerFrames[0];return;}int id=stats.character*4+stats.outfit;
+            ApplyGuestUnlocks();stats.EnsureCollection();if(stats.character==4&&wonderWrathUnlocked&&wonderWrathEquipped){playerFrames=wonderWrathFrames;if(playerVisual)playerVisual.sprite=playerFrames[0];return;}int id=stats.character*4+stats.outfit;
             if(styledCharacters[id]==null){
                 var frames=new Sprite[8];Color[] accents={Color.white,Cyan,Gold,new Color(.75f,.4f,1)};
                 for(int i=0;i<8;i++){
@@ -60,7 +60,7 @@ namespace ArtificialNegligence {
                 }styledCharacters[id]=frames;
             }playerFrames=styledCharacters[id];if(playerVisual)playerVisual.sprite=playerFrames[0];
         }
-        public Sprite CharacterFrame(int character,int frame){return character==4?(wonderWrathUnlocked&&wonderWrathEquipped?wonderWrathFrames[frame]:wrathFrames[frame]):character==0?looperFrames[frame]:survivorAtlas[(character==3?0:character)*8+frame];}
+        public Sprite CharacterFrame(int character,int frame){return character==5?daveyGoatsFrames[frame]:character==6?bradJamminFrames[frame]:character==4?(wonderWrathUnlocked&&wonderWrathEquipped?wonderWrathFrames[frame]:wrathFrames[frame]):character==0?looperFrames[frame]:survivorAtlas[(character==3?0:character)*8+frame];}
         public Sprite EquipmentIcon(int slot,int family){return itemFrames[slot==0?4:slot==1?new[]{5,8,9,10}[family]:new[]{6,11,12,13}[family]];}
     }
 }

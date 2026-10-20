@@ -3,12 +3,12 @@ using System.Linq;
 using UnityEngine;
 namespace ArtificialNegligence {
     public partial class RunStats {
-        public int collectionVersion=2,character,outfit;public bool wrathFreed;public int wrathEncounters,wrathProgressVersion;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
+        public int collectionVersion=2,character,outfit;public bool wrathFreed,daveyGoatsUnlocked,bradJamminUnlocked;public int wrathEncounters,wrathProgressVersion;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
         public int[] weaponRarities,armorRarities;
-        public static readonly string[] Characters={"LOOPER","VALE","MENDER","ROOK","AI WRATH"};
-        public static readonly string[] CharacterDescriptions={"A core runner with a blue pulse pack","A rooftop mechanic","A neighborhood medic","The original street survivor","A freed Sinister elite"};
+        public static readonly string[] Characters={"LOOPER","VALE","MENDER","ROOK","AI WRATH","DAVEY GOATS","BRAD JAMMIN'"};
+        public static readonly string[] CharacterDescriptions={"A core runner with a blue pulse pack","A rooftop mechanic","A neighborhood medic","The original street survivor","A freed Sinister elite","A goat outside the program","A boombox-carrying resistance ally"};
         public static readonly string[] Outfits={"ORIGINAL","CYAN THREAD","GOLD THREAD","VIOLET THREAD"};
-        public bool CharacterUnlocked(int id){return id==0||id==1&&GraphicsGpus>=24||id==2&&cityUnlocked>=6||id==3&&cityUnlocked>=12||id==4&&wrathFreed;}
+        public bool CharacterUnlocked(int id){return id==0||id==1&&GraphicsGpus>=24||id==2&&cityUnlocked>=6||id==3&&cityUnlocked>=12||id==4&&wrathFreed||id==5&&daveyGoatsUnlocked||id==6&&bradJamminUnlocked;}
         public bool OutfitUnlocked(int id){return id==0||id==1&&rank>=3||id==2&&GraphicsGpus>=75||id==3&&cityUnlocked>=12||id==4&&wrathFreed;}
         [Serializable] public class EquipmentItem {public int id,slot,family,tier;public string Name {get{return (slot==1?Weapons[family]:Suits[family]+" ARMOR")+" #"+id.ToString("000");}}}
         public System.Collections.Generic.List<EquipmentItem> inventory=new System.Collections.Generic.List<EquipmentItem>();
@@ -38,7 +38,7 @@ namespace ArtificialNegligence {
             weaponRarities=new int[4];armorRarities=new int[4];foreach(var i in inventory){var rarities=i.slot==1?weaponRarities:armorRarities;rarities[i.family]=Math.Max(rarities[i.family],i.tier);}
             var w=inventory.FirstOrDefault(i=>i.id==weaponItemId&&i.slot==1);gear[1]=w==null?0:w.tier;weapon=w==null?0:w.family;if(w==null)weaponItemId=0;
             var a=inventory.FirstOrDefault(i=>i.id==armorItemId&&i.slot==2);int armorTier=a==null?0:a.tier;maxHealth=Math.Max(1,maxHealth+armorTier-gear[2]);health=Math.Min(health,maxHealth);gear[2]=armorTier;suit=a==null?0:a.family;if(a==null)armorItemId=0;
-            character=Mathf.Clamp(character,0,4);outfit=Mathf.Clamp(outfit,0,3);if(!CharacterUnlocked(character))character=0;if(!OutfitUnlocked(outfit))outfit=0;
+            character=Mathf.Clamp(character,0,Characters.Length-1);outfit=Mathf.Clamp(outfit,0,3);if(!CharacterUnlocked(character))character=0;if(!OutfitUnlocked(outfit))outfit=0;
         }
         public bool EquipItem(int id){EnsureCollection();var item=inventory.FirstOrDefault(i=>i.id==id);if(item==null)return false;if(item.slot==1)weaponItemId=id;else armorItemId=id;EnsureCollection();return true;}
         public bool SelectEquipment(int slot,int family){EnsureCollection();var item=inventory.Where(i=>i.slot==slot&&i.family==family).OrderByDescending(i=>i.tier).FirstOrDefault();return item!=null&&EquipItem(item.id);}

@@ -1,8 +1,8 @@
 # Art Roadmap: Artist-Led Characters and Animation
 
-## Current status — 2.4.2
+## Current status — 2.4.8
 
-The current visuals remain AI-generated or AI-assisted under creator direction. Five characters, artwork dialogue, GPU-driven visual tiers, Windows/web controller input and a browser build now exist. Creator-drawn replacements, distinct ally powers and hardware controller/device QA remain planned.
+The current visuals remain AI-generated or AI-assisted under creator direction. Seven characters, artwork dialogue, GPU-driven visual tiers, Windows/web controller input and a browser build now exist. Creator-drawn replacements, distinct ally powers and hardware controller/device QA remain planned.
 
 ## Direction
 

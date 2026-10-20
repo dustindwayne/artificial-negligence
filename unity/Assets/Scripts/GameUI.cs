@@ -141,12 +141,12 @@ namespace ArtificialNegligence {
         }
         void BuildCharacters(RectTransform window){
             stats.EnsureCollection();cosmeticPopup=null;
-            for(int i=0;i<5;i++){
+            for(int i=0;i<RunStats.Characters.Length;i++){
                 int choice=i;bool unlocked=stats.CharacterUnlocked(i),active=stats.character==i;
-                var select=Button(window,"",28,103+i*64,260,60,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
-                Image(select.transform,"Character silhouette or portrait",5,4,52,52,unlocked?Color.white:Color.black,CharacterFrame(i,0)).preserveAspect=true;
-                Label(select.transform,RunStats.Characters[i],65,3,184,27,21,unlocked?Cream:new Color(.5f,.6f,.65f));
-                Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":"FREE AI WRATH",65,32,184,20,13,active?Gold:Cyan);
+                var select=Button(window,"",28,103+i*45,260,42,active?Gold:Cyan,()=>{stats.character=choice;ApplyCharacter();SaveProgress();BuildScreen();});
+                Image(select.transform,"Character silhouette or portrait",5,3,36,36,unlocked?Color.white:Color.black,CharacterFrame(i,0)).preserveAspect=true;
+                Label(select.transform,RunStats.Characters[i],49,1,203,23,18,unlocked?Cream:new Color(.5f,.6f,.65f));
+                Label(select.transform,unlocked?(active?"ACTIVE":"SWITCH CHARACTER"):i==1?"24 GPUS":i==2?"CLEAR STAGE 6":i==3?"CLEAR STAGE 12":i==4?"FREE AI WRATH":"SECRET CODE",49,23,203,17,11,active?Gold:Cyan);
                 select.interactable=unlocked&&!active;
             }
             var preview=Panel(window,"Equipped loadout",305,102,543,316,Gold,.8f);

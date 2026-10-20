@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &749349193
+--- !u!1 &719387224
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 749349195}
-  - component: {fileID: 749349194}
+  - component: {fileID: 719387226}
+  - component: {fileID: 719387225}
   m_Layer: 0
   m_Name: Artificial Negligence
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &749349194
+--- !u!114 &719387225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 749349193}
+  m_GameObject: {fileID: 719387224}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1f4e8197fedd684a8d6b904028e2fdf, type: 3}
@@ -153,6 +153,8 @@ MonoBehaviour:
     character: 0
     outfit: 0
     wrathFreed: 0
+    daveyGoatsUnlocked: 0
+    bradJamminUnlocked: 0
     wrathEncounters: 0
     wrathProgressVersion: 0
     seenStoryScenes:
@@ -210,13 +212,13 @@ MonoBehaviour:
   haptics: 0
   qaMode: 0
   updater: {fileID: 0}
---- !u!4 &749349195
+--- !u!4 &719387226
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 749349193}
+  m_GameObject: {fileID: 719387224}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -229,4 +231,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 749349195}
+  - {fileID: 719387226}

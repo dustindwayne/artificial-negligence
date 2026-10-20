@@ -40,6 +40,10 @@ Use case stylized-concept. Create a corrected production sprite atlas for Looper
 [Frame audit](sprite-audit.json). Runtime captures: [Looper](atlas-looper.png), [survivors](atlas-survivors.png), [enemies and bosses](atlas-enemies.png), [equipment](atlas-equipment.png), [background sprites](atlas-ships.png). All source silhouettes remain inside the image bounds; normalized frames retain clear two-pixel borders. Wide sprites preserve their aspect ratio, and animation groups share a consistent scale.
 
 
-## Current 2.4.2 additions
+## Earlier 2.4.2 additions
 
 Sinister agents add twelve poses and Ai Wrath adds eight poses. The raw PNG masters are preserved; runtime masks and measured layouts prevent cross-frame bleed. The validator checks 108 native atlas frames, with minimum clear edge gutters. Full-resolution masked portraits are used in short narrative scenes. This is pixel-style generated art, not a claim of creator-drawn final assets.
+
+## Current character fitting — 2.4.8
+
+The active cast includes seven characters. Davey Goats and Brad Jammin’ each add eight poses with measured layout/mask metadata. All eight poses share one scale; normalized 64×64 frames retain four-pixel transparent gutters. Brad’s boombox remains visible in every pose. See [character art direction](CHARACTER-ART.md).
