@@ -33,20 +33,20 @@
   "webBrowserSmokeTest": "pending",
   "packages": {
     "ArtificialNegligence-Linux.tar.gz": {
-      "bytes": 74198729,
-      "sha256": "cf4082652d851ed3b95048d497877db64a2f7c41ab5576d40577ec5c572d970d"
+      "bytes": 74198549,
+      "sha256": "52065ae531cd26b9abe0b1d0f04a9d7bb01e8f6c1452375b48243c115ae1a1e6"
     },
     "ArtificialNegligence-Web-FTP.zip": {
-      "bytes": 55903553,
-      "sha256": "02255f37b4b42a81202f09863d86364a097ab9166c0c4324a035f248fe65b991"
+      "bytes": 55899990,
+      "sha256": "7e91472baaf5613e5f0b97036eb4dc1fc51f611da1034f4241a9cdfa1e5e3cfe"
     },
     "ArtificialNegligence-Windows.zip": {
-      "bytes": 77603611,
-      "sha256": "7c206a1a2e1d8841961f538af4403d46f3b8ba78b7bb0c93bdd5f32eb640652d"
+      "bytes": 77606355,
+      "sha256": "00a0560154e2ea09ded89eb2f3333b034e0d7f099b9c18e6a1d12c35624e6815"
     },
     "ArtificialNegligence.apk": {
-      "bytes": 67670655,
-      "sha256": "a3548f8dbd5b4f5a37c52ef552d02edbf1b81c23d38062cddb3fbb821732fa0b"
+      "bytes": 67673115,
+      "sha256": "3e91046d98f48f9ab774262355db7b7d2aa5c219a087a0bbcccecc2e5082743d"
     }
   },
   "linuxRuntime": "PASS: Ubuntu/WSL rendered guest sprite checks and virtual Input System gamepad adapter with shared HUD/controller routing",
