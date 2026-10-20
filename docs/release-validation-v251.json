@@ -30,7 +30,7 @@
   "physicalControllerTest": false,
   "physicalAndroid251Test": false,
   "physicalInAppUpdaterTest": false,
-  "webBrowserSmokeTest": "pending",
+  "webBrowserSmokeTest": "PASS: public final WebGL player rendered, no startup console errors",
   "packages": {
     "ArtificialNegligence-Linux.tar.gz": {
       "bytes": 74198549,
@@ -50,5 +50,11 @@
     }
   },
   "linuxRuntime": "PASS: Ubuntu/WSL rendered guest sprite checks and virtual Input System gamepad adapter with shared HUD/controller routing",
-  "physicalLinuxDeviceTest": false
+  "physicalLinuxDeviceTest": false,
+  "websiteDeployment": {
+    "url": "https://dustinwann.com/apps/artificial-negligence/",
+    "verified": true,
+    "files": 21,
+    "indexSha256": "ecd77043cfb70feabeabbf60a692e3d59486241c69bcda7cc0dc788d50e3a92b"
+  }
 }
