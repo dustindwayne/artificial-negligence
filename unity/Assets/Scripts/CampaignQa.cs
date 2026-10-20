@@ -52,7 +52,20 @@ namespace ArtificialNegligence {
     Debug.Log("AN_CAMPAIGN_STAGE_PASS / "+(stage+1));
    }
    if(wins!=2||bosses!=11||!stats.CharacterUnlocked(4))throw new Exception("Campaign totals incorrect / bosses "+bosses);
-   File.WriteAllText(Path.Combine(path,"campaign-result.json"),"{\"stages\":60,\"bosses\":11,\"victories\":2,\"wrathUnlocked\":true,\"scriptedProgression\":true,\"humanPlaythrough\":false}");
+   foreach(int legacyStage in new[]{12,18,35}){
+    stats=new RunStats{cityUnlocked=legacyStage,district=legacyStage};stats.EnsureCollection();
+    if(stats.wrathEncounters!=2||stats.CharacterUnlocked(4))throw new Exception("Legacy save auto-unlocked Wrath");
+    LoadLevel(legacyStage);SetMode(ScreenMode.Play);var final=enemies.SingleOrDefault(e=>e.type==12);
+    if(!final)throw new Exception("Pending Wrath never appeared / "+legacyStage);
+    for(int hit=0;final.hp>0&&hit<2000;hit++){final.QaStepCombat(.25f);final.Hit(2,3);}
+    if(final.hp>0||!stats.CharacterUnlocked(4)||stats.wrathEncounters!=3)throw new Exception("Legacy final fight did not unlock Wrath");
+    if(mode==ScreenMode.Narrative)FinishNarrative();
+    stats=JsonUtility.FromJson<RunStats>(JsonUtility.ToJson(stats));stats.EnsureCollection();stats.character=4;ApplyCharacter();
+    if(!stats.wrathFreed||stats.character!=4)throw new Exception("Recovered Wrath unlock lost after reload");
+    LoadLevel(legacyStage);if(enemies.Any(e=>e.type==12))throw new Exception("Recovered final fight repeated after unlock");
+   }
+   Debug.Log("AN_WRATH_SAVE_RECOVERY_PASS / level 13, later stage, next city cycle, real final defeat required, persisted playable unlock");
+   File.WriteAllText(Path.Combine(path,"campaign-result.json"),"{\"stages\":60,\"bosses\":11,\"victories\":2,\"wrathUnlocked\":true,\"scriptedProgression\":true,\"humanPlaythrough\":false,\"legacyWrathRecoveryCases\":3}");
    Debug.Log("AN_CAMPAIGN_QA_PASS / 60 stages, all quota/boss/exit gates, found weapon, three Wrath encounters, two victories, saved progression, next cycles");Application.Quit(0);
   }
  }

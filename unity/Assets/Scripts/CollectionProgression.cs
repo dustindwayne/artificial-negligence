@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 namespace ArtificialNegligence {
     public partial class RunStats {
-        public int collectionVersion=2,character,outfit;public bool wrathFreed;public int wrathEncounters;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
+        public int collectionVersion=2,character,outfit;public bool wrathFreed;public int wrathEncounters,wrathProgressVersion;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
         public int[] weaponRarities,armorRarities;
         public static readonly string[] Characters={"LOOPER","VALE","MENDER","ROOK","AI WRATH"};
         public static readonly string[] CharacterDescriptions={"A core runner with a blue pulse pack","A rooftop mechanic","A neighborhood medic","The original street survivor","A freed Sinister elite"};
@@ -16,6 +16,17 @@ namespace ArtificialNegligence {
         public bool HasWeapon {get{return weaponItemId>0&&gear[1]>0;}}
         public bool HasArmor {get{return armorItemId>0&&gear[2]>0;}}
         public void EnsureCollection(){
+            if(seenStoryScenes==null)seenStoryScenes=new System.Collections.Generic.List<int>();
+            // Older builds could finish these boss chapters without recording Wrath encounters.
+            // Restore only the two prior chapters; the final fight must still be won.
+            if(wrathProgressVersion<1){
+                int cleared=Math.Max(cityUnlocked,district),previous=cleared>=12?2:cleared>=6?1:0;
+                if(stageStars!=null&&stageStars.Length>5&&stageStars[5]>0)previous=Math.Max(previous,1);
+                if(stageStars!=null&&stageStars.Length>11&&stageStars[11]>0)previous=2;
+                if(seenStoryScenes.Contains(7))previous=Math.Max(previous,1);
+                if(seenStoryScenes.Contains(8))previous=2;
+                wrathEncounters=Math.Max(wrathEncounters,previous);wrathProgressVersion=1;
+            }
             wrathEncounters=wrathFreed?3:Mathf.Clamp(wrathEncounters,0,2);
             compute=Mathf.Clamp(compute,0,ComputeCapacity);momentum=Mathf.Clamp(momentum,0,100);
             if(seenStoryScenes==null)seenStoryScenes=new System.Collections.Generic.List<int>();

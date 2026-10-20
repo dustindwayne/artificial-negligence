@@ -38,8 +38,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.5";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=245;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.4.6";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=246;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -93,6 +93,13 @@ public static class BuildGame {
         Assert(RangeProtocol.Plan(protocolChunks,new System.Collections.Generic.HashSet<string>(protocolChunks.Select(x=>x.sha256))).Count==0,"Unchanged APK downloads data");
         Assert(RangeProtocol.SafeUrl("https://github.com/dustindwayne/artificial-negligence/releases/download/v2.3.0/ArtificialNegligence.apk")&&!RangeProtocol.SafeUrl("https://example.com/bad.apk"),"Unsafe release URL");
         Debug.Log("AN_RANGE_PLAN_PASS / bounded grouped requests, reused holes, zero-download case and URL validation");
+        foreach(int cleared in new[]{0,5,6,11,12,13,40}){
+            var legacy=JsonUtility.FromJson<RunStats>("{\"cityUnlocked\":"+cleared+"}");legacy.EnsureCollection();
+            Assert(legacy.wrathEncounters==(cleared>=12?2:cleared>=6?1:0)&&!legacy.wrathFreed,"Legacy Wrath chapters not restored / "+cleared);
+            int before=legacy.wrathEncounters;legacy.EnsureCollection();Assert(legacy.wrathEncounters==before&&legacy.wrathProgressVersion==1,"Wrath recovery repeated");
+        }
+        var oldDistrict=JsonUtility.FromJson<RunStats>("{\"district\":12}");oldDistrict.EnsureCollection();Assert(oldDistrict.wrathEncounters==2&&!oldDistrict.CharacterUnlocked(4),"District-only save lost pending final fight");
+        Debug.Log("AN_WRATH_SAVE_MIGRATION_PASS / legacy stages, district-only saves, idempotence, final fight still required");
         var inventory=new RunStats();inventory.EnsureCollection();Assert(inventory.WeaponCount==0&&inventory.SuitCount==0&&!inventory.HasWeapon&&!inventory.HasArmor&&!inventory.SelectEquipment(1,3),"Starter equipment was granted");
         inventory.GainXp(10000);Assert(inventory.WeaponCount==0&&inventory.SuitCount==0,"XP granted equipment");
         inventory.Discover(1,3,3);Assert(!inventory.HasWeapon,"Find auto-equipped a weapon");inventory.SelectEquipment(1,3);int first=inventory.weaponItemId;

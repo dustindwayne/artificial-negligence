@@ -1,7 +1,7 @@
 # Artificial Negligence
 ## Story and campaign direction
 
-**Build 2.4.5:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, five playable characters, permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+**Build 2.4.6:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, five playable characters, permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
 
 **Restore reality. Keep AI public.**
 
@@ -76,3 +76,5 @@ The monopoly is broken, but other cities remain disconnected. Further campaign c
 The corporate enforcement program is known as the Sinister. Human agents fight beside its bots, pursue runners, and deploy AI attacks. Ai Wrath, a heavyset elite dressed in black with a cigar, begins under its control. The first two confrontations occur in boss levels 6 and 12. He retreats after both; cracks in his orders become visible. A third encounter in level 13 breaks the program on defeat, after which he joins the resistance and becomes playable. Short two-line artwork scenes introduce each encounter and show the retreats and liberation, with occasional checkpoint radio lines between major encounters.
 
 GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.
+
+Older saves that have already cleared the first two boss chapters recover that encounter progress. If the player has passed level 13 without freeing Wrath, his pending final encounter follows them to a later district. The final defeat is still required.

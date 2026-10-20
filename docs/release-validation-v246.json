@@ -1,0 +1,39 @@
+{
+  "release": "2.4.6",
+  "builds": "PASS: Windows, Android ARM64, WebGL",
+  "windowsRuntime": "PASS",
+  "campaign": {
+    "physicsRoutes": 60,
+    "gpus": 1960,
+    "groundGaps": 443,
+    "scriptedStages": 60,
+    "bossEncounters": 11,
+    "cityVictories": 2,
+    "wrathUnlocked": true,
+    "legacyWrathRecoveryCases": 3,
+    "humanPlaythrough": false
+  },
+  "spriteFrames": 116,
+  "secretOutfit": "PASS: exact and wrong code, single-tap modal, story gate, toggle, all eight gutters",
+  "androidInstaller": "Packaged narrow FileProvider paths and matching signing certificate verified",
+  "androidTransport": "Prior patch tests passed normal, resume, retry/corruption, range rejection and full fallback; not a physical in-app installation test",
+  "physicalControllerTest": false,
+  "physicalAndroid246Test": false,
+  "webBrowserSmokeTest": "PASS: final 2.4.6 player rendered in browser; no startup console errors",
+  "packages": {
+    "ArtificialNegligence-Web-FTP.zip": {
+      "bytes": 41239702,
+      "sha256": "92865a13580a2fbf5e810d22fca5adf011c42b9f3da6fbfced612c2dec0c51b9"
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "bytes": 64838371,
+      "sha256": "ce1686c759897aabe6e9ce8a2620cc593d413e3c4f13655a896ee9cb03d66c58"
+    },
+    "ArtificialNegligence.apk": {
+      "bytes": 49990579,
+      "sha256": "fd96989061122b12d83b84708282faad1efe9fbefe8a334238c13250d4a74338"
+    }
+  },
+  "physicalAndroid246Install": "PASS: adb install -r succeeded; installed versionCode 246/versionName 2.4.6 verified; player data retained",
+  "wrathSaveRecovery": "PASS: legacy stage 13, later stage and next city cycle; final enemy spawned; defeat required; playable unlock survived JSON reload; no hostile Wrath after liberation"
+}

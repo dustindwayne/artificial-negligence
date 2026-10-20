@@ -1,6 +1,6 @@
 # Testing and compatibility
 
-## Release 2.4.5
+## Release 2.4.6
 
 - All three Unity targets built: Windows x64, Android ARM64, WebGL.
 - Generated route checks cover 60 routes, 1,960 GPUs and 443 ground gaps; low passages use the crouched collision shape.
@@ -11,9 +11,9 @@
 - Android package version, signature and continuity with the preceding signing certificate were checked.
 - Published download links and package SHA-256 values were verified.
 
-**Not yet verified:** physical Xbox/gamepad use over USB/Bluetooth across browsers, and final-release playtesting or in-app installation on a physical Android device. The earlier 2.4.4 updater test APK was installed over the existing app by USB and its installed version was verified. Software routing checks do not establish hardware compatibility for every controller.
+**Not yet verified:** physical Xbox/gamepad use over USB/Bluetooth, final-release Android playtesting, and installation through the in-app updater. The 2.4.6 APK was installed over the existing Android app by USB and its installed version was verified. Software routing checks do not establish hardware compatibility for every controller.
 
-[Release verification record](release-validation-v245.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
+[Release verification record](release-validation-v246.json). Current package checksums are supplied as SHA256SUMS.txt in the release.
 
 ## Historical evidence
 
@@ -26,3 +26,7 @@ Physics validation passed for 60 generated levels, 1,960 GPU placements and 443 
 This is automated regression evidence, not a human playthrough or a difficulty/balance assessment. The script positions the player at pickups, applies damage through boss hit rules, ignores player damage, and uses real movement for each exit approach. [Recorded progression](campaign-completion-validation.json).
 
 The hidden outfit has a separate runtime check for a single-tap input box, wrong-code rejection, successful code entry, retained story unlock, costume selection and all eight rendered frame gutters. [Costume verification](wonder-wrath-validation.json).
+
+## Wrath save recovery
+
+Save fixtures cover progression before/after each boss chapter, level 13, later stages, later cycles, district-only legacy saves and repeated migration. Runtime checks require the final Wrath enemy to spawn, remain locked until defeat, become selectable after defeat/reload, and stop spawning after liberation. Fresh-run campaign checks retain the 6/12/13 sequence.

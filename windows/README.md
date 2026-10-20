@@ -1,4 +1,4 @@
-# Windows — 2.4.5
+# Windows — 2.4.6
 
 [Download latest Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip). Extract every file, then run ArtificialNegligence.exe. Optional Launch-HD-Preview.cmd changes visual rendering only, without granting progress. Normal play starts at the earned graphics tier.
 

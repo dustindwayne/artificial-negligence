@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.6 — Restore missing Ai Wrath encounter
+
+- Recover the first two Wrath encounter credits from completed boss chapters in older saves, without granting his playable unlock.
+- Spawn the pending final fight in level 13, or a later entered district for saves already past it. Defeating him unlocks the character normally.
+- Save the migration once; preserve existing unlocks and the three-encounter sequence on fresh runs.
+- Regression tests cover old level-13 saves, later stages and later city cycles, final defeat, save reload, playable selection and no repeated enemy spawn after liberation.
+
+
 ## 2.4.5 — Android updater, campaign ending and hidden outfit
 
 - Correct Android FileProvider access to downloaded APKs and grant the installer read access explicitly.

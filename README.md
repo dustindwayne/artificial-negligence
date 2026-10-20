@@ -12,7 +12,7 @@
   <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
 </p>
 <p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.5 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center">v2.4.6 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
 
 ## The world broke. Take it back.
 
@@ -26,12 +26,11 @@ The story continues through a first-run opening, short skippable artwork scenes,
 
 ## New in this update
 
-- **A proper city ending:** finish stage 30 to see the public AI liberated, then continue into another city cycle with your progress intact.
-- **Android update repair:** fixes the installer handoff, restores verified downloads after a restart, and recovers from failed partial downloads. Players on 2.4.3 or earlier whose Install button fails need one manual APK install over the existing game.
-- **A hidden Ai Wrath cosmetic:** a secret code unlocks a creator-supplied costume. Wrath still has to be freed through the story before he can wear it. All eight poses use isolated masks, shared scale and transparent gutters.
-- **Completion checks:** physics route checks plus scripted progression cover 60 stages, 11 boss encounters, GPU/boss gates, saved unlocks, victory screens and next-cycle continuation. This is automated regression testing, not a human playthrough.
+- **Ai Wrath unlock repair for existing saves:** older saves could reach level 13 without the encounter counter, preventing him from appearing. Completed boss chapters now restore the first two encounters. His final fight appears in level 13 or the next district you enter after it if you have already progressed farther.
+- **Defeat still required:** save recovery never grants the playable character automatically. Win the final Wrath fight, then select him from the character screen; the unlock survives restarting the game.
+- **New runs retain the original sequence:** boss levels **6 and 12**, then the final encounter in **level 13**. Already-freed Wrath stays unlocked and does not return as an enemy.
 
-Three Wrath encounters, tougher opposition, the shuffled gameplay soundtrack, controller support and the browser edition remain available. [Full changelog](CHANGELOG.md).
+The Android installer repair, city victory/next cycles, hidden cosmetic, stronger bosses, shuffled soundtrack, controller support and browser edition remain included. [Full changelog](CHANGELOG.md).
 
 ## Screens from the game
 
@@ -51,11 +50,11 @@ These are actual Windows captures. The banner above is promotional artwork.
 
 ### City liberated
 
-![Victory after completing the city](docs/city-victory-v245.png)
+![Victory after completing the city](docs/city-victory-v246.png)
 
 ### Browser edition
 
-![Browser edition running the actual 2.4.5 game](docs/web-v245.png)
+![Browser edition running the actual 2.4.6 game](docs/web-v246.png)
 
 ## Built around exploration and choice
 

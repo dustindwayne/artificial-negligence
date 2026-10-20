@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D project / 2.4.5
+# Artificial Negligence — Unity 2D project / 2.4.6
 
 Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
 
@@ -48,3 +48,7 @@ The four gameplay tracks play once each in shuffle-bag order with crossfades. Me
 ## City completion and hidden costume
 
 Every 30-stage city cycle ends with the victory screen; continue preserves progress and opens the next cycle. A scripted 60-stage regression checks quotas, bosses, found equipment, saved unlocks, both endings and continuation, alongside independent route physics checks. Creator-supplied hidden costume artwork for Ai Wrath uses eight isolated frames with a shared scale and four-pixel transparent gutters. Costume unlocking never skips his story unlock.
+
+## Existing-save Wrath recovery
+
+A one-time save migration restores the first two Wrath encounter credits from completed boss chapters. A pending final encounter spawns in level 13 or a later entered stage for players who have passed it. It never awards the character without a final defeat. Fresh saves retain the normal 6/12/13 encounters.

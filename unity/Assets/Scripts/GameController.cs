@@ -114,8 +114,9 @@ namespace ArtificialNegligence {
                 int type=(int)row.w;if(type==12&&stats.wrathFreed)continue;enemyIndex++;var sr=SpriteObject("Security / "+EnemyAgent.Names[type],enemyFrames[type*4],PixelCenter(row.x+7.5f,202.8f),8,false);
                 var e=sr.gameObject.AddComponent<EnemyAgent>();e.Initialize(this,type,row.x/PPU);enemies.Add(e);
             }
-            if(CityRoute.Boss(index)||index==12&&!stats.wrathFreed&&stats.wrathEncounters==2){
-                int slot=CombatBalance.WrathSlot(index);int bossType=!stats.wrathFreed&&slot==stats.wrathEncounters?12:6+CityRoute.Area(index)%3;var bossVisual=SpriteObject(EnemyAgent.Names[bossType],enemyFrames[bossType*4],PixelCenter(worldLength-165,193.68f),8,false);
+            bool finalWrathPending=!stats.wrathFreed&&stats.wrathEncounters==2&&index>=12;
+            if(CityRoute.Boss(index)||finalWrathPending){
+                int slot=CombatBalance.WrathSlot(index);int bossType=!stats.wrathFreed&&(slot==stats.wrathEncounters||finalWrathPending)?12:6+CityRoute.Area(index)%3;var bossVisual=SpriteObject(EnemyAgent.Names[bossType],enemyFrames[bossType*4],PixelCenter(worldLength-165,193.68f),8,false);
                 var boss=bossVisual.gameObject.AddComponent<EnemyAgent>();boss.Initialize(this,bossType,(worldLength-165)/PPU);enemies.Add(boss);
             }
             BuildSceneDepth();BuildLowPassages();ResetTraversal();ResetSupportScene();
