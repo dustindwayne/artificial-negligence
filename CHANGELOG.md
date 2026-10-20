@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.4.10 — Prison Mike and the current cast
+
+- Add Prison Mike with a purple bandana, Hawaiian shirt, khaki shorts and flip-flops, based on a creator-supplied likeness reference.
+- Make Davey Goats recruitable at 24 distinct GPUs, Brad Jammin’ after clearing stage 6 and Prison Mike after clearing stage 12; their old code routes no longer unlock them. Preserve prior unlocks.
+- Retire three earlier character designs, remove their active sprite atlas and safely return affected saved selections to Looper.
+- Use a six-character selector beside the large preview and cosmetics dropdown.
+- Replace the README hero with the complete current cast and title; rewrite current features and replace the displayed screenshots with current captures.
+- Retain Mikey O’Redd’s exact lowercase code and Ai Wrath’s three-encounter story gate.
+
+
 ## 2.4.9 — Mikey O’Redd
 
 - Add Mikey O’Redd, a short red-bearded leprechaun with a bucket of gold and a smoking blunt.

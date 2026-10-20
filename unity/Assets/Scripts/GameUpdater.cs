@@ -26,7 +26,7 @@ namespace ArtificialNegligence {
     }
     public partial class GameUpdater:MonoBehaviour {
         const string Root="https://raw.githubusercontent.com/dustindwayne/artificial-negligence/main/apk/";
-        const int Version=249;
+        const int Version=250;
         [Serializable] public class Chunk {public string sha256;public int size;}
         [Serializable] public class Manifest {public int versionCode,protocol;public string version,sha256,downloadUrl;public long size;public Chunk[] chunks;}
         struct Local {public long offset;public int size;}

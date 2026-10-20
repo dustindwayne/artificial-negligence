@@ -3,12 +3,14 @@ using System.Linq;
 using UnityEngine;
 namespace ArtificialNegligence {
     public partial class RunStats {
-        public int collectionVersion=2,character,outfit;public bool wrathFreed,daveyGoatsUnlocked,bradJamminUnlocked,mikeyReddUnlocked;public int wrathEncounters,wrathProgressVersion;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
+        public int collectionVersion=2,character,outfit;public bool wrathFreed,daveyGoatsUnlocked,bradJamminUnlocked,mikeyReddUnlocked,prisonMikeUnlocked;public int wrathEncounters,wrathProgressVersion;public System.Collections.Generic.List<int> seenStoryScenes=new System.Collections.Generic.List<int>();
         public int[] weaponRarities,armorRarities;
-        public static readonly string[] Characters={"LOOPER","VALE","MENDER","ROOK","AI WRATH","DAVEY GOATS","BRAD JAMMIN'","MIKEY O'REDD"};
-        public static readonly string[] CharacterDescriptions={"A core runner with a blue pulse pack","A rooftop mechanic","A neighborhood medic","The original street survivor","A freed Sinister elite","A goat outside the program","A boombox-carrying resistance ally","A red-bearded rebel with a bucket of gold"};
+        public static readonly string[] Characters={"LOOPER","","","","AI WRATH","DAVEY GOATS","BRAD JAMMIN'","MIKEY O'REDD","PRISON MIKE"};
+        public static readonly string[] CharacterDescriptions={"A core runner with a blue pulse pack","","","","A freed Sinister elite","A goat outside the program","A boombox-carrying resistance ally","A red-bearded rebel with a bucket of gold","A bandana-wearing island-shirt rebel"};
+        // Retain retired IDs 1-3 so old saves cannot select a different character by accident.
+        public static readonly int[] ActiveCharacters={0,4,5,6,7,8};
         public static readonly string[] Outfits={"ORIGINAL","CYAN THREAD","GOLD THREAD","VIOLET THREAD"};
-        public bool CharacterUnlocked(int id){return id==0||id==1&&GraphicsGpus>=24||id==2&&cityUnlocked>=6||id==3&&cityUnlocked>=12||id==4&&wrathFreed||id==5&&daveyGoatsUnlocked||id==6&&bradJamminUnlocked||id==7&&mikeyReddUnlocked;}
+        public bool CharacterUnlocked(int id){return id==0||id==4&&wrathFreed||id==5&&(daveyGoatsUnlocked||GraphicsGpus>=24)||id==6&&(bradJamminUnlocked||cityUnlocked>=6)||id==7&&mikeyReddUnlocked||id==8&&(prisonMikeUnlocked||cityUnlocked>=12);}
         public bool OutfitUnlocked(int id){return id==0||id==1&&rank>=3||id==2&&GraphicsGpus>=75||id==3&&cityUnlocked>=12||id==4&&wrathFreed;}
         [Serializable] public class EquipmentItem {public int id,slot,family,tier;public string Name {get{return (slot==1?Weapons[family]:Suits[family]+" ARMOR")+" #"+id.ToString("000");}}}
         public System.Collections.Generic.List<EquipmentItem> inventory=new System.Collections.Generic.List<EquipmentItem>();

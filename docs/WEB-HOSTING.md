@@ -1,4 +1,4 @@
-# Web build and FTP hosting — 2.4.9
+# Web build and FTP hosting — 2.4.10
 
 The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL build. It contains a `play/` folder and upload instructions. No database or server application is required.
 
@@ -30,3 +30,7 @@ The promotional banner is AI-generated; gameplay captures are actual game output
 ## Build
 
 Open the Unity project with Web Build Support for 6000.6.5f1. `BuildWeb.Build` builds the WebGL player with Web audio import settings, a 512 MiB initial heap, gzip fallback and hashed filenames. `tools/package_web.py` restores the themed page around the generated filenames and creates the FTP archive. The initial download is roughly 40 MB; size changes with each build. Web audio uses compressed-in-memory imports because browser builds do not use the native streaming path.
+
+## Updating an existing host
+
+`tools/deploy_web.py` uploads a generated web directory over verified FTPS. Credentials are read from environment variables; keep them outside source control. Pass the host, existing target folder and public URL explicitly. Assets are verified before the entry page is replaced. The target folder receives the contents of the packaged `play/` directory, preserving its internal paths.

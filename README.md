@@ -1,158 +1,131 @@
 <p align="center">
-  <img src="docs/looper-vs-wrath-banner.png" width="960" alt="Artificial Negligence — Looper confronts Ai Wrath. Promotional artwork.">
+  <img src="docs/cast-banner-v250.png" width="1100" alt="Artificial Negligence — Looper, Ai Wrath, Davey Goats, Brad Jammin’, Mikey O’Redd and Prison Mike. Promotional artwork.">
 </p>
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
-<p align="center">A story-driven 2D pixel platformer for Android, Windows, and your browser.</p>
+<p align="center">A story-driven 2D pixel platformer for Android, Windows and your browser.</p>
 <p align="center">
   <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk"><img src="docs/download-android.svg" width="250" height="58" alt="Download Android APK"></a>
   <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip"><img src="docs/download-windows.svg" width="250" height="58" alt="Download Windows ZIP"></a>
 </p>
-<p align="center">
-  <a href="#new-in-this-update">What's new</a> · <a href="#screens-from-the-game">Screenshots</a> · <a href="#download-and-play">Install &amp; controls</a> · <a href="#creative-direction-and-ai-disclosure">AI disclosure</a> · <a href="STORY.md">Story</a>
-</p>
-<p align="center"><a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">Download browser build / FTP package</a></p>
-<p align="center">v2.4.9 · Playtest build · Android 8+ ARM64 · Windows 64-bit</p>
+<p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a> · <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip">WebGL package</a> · <a href="https://github.com/dustindwayne/artificial-negligence/releases/tag/v2.4.10">Release notes</a></p>
+<p align="center">v2.4.10 · Playtest build · Android 8+ ARM64 · Windows x64</p>
 
 ## The world broke. Take it back.
 
-The global AI explosion gave ordinary people freedom. The corporations fought to reclaim it, hoarding GPUs and reserving intelligence for the elite. Their control system glitched reality itself: color disappeared, motion lost its frames, and whole neighborhoods fell into crude pixels.
+The global AI explosion set ordinary people free. Corporations tried to seize the GPUs and reserve intelligence for the elite. Their control system glitched reality into crude pixels.
 
-You are **Looper**. Recover the GPUs, restore the world, and keep AI in the hands of the people. Cross the city, find your equipment, and confront **the Sinister**—human agents and bots enforcing corporate control.
+You are **Looper**. Cross the city, recover the GPUs, restore the world and return AI to the people. The **Sinister** send bots, pursuing human agents and bosses to stop you. Short artwork scenes and checkpoint dialogue carry the story through the campaign. Ai Wrath begins as an enemy; breaking his program brings him into the resistance.
 
-The story continues through a first-run opening, short skippable artwork scenes, and occasional checkpoint transmissions. **Ai Wrath** begins as a Sinister elite. Survive his first two boss encounters and defeat him in the third to break the program and unlock him as a playable ally. [Read the campaign outline](STORY.md).
+## New in this build
 
----
+- **Prison Mike:** purple bandana, Hawaiian shirt, khaki shorts and flip-flops, with eight animation poses.
+- **Gameplay unlocks:** Davey Goats joins at 24 distinct GPUs, Brad Jammin’ after stage 6 and Prison Mike after stage 12.
+- **Six-character cast:** a readable roster beside a large active preview, equipped-item details and an in-preview cosmetics dropdown.
+- **New ensemble artwork:** the banner above features the complete current cast. Screens below are captures from this build.
 
-## New in this update
+## Meet the resistance
 
-- **Mikey O’Redd joins the resistance:** a short, red-haired and red-bearded leprechaun carrying his bucket of gold and smoking a blunt. Eight animation poses preserve his outfit and bucket.
-- **Code-unlocked character:** redeem his character code through the hidden signal decoder, then select him in the character menu. Unlocking him grants no equipment or story progress.
-- **Eight-character roster:** compact entries fit beside the large active preview, equipped-item details and cosmetics dropdown. Locked characters remain silhouettes.
-
-[Full changelog](CHANGELOG.md).
-
-## Screens from the game
-
-These are actual Windows captures. The banner above is promotional artwork.
-
-| Platforming at HD Pixel detail | Ai Wrath's liberation |
+| Character | Unlock |
 | --- | --- |
-| ![HD Pixel platforming](docs/gameplay-v248.png) | ![Ai Wrath dialogue scene](docs/wrath-v248.png) |
+| **Looper** | Available from the start |
+| **Davey Goats** | Collect 24 distinct GPUs |
+| **Brad Jammin’** | Clear stage 6 |
+| **Prison Mike** | Clear stage 12 |
+| **Ai Wrath** | Defeat his third encounter in stage 13, following encounters in stages 6 and 12 |
+| **Mikey O’Redd** | Enter `mikeyredd` in the hidden signal decoder |
 
-| Character and loadout | Found-item inventory |
+Locked characters appear as silhouettes. Characters share progress, inventory and combat systems; distinct signature powers remain a future goal. Existing earned unlocks are preserved.
+
+## See the game
+
+The banner is AI-generated promotional art. These are actual Windows captures from **2.4.10**.
+
+| Platforming at HD Pixel detail | Current character and loadout screen |
 | --- | --- |
-| ![Eight-character roster with Mikey O’Redd selected](docs/characters-v249.png) | ![Individual weapons and armor in inventory](docs/inventory-v248.png) |
+| ![Current platforming HUD](docs/gameplay-v250.png) | ![Prison Mike in the six-character roster](docs/characters-v250.png) |
 
-| Live start screen | Intellect terminal |
+| Found-item inventory | Story scene |
 | --- | --- |
-| ![Animated city start screen](docs/title-v248.png) | ![Logic puzzle terminal](docs/puzzle-v248.png) |
+| ![Individual found weapons and armor](docs/inventory-v250.png) | ![Current story dialogue artwork](docs/story-v250.png) |
 
-### Clearer touch controls
+| Animated start screen | Intellect terminal |
+| --- | --- |
+| ![Current start screen](docs/title-v250.png) | ![Changing logic puzzle](docs/puzzle-v250.png) |
 
-![Touch layout with a found weapon and earned AI help](docs/hud-v248.png)
+## Play your way
 
-### City liberated
+### Restore the world
 
-![Victory after completing the city](docs/city-victory-v246.png)
+Explore **30 generated stages across five districts**, then continue into harder city cycles. Stacked ledges, ground gaps, rooftop climbs, hazards, checkpoints, low passages and airborne GPUs reward movement and exploration.
 
-### Browser edition
-
-![Browser edition running the actual 2.4.9 game](docs/web-v249.png)
-
-## Built around exploration and choice
-
-### Run, jump, restore
-
-Explore **30 generated stages across five districts**, reach the city victory screen, then continue into further cycles of increasing resistance. Varied platform surfaces, stacked ledges, ground gaps, rooftop climbs, hazards, checkpoints, low passages, and airborne GPUs give each route a different rhythm. Route validation covers **60 routes, 1,960 GPUs, and 443 ground gaps**, using base movement and ducking for low routes without equipment upgrades.
-
-Distinct GPUs permanently improve the world's graphics:
+Distinct GPUs permanently improve the graphics:
 
 **Bootstrap → 8-bit → 16-bit → Neon → HD Pixel → Ultra**
 
-Revisited districts keep your earned visual quality. Recollecting the same core does not grant duplicate restoration credit. Each pickup also adds to a **separate compute bank** for temporary AI support; spending compute never reduces visual restoration. Chat support must be earned through momentum, and taking damage drains that meter.
+GPUs also fill a separate compute bank. Earn momentum through combat and close calls to request temporary AI help. Spending compute does not reduce restored graphics; taking damage drains momentum.
 
-### Find your build
+### Find your equipment
 
-**You start unarmed and unarmored.** Search supply boxes for your first weapon, then equip it from the inventory. Supply boxes contain individual equipment finds, including multiple copies and different rarities. Equipment never auto-equips, and XP never grants weapons or armor.
+**You start unarmed and unarmored.** Find equipment in supply boxes, keep individual copies and equip them deliberately from the inventory. Items do not auto-equip; XP does not grant weapons or armor.
 
-| Weapon | Strength | Tradeoff |
+| Weapon | Role | Tradeoff |
 | --- | --- | --- |
 | Pulse | Balanced fire | Shields resist it |
 | Arc | Shield breaking and chaining | Weaker against heavy armor |
-| Scatter | Spread against swarms | Short range |
+| Scatter | Crowd control | Short range |
 | Rail | Piercing and armor damage | Weaker against shields |
 
-Balanced, Kinetic, Insulated, and Light armor provide different protection and movement tradeoffs. Keep finds in the inventory, equip deliberately, and spend points to improve equipment you own. Personal upgrades and talents add longer-term progression.
+Balanced, Kinetic, Insulated and Light armor offer different protection and movement tradeoffs. Spend points on owned equipment, personal upgrades and talents.
 
 **Common → Rare → Epic → Legend → Ultra**
 
-The workshop upgrades owned equipment through Legend. **Ultra is found only in boxes, with a 0.5% chance per box.**
+The workshop improves owned equipment through Legend. **Ultra equipment is found only in boxes, with a 0.5% chance per box.**
 
-### Unlock the resistance
+### Outsmart the Sinister
 
-Looper is available from the start. Unlock **Vale** with 24 distinct GPUs, **Mender** by clearing stage 6, **Rook** by clearing stage 12, and **Ai Wrath** after the third encounter in level 13. Already-unlocked saves retain him. Locked characters appear as silhouettes; the character screen shows the selected character, outfit, and equipped items.
+Twelve puzzle families keep intellect terminals varied. Each terminal gives one attempt; wrong answers give no powerup. Human agents pursue you, bots pressure your route and bosses test movement and equipment choices.
 
-Three additional secret allies, **Davey Goats**, **Brad Jammin’** and **Mikey O’Redd**, unlock with character codes. Their outfits are visual identities; Brad’s boombox does not grant a free inventory weapon.
-
-Characters currently share combat stats and inventory. Individual signature powers remain part of the [roadmap](ROADMAP.md).
-
-### Outthink the Sinister
-
-Twelve puzzle families offer changing intellect terminals. Each terminal allows one attempt; a wrong answer gives no powerup. Bots, pursuing human agents, and the Auditor, Harvester, and Executor bosses test your movement and equipment choices.
-
-Choose **Relaxed, Standard, Hard, or Adaptive**. Adaptive increases pressure after strong clears and eases it after struggling clears or defeat; adjustments apply between stages.
+Choose **Relaxed, Standard, Hard or Adaptive**. Adaptive adjusts pressure between stages based on how you play.
 
 ## Download and play
 
-- **[Web / FTP package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** upload the included `play/` folder to your website. [Hosting instructions](docs/WEB-HOSTING.md).
+- **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8+, ARM64. Install over the existing app to retain local progress.
+- **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the complete archive and run `ArtificialNegligence.exe`. Keep its Data folder and supporting files alongside it.
+- **[WebGL package](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Web-FTP.zip):** browser game and hosting files. [Hosting guide](docs/WEB-HOSTING.md).
 
-- **[Android APK](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence.apk):** Android 8.0+, ARM64. Install over the existing app to retain local progress. Android asks you to approve installation.
-- **[Windows ZIP](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Windows.zip):** extract the entire archive, then run `ArtificialNegligence.exe`. Keep the Data folder and supporting files beside it. The optional HD preview launcher changes rendering only and grants no progress.
-
-Install updates over your existing copy to keep local progress. Saves are local to each platform.
+Progress saves locally. Android, Windows and browser saves do not sync.
 
 ### Controls
 
-| Action | Windows | Android |
+| Action | Keyboard | Android |
 | --- | --- | --- |
 | Move | A / D or arrows | Left / right |
-| Jump | Space, W, or Up | Jump |
-| Duck | S / Down | Duck |
-| Slide while moving | Ctrl | Press Down while moving |
-| Equipped weapon fire | J / F | Fire (after equipping a find) |
+| Jump | Space, W or Up | Jump |
+| Duck / moving slide | S / Down · Ctrl | Hold Down / press while moving |
+| Equipped weapon fire | J / F | Fire, after equipping a find |
 | Dash | Shift / K | Dash |
-| Earned AI assist / type | R / Q | AI Help / Menu → AI Type |
-| Intellect terminal | E | Nearby Interact prompt |
-| Inventory | I / G | Menu → Inventory |
-| Character / upgrades | C / U | Menu |
+| Earned AI help / type | R / Q | AI Help / Menu → AI Type |
+| Terminal | E | Nearby Interact |
+| Inventory / character / upgrades | I or G / C / U | Menu |
 | Pause | Escape | Menu |
-| Story: continue / skip | Space or Enter / Escape | Continue / Skip |
 
-### Controllers
-
-Windows supports Xbox/XInput-compatible controllers; web supports standard-mapped browser gamepads. A jumps/confirms, X or RT attacks, B slides/backs out, RB dashes, Y connects, LB asks for earned help, LT cycles assist, View opens inventory, and Menu pauses. Stick/D-pad navigates menus. [Full controls and tested limits](docs/CONTROLS.md).
+Windows supports Xbox/XInput-compatible controllers; web supports standard-mapped browser gamepads. **A** jumps/confirms, **X/RT** attacks, **B** slides/backs out, **RB** dashes and **Menu** pauses. [Full controls and compatibility](docs/CONTROLS.md).
 
 ### Updates
 
-On Android, use **Settings → Check for Updates**. The updater reuses matching regions from the installed APK, downloads missing regions in parallel, verifies the completed package, and hands installation to Android. Actual savings depend on what changed; unchanged music and art can be reused. Small balance updates can arrive separately.
-
-The current APK is hosted once in GitHub Releases. [`apk/`](apk/) provides its link and update manifest. One v2.3.0 bridge remains for older clients. Windows updates are full ZIP downloads. The web build updates when its hosting files are replaced and the page reloads; browser saves stay separate from native saves.
-
----
+Android: **Settings → Check for Updates**. Downloads reuse matching installed/cached regions where possible and verify the completed APK before handing installation to Android. Windows uses the latest ZIP; browser updates arrive when the hosting files are replaced. [Update details](docs/UPDATES.md).
 
 ## Creative direction and AI disclosure
 
-**Creator and creative director: Dustin (dustindwayne).** The original game concept, world, gameplay vision, art-style direction, and overall creative direction are his ideas. He supplied the music and visual references and directed the work.
+**Creator and creative director: Dustin Wann (dustindwayne).** The original concept, world, gameplay vision, art direction, music selection and character ideas are his direction.
 
-**AI was used to build this game.** Codex/ChatGPT assisted with programming, generated visual assets, implementation, integration, and testing. This is an AI-assisted playtest build, not a claim of entirely hand-coded or hand-drawn production.
+**AI was used to build this game.** Codex/ChatGPT assisted with programming, generated artwork, implementation, integration and testing. This is an AI-assisted playtest build. The art roadmap moves toward creator-drawn characters and key poses, with AI assisting frames under creator review.
 
-The art roadmap moves toward creator-drawn characters and key poses, with AI assisting animation frames under the creator's review. [Credits and disclosure](CREDITS.md) · [Art roadmap](ROADMAP.md) · [Banner generation record](docs/banner-generation-v241.md).
+[Credits](CREDITS.md) · [Art roadmap](ROADMAP.md) · [Current banner generation record](docs/cast-banner-generation-v250.md)
 
 ## Development and testing
 
-Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Android Build Support. `BuildGame.Desktop`, `BuildGame.Android`, and `BuildWeb.Build` run puzzle, collection, rarity, sprite-gutter, and route validation before packaging.
+Open [`unity/`](unity/) in **Unity 6000.6.5f1** with the relevant platform modules. Build methods validate puzzles, equipment rules, sprite gutters and generated routes before packaging. Automated route checks cover **60 routes, 1,960 GPUs and 443 ground gaps**. Automated checks do not replace human balance testing; physical controller compatibility and in-app Android installation remain to be tested.
 
-Automated checks cover gameplay rules, generated routes, inventory, story, controller routing and build integrity. Browser startup was checked in WebGL. Physical controller and Android-device testing remain outstanding. [Testing and compatibility](docs/TESTING.md).
-
-[Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)
+[Testing and compatibility](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)

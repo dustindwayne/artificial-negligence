@@ -1,64 +1,13 @@
-# Artificial Negligence — Unity 2D project / 2.4.9
+# Artificial Negligence — Unity 2D / 2.4.10
 
-Unity 6000.6.5f1, URP 2D. Open Assets/Scenes/ArtificialNegligence.unity and press Play. The active game is 2D; discarded perspective experiments are not the production game.
+See the [game README](../README.md) for current features, downloads and screenshots.
 
-## Implemented
+## Characters
 
-30 generated stages across five districts and further cycles; 60 route validation cases. Varied platforms, gaps, airborne GPUs, duck/slide passages, permanent GPU graphics restoration and separate compute/momentum-gated AI support. No starter or XP-granted weapons/armor: find individual items, retain copies, manually equip and upgrade owned equipment. Five gameplay-unlocked characters including Ai Wrath, short artwork story scenes, twelve puzzle families with one attempt, bots/human Sinister agents/bosses, four difficulty modes and contextual music.
+Six active characters: Looper, Ai Wrath, Davey Goats, Brad Jammin’, Mikey O’Redd and Prison Mike. Davey requires 24 distinct GPUs; Brad requires clearing stage 6; Prison Mike requires clearing stage 12. Ai Wrath requires the three story encounters. Mikey retains his secret code. Removed saved character selections fall back to Looper; retained unlocks and equipment stay intact.
 
-Individual ally signature powers, the full campaign outline and creator-drawn sprite replacements remain planned.
+## Build and validate
 
-## Controls
+Unity 6000.6.5f1. BuildRelease.All builds Windows, Android and WebGL. Validation checks generated routes, puzzle solutions, loot, equipment rules and 124 isolated sprite frames. Runtime QA covers progression, character migration, HUD/cosmetics and controller routing. Signing credentials remain local.
 
-Keyboard: A/D or arrows move; Space/W/Up jump; S/Down duck; Ctrl moving slide; J/F attack; Shift/K dash; E terminal; I/G inventory; C character; U upgrades; Escape pause/skip; Enter/Space story advance.
-
-Windows XInput and standard-mapped web gamepads: stick/D-pad movement and duck, A jump/confirm, B slide/back/skip, X/RT attack, Y terminal, RB dash, LB earned AI assist, LT assist type, View inventory, Menu pause. Android uses touch controls. See ../docs/CONTROLS.md for target limits and verification.
-
-## Build
-
-- BuildGame.Desktop: Windows x64.
-- BuildGame.Android: Android 8+ ARM64, SDK 35, NDK r27c, JDK 17.
-- BuildWeb.Build: WebGL with gzip fallback, hashed names and Web audio import override.
-- BuildRelease.All: all three targets sequentially.
-- After a Web build, run tools/package_web.py from the repository root to restore the themed index and package it.
-
-Install matching Unity platform modules. Build methods configure settings and validate gameplay, puzzle rewards, rarity, inventory, sprite gutters and generated reachability. Native audio uses streaming; Web uses compressed-in-memory AAC imports. Game surfaces and collisions retain the same world footprint at all visual tiers.
-
-Example: Unity.exe -batchmode -quit -projectPath <project> -executeMethod BuildRelease.All -logFile <log>
-
-Configure the Android SDK, JDK, NDK and signing key in Unity for your development environment. The build helper uses available configured tools. Never commit a signing key or password. Published APKs currently use the same playtest signing certificate across updates.
-
-## Checks and saves
-
-Run the Windows executable with -qa -qaOutput <folder> for isolated checks and captures; QA suppresses save writes. Checks include story flow, found-only inventory, locked silhouettes, GPU visual tiers, movement, upgrades, puzzles, bosses, music, Wrath liberation and injected controller input. Physical controller and Android-device validation remain outstanding.
-
-Native progress is local; browser progress belongs to that browser/site. The legacy menu-granted loadout migration backs up progress-before-loot-inventory and clears old granted gear while preserving other progression. New equipment has individual IDs and retains found copies.
-
-Android updates use the current release manifest plus a frozen v2.3.0 bridge. Windows updates are full ZIPs. Web hosting uses static files and page reloads, with no Android updater. See ../docs/UPDATES.md and ../docs/WEB-HOSTING.md.
-
-Concept, world, gameplay vision and art direction: Dustin (dustindwayne). AI assisted programming, visuals, implementation and testing. See CREDITS.md, STORY.md and ROADMAP.md; STORY-PRESENTATION.md describes limited dialogue.
-
-
-## Combat and soundtrack
-
-Ai Wrath encounters are boss levels 6 and 12, then level 13 for his final defeat/unlock. Each fight has three damage-gated phases; guard disruption, armor counters, aimed fans, bursts, rushes and ground waves. First two wins trigger retreats. Existing unlocked saves remain unlocked. Bot/agent health and attack pressure are increased; bosses resist burst kills and Wrath recovers from pits without defeat credit.
-
-The four gameplay tracks play once each in shuffle-bag order with crossfades. Menus and stage changes retain the current track and playback position. Menu, boss, upgrade, victory and defeat contexts remain separate.
-
-## City completion and hidden costume
-
-Every 30-stage city cycle ends with the victory screen; continue preserves progress and opens the next cycle. A scripted 60-stage regression checks quotas, bosses, found equipment, saved unlocks, both endings and continuation, alongside independent route physics checks. Creator-supplied hidden costume artwork for Ai Wrath uses eight isolated frames with a shared scale and four-pixel transparent gutters. Costume unlocking never skips his story unlock.
-
-## Existing-save Wrath recovery
-
-A one-time save migration restores the first two Wrath encounter credits from completed boss chapters. A pending final encounter spawns in level 13 or a later entered stage for players who have passed it. It never awards the character without a final defeat. Fresh saves retain the normal 6/12/13 encounters.
-
-## Character preview and controls
-
-The active-character preview is enlarged with a cosmetics dropdown and equipped gear. Mobile controls combine Down duck/slide, only show Fire for an equipped find, and group movement/actions at opposite corners. Menu holds inventory, character, upgrades, AI type, settings and controls; settings returns to Pause. AI Help stays earned and terminal interaction remains contextual.
-
-## Secret allies
-
-The eight-character roster includes code-unlocked Davey Goats and Brad Jammin’. Code unlocks persist across profile loads; they grant no gear, XP or campaign completion. Brad carries his boombox in all eight animation poses.
-
-Mikey O’Redd joins the secret roster with the exact code `mikeyredd`. He retains his bucket of gold and blunt in all eight poses; code redemption grants no equipment or campaign progress.
+Character codes and gameplay recruits do not grant equipment. All characters share progress and inventory. Individual signature powers are roadmap work.

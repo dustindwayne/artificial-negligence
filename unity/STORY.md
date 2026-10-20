@@ -1,7 +1,7 @@
 # Artificial Negligence
 ## Story and campaign direction
 
-**Build 2.4.9:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, eight playable characters (including three code-unlocked guests), permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
+**Build 2.4.10:** the opening, five district introductions, Ai Wrath confrontation/liberation, short checkpoint radio lines, six playable characters (three gameplay recruits, Ai Wrath, Looper and secret Mikey O’Redd), permanent GPU restoration and earned shared AI support are implemented. The longer district narrative, ending tableau and individual ally signature powers below remain campaign direction.
 
 **Restore reality. Keep AI public.**
 
@@ -23,9 +23,9 @@ He is not collecting better graphics for himself. He is giving everyone their wo
 
 ### The route through the city
 1. **Street Settlement — The first clear picture.** Looper reconnects a neighborhood relay. A face becomes recognizable; a sign becomes readable. Ai Wrath arrives to repossess the connection. The first boss victory forces his retreat, proving restoration is possible without yet breaking his program.
-2. **Market Rooftops — Nobody owns a thought.** Corporate patrols raid independent traders and repair crews. Looper finds Vale, a mechanic keeping the community's machines alive. Restored rooftops reveal routes and stories the glitch had hidden. Wrath returns for the second boss fight, and another retreat exposes cracks in his orders.
-3. **Transit Works — Keep it moving.** The Harvester diverts the city's power and compute toward private towers. Immediately after the second boss level, the third Wrath confrontation breaks the Sinister program and brings him into the resistance. The team reopens the distribution network and meets Rook, who has been guiding survivors through sealed districts.
-4. **Data Gardens — More than survival.** Mender protects public medical models and community archives from deletion. Restoring the gardens brings back details of everyday life: plants, murals, memories, and people the corporate index declared unnecessary.
+2. **Market Rooftops — Nobody owns a thought.** Corporate patrols raid independent traders and repair crews. Independent mechanics keep the community’s machines alive. Restored rooftops reveal routes and stories the glitch had hidden. Wrath returns for the second boss fight, and another retreat exposes cracks in his orders.
+3. **Transit Works — Keep it moving.** The Harvester diverts the city's power and compute toward private towers. Immediately after the second boss level, the third Wrath confrontation breaks the Sinister program and brings him into the resistance. The team reopens the distribution network and opens safe routes for residents through sealed districts.
+4. **Data Gardens — More than survival.** The resistance protects public medical models and community archives from deletion. Restoring the gardens brings back details of everyday life: plants, murals, memories, and people the corporate index declared unnecessary.
 5. **Corporate Spire — No premium reality.** The Executor guards the access layer. The corporation offers Looper a place among the elite: one perfect life in exchange for leaving everyone else in the glitch. He refuses. The team breaks the monopoly and makes the restoration network impossible for any single owner to shut down.
 
 ### Allies and powers — gameplay direction
@@ -34,9 +34,6 @@ Allies join through play and share the recovered inventory. Each should offer a 
 | Ally | Identity | Signature power direction |
 | --- | --- | --- |
 | Looper | Core runner and first playable character | Loop Step: a brief phase dash through hostile fire. |
-| Vale | Rooftop mechanic | Override: temporarily turn a bot or security device against its owners. |
-| Mender | Neighborhood medic | Patch Field: a limited healing and protection zone. |
-| Rook | Street survivor and resistance guide | Anchor: withstand a hit and interrupt a charging enemy. |
 | Ai Wrath | Sinister elite freed from its program; playable after liberation | Individual signature ability remains planned. |
 
 These signature powers are proposed story/mechanic designs; character selection and shared equipment already exist. Power-specific implementation is a separate step.
@@ -78,3 +75,7 @@ The corporate enforcement program is known as the Sinister. Human agents fight b
 GPUs permanently repair reality. Their separate compute charge powers temporary AI support, available only after earning enough momentum through combat and close calls. Spending compute never reduces restored graphics.
 
 Older saves that have already cleared the first two boss chapters recover that encounter progress. If the player has passed level 13 without freeing Wrath, his pending final encounter follows them to a later district. The final defeat is still required.
+
+## Current playable recruits
+
+Davey Goats joins after collecting 24 distinct GPUs, Brad Jammin’ after clearing stage 6, and Prison Mike after clearing stage 12. Mikey O’Redd remains a secret code unlock. These characters share the existing gameplay systems; their individual signature abilities are future direction.
