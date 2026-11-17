@@ -25,7 +25,7 @@ Desktop browsers with WebGL 2 and a keyboard are the primary target. Standard-ma
 
 The page uses the game's public-resistance terminal theme, button-free title-screen banner, mission briefing, field controls and direct native downloads. An optional [Ko-fi support link](https://ko-fi.com/stonerautist) opens only when selected. No advertising or analytics scripts are added. Normal web-host access logs and the destination payment provider are separate from the game page; this is not a promise that those services collect no data.
 
-The banner and screenshots are captured from the game. Creator and AI-assistance credits appear on the page.
+The banner and screenshots are captured from the game. Creator credits appear on the page.
 
 ## Build
 

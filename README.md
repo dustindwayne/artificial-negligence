@@ -118,11 +118,10 @@ Windows supports Xbox/XInput-compatible controllers; Linux supports Unity Input 
 
 Android: **Settings → Check for Updates**. Downloads reuse matching installed/cached regions where possible and verify the completed APK before handing installation to Android. Download the current package for Windows or Linux. Browser updates arrive when the hosting files are replaced. [Update details](docs/UPDATES.md).
 
-## Creative direction and AI disclosure
+## Creator
 
 **Creator and creative director: Dustin Wann (dustindwayne).** The original concept, world, gameplay vision, art direction, music selection and character ideas are his direction.
 
-**AI was used to build this game.** Codex/ChatGPT assisted with programming, generated artwork, implementation, integration and testing. This is an AI-assisted playtest build. The art roadmap moves toward creator-drawn characters and key poses, with AI assisting frames under creator review.
 
 [Credits](CREDITS.md) · [Art roadmap](ROADMAP.md)
 
