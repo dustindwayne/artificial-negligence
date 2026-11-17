@@ -1,0 +1,37 @@
+{
+  "version": "2.5.0",
+  "androidVersionCode": 253,
+  "unityEditor": "6000.6.5f1",
+  "generatedRoutes": 90,
+  "generatedGpuPickups": 2945,
+  "generatedGroundGaps": 666,
+  "verifiedDuctClearances": 251,
+  "windowsCrouchRuntimeCheck": "PASS",
+  "windowsHudLayout": {
+    "labels": 1262,
+    "captures": 166,
+    "issues": 0
+  },
+  "androidSignatureMatchesPreviousRelease": true,
+  "androidDevicePlaytest": false,
+  "linuxPackageVerified": true,
+  "webglPackageVerified": true,
+  "packages": {
+    "ArtificialNegligence-Linux.tar.gz": {
+      "sha256": "2fa91db4f7c337a850b90e8d02e25402c003fd7d4a76c1453dafb4ee5d241c9a",
+      "bytes": 105863779
+    },
+    "ArtificialNegligence-Web-FTP.zip": {
+      "sha256": "a26a5eef49fcf33c25cc8cb698ee0b96170ecdc074b760ace4a9c81945476ee8",
+      "bytes": 83874291
+    },
+    "ArtificialNegligence-Windows.zip": {
+      "sha256": "a7e08fb4b97c9627d19c1fa48beaf650a24161808885e8f0f6e1ce80cb0b2770",
+      "bytes": 108588341
+    },
+    "ArtificialNegligence.apk": {
+      "sha256": "8c83b2110a5564200b88180a3ec20a0c38ad705bb073a2103a629ae615ed41ec",
+      "bytes": 98394179
+    }
+  }
+}

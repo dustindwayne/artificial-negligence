@@ -1,6 +1,6 @@
 # Artificial Negligence — story
 
-**Spoilers: all three acts.** This is the current narrative for release 2.4.11. Short illustrated conversations and checkpoint radio carry the story between generated platforming routes.
+**Spoilers: all three acts.** This is the current narrative for release 2.5.0. Short scenes with moving characters, fixed captions, and checkpoint radio carry the story between generated platforming routes.
 
 ## Act I — The borrowed world (stages 1–30)
 

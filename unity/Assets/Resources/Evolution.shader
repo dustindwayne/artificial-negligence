@@ -16,12 +16,12 @@ Shader "ArtificialNegligence/WorldEvolution" {
     float4 c=tex2D(_MainTex,i.uv)*i.color;
     if(_Tier<.5){
      float luminance=pow(saturate(dot(c.rgb,float3(.299,.587,.114))),.7);
-     float shade=floor(luminance*3+.5)/3;
-     float3 high=float3(.72,.93,.84);
+     float shade=step(.18,luminance);
+     float3 high=float3(.96,.94,.87);
      // Danger and objective accents stay distinct, even in the earliest renderer.
      if(c.r>.35&&c.r>c.g*1.45&&c.b>.15)high=float3(1,.42,.7);
      else if(c.r>.55&&c.g>.4&&c.b<.45)high=float3(1,.84,.3);
-     c.rgb=lerp(float3(.005,.035,.055),high,shade);
+     c.rgb=lerp(float3(.012,.012,.012),high,shade);
     }else if(_Tier<1.5)c.rgb=floor(c.rgb*float3(7,7,3)+.5)/float3(7,7,3);
     else if(_Tier<2.5)c.rgb=floor(c.rgb*float3(31,63,31)+.5)/float3(31,63,31);
     else if(_Tier<3.5)c.rgb=floor(c.rgb*63+.5)/63;

@@ -1,4 +1,4 @@
-# Controls — 2.4.11
+# Controls — 2.5.0
 
 ## Supported targets
 

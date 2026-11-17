@@ -1,6 +1,6 @@
 # Artificial Negligence — story
 
-**Spoilers: all three acts.** This is the current narrative for release 2.4.11. Short illustrated conversations and checkpoint radio carry the story between generated platforming routes.
+**Spoilers: all three acts.** This is the current narrative for release 2.5.0. Short illustrated conversations and checkpoint radio carry the story between generated platforming routes.
 
 ## Act I — The borrowed world (stages 1–30)
 
@@ -38,6 +38,6 @@ The final repair restores the world, freedom and the captors’ humanity. After 
 - **Prison Mike:** former corporate accountant, joins after stage 12; his records become evidence.
 - **The Founder:** leader of the Unknown, a story NPC with illustrated dialogue; not an additional playable unlock.
 
-Previously earned character unlocks are preserved. Fresh profiles earn Mikey and Davey through their encounters; their former codes and Davey’s old GPU threshold do not unlock them. The secret Wonder Wrath cosmetic code remains separate from character progression.
+Previously earned character unlocks are preserved. Fresh profiles earn Mikey and Davey through their encounters; their former codes and Davey’s old GPU threshold do not unlock them.
 
 All playable characters share inventory and combat systems. Unique signature powers remain roadmap work.

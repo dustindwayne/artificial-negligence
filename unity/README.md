@@ -1,4 +1,4 @@
-# Artificial Negligence — Unity 2D / 2.4.11
+# Artificial Negligence — Unity 2D / 2.5.0
 
 See the root game README for downloads, current screenshots and features.
 

@@ -1,53 +1,24 @@
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 namespace ArtificialNegligence {
  public partial class GameController {
-  SpriteRenderer titleRunner;Text titleTransmission,titleCharacterLabel;int[] titleRoster=new[]{0};float titleStarted;bool titleWasVisible;
-  void BeginTitlePresentation(){
-   titleStarted=Time.unscaledTime;
-   var profile=stats;
-   if(!qaMode&&PlayerPrefs.HasKey("progress-v2")){try{profile=JsonUtility.FromJson<RunStats>(PlayerPrefs.GetString("progress-v2"));}catch{profile=new RunStats();}}
-   profile.EnsureCollection();
-   titleRoster=RunStats.ActiveCharacters.Where(id=>profile.CharacterUnlocked(id)||id==5&&daveyAccountUnlocked||id==6&&bradAccountUnlocked||id==7&&mikeyAccountUnlocked||id==8&&prisonMikeAccountUnlocked).ToArray();
-   if(!titleRunner){titleRunner=SpriteObject("Title scene / Looper",looperFrames[0],Vector2.zero,12,false);titleRunner.sharedMaterial=unlit;titleRunner.transform.localScale=Vector3.one*1.2f;}
-  }
-  void TickTitlePresentation(){
-   bool visible=mode==ScreenMode.Title;
-   if(titleRunner)titleRunner.enabled=visible;
-   if(!visible){if(titleWasVisible){if(playerVisual)playerVisual.enabled=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.SetPresentationVisible(true);}titleWasVisible=false;return;}
-   titleWasVisible=true;foreach(var enemy in enemies)if(enemy&&enemy.hp>0)enemy.SetPresentationVisible(false);if(playerVisual)playerVisual.enabled=false;if(!titleRunner)return;
-   float t=Time.unscaledTime-titleStarted;
-   var floor=rows.Where(r=>r.kind=="platform"&&r.y==218&&r.x/PPU>12&&r.x/PPU<27).FirstOrDefault();
-   float left=floor.w>0?(floor.x+22)/PPU:18,right=floor.w>0?(floor.x+floor.w-22)/PPU:25;
-   gameCamera.transform.position=new Vector3((left+right)*.5f-9,-8.4375f,-20);
-   float span=Mathf.Max(1,right-left),walk=Mathf.PingPong(t*1.1f,span),jumpCycle=t%6;
-   float lift=jumpCycle>3.5f&&jumpCycle<4.5f?Mathf.Sin((jumpCycle-3.5f)*Mathf.PI)*2.3f:0;
-   titleRunner.transform.position=new Vector3(left+walk,-218/PPU+.9f+lift,0);titleRunner.flipX=(t*1.1f)%(span*2)>span;
-   int actor=titleRoster[(int)(t/7)%titleRoster.Length];
-   int pose=lift>.1f?3:jumpCycle>5.2f?4:jumpCycle<.65f?6:1+(int)(t*7)%2;
-   titleRunner.sprite=CharacterFrame(actor,pose);
-   if(titleCharacterLabel)titleCharacterLabel.text=RunStats.Characters[actor]+" / UNLOCKED";
-   if(titleTransmission){string[] lines={"PUBLIC SIGNAL / OPEN CHANNEL","A CLEARER PICTURE IS NOT ALWAYS THE TRUTH.","RECOVER THE CORES. KEEP AI PUBLIC."};titleTransmission.text=lines[(int)(t/5)%lines.Length];titleTransmission.color=new Color(.46f,.88f,.9f,.7f+.2f*Mathf.Sin(t*.7f));}
-  }
+  readonly List<UnityEngine.UI.Image> titleMistLayers=new List<UnityEngine.UI.Image>();UnityEngine.UI.Image titleSkyline;float titleCityX,titleCityY;
+  void TickTitlePresentation(){if(mode!=ScreenMode.Title)return;float t=Time.unscaledTime;if(titleSkyline)titleSkyline.rectTransform.anchoredPosition=new Vector2(titleCityX+Mathf.Sin(t*.035f)*14,-titleCityY);for(int i=0;i<titleMistLayers.Count;i++)if(titleMistLayers[i]){titleMistLayers[i].rectTransform.anchoredPosition=new Vector2(-350+(t*(8+i*4)+i*470)%(UiWidth+500),-(180+i*90));titleMistLayers[i].color=new Color(.76f,.65f,.43f,.07f+.035f*Mathf.Sin(t*.2f+i*2));}}
   void BuildLivingTitle(){
-   BeginTitlePresentation();AddSecretSpot();
-   var texture=new Texture2D(128,2,TextureFormat.RGBA32,false){wrapMode=TextureWrapMode.Clamp};for(int x=0;x<128;x++)for(int y=0;y<2;y++)texture.SetPixel(x,y,new Color(.004f,.025f,.035f,Mathf.SmoothStep(.98f,0,Mathf.Clamp01((x-38)/89f))));texture.Apply();
-   var gradient=Sprite.Create(texture,new Rect(0,0,128,2),Vector2.one*.5f,1);Image(screenRoot,"Title readability gradient",0,0,790,540,Color.white,gradient);
-   Image(screenRoot,"Signal marker",48,34,22,3,Gold);Label(screenRoot,"A PUBLIC INTELLIGENCE UPRISING",82,24,463,24,16,Cyan);
-   Label(screenRoot,"ARTIFICIAL",45,79,520,73,65,Cream);Label(screenRoot,"NEGLIGENCE",45,145,550,73,65,Gold);
-   Label(screenRoot,"RESTORE REALITY. KEEP AI PUBLIC.",50,234,510,31,23,Cyan);
-   Label(screenRoot,"Your world just broke. Follow the signal.\nQuestion who owns the picture.",50,274,470,52,18,Cream);
-   Button(screenRoot,PlayerPrefs.HasKey("progress-v2")?"CONTINUE THE FIGHT  >":"ENTER THE CITY  >",50,349,352,57,Gold,StartRun);
-   Button(screenRoot,"SETTINGS",50,422,150,40,Cyan,()=>{settingsReturn=ScreenMode.Title;SetMode(ScreenMode.Settings);});Button(screenRoot,"STORY",216,422,94,40,Cyan,()=>BeginStory(ScreenMode.Title));
+   titleMistLayers.Clear();var texture=Resources.Load<Texture2D>("Art/background_settlement");var city=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),Vector2.one*.5f,100);float ratio=texture.width/(float)texture.height,width=Mathf.Max(ScreenUiWidth+120,600*ratio),height=width/ratio;titleCityX=(UiWidth-width)*.5f-uiRoot.anchoredPosition.x;titleCityY=(540-height)*.5f;
+   titleSkyline=Image(screenRoot,"Ambient title city",titleCityX,titleCityY,width,height,new Color(.85f,.77f,.64f),city);titleSkyline.material=WarmUiMaterial();
+   for(int i=0;i<3;i++)titleMistLayers.Add(Image(screenRoot,"Title mist",-200+i*350,180+i*90,620,140,Color.clear,glowSprite));
+   Image(screenRoot,"Title shade",(UiWidth-ScreenUiWidth)*.5f-uiRoot.anchoredPosition.x,0,ScreenUiWidth,540,new Color(.015f,.012f,.009f,.35f));
+   Label(screenRoot,"ARTIFICIAL\nNEGLIGENCE",(UiWidth-740)*.5f,66,740,140,54,Cream,TextAnchor.MiddleCenter);
+   Label(screenRoot,"Follow the signal. Question who owns the picture.",(UiWidth-720)*.5f,262,720,40,18,Gold,TextAnchor.MiddleCenter);
+   float dockX=(UiWidth-680)*.5f;Image(screenRoot,"Menu action dock",dockX,350,680,150,new Color(1,1,1,.88f),InfoFrame());
+   Button(screenRoot,PlayerPrefs.HasKey("progress-v2")?"CONTINUE":"START",dockX+28,372,624,50,Gold,StartRun);
+   Button(screenRoot,"SETTINGS",dockX+28,442,300,40,Accent,()=>{settingsReturn=ScreenMode.Title;SetMode(ScreenMode.Settings);});
 #if UNITY_WEBGL && !UNITY_EDITOR
-   Button(screenRoot,"FULL",326,422,76,40,Cyan,()=>Screen.fullScreen=!Screen.fullScreen);
+   Button(screenRoot,"FULLSCREEN",dockX+352,442,300,40,Accent,()=>Screen.fullScreen=!Screen.fullScreen);
 #else
-   Button(screenRoot,"QUIT",326,422,76,40,Cyan,()=>Application.Quit());
+   Button(screenRoot,"EXIT",dockX+352,442,300,40,Accent,()=>Application.Quit());
 #endif
-   titleTransmission=Label(screenRoot,"",50,491,731,25,15,Cyan);
-   titleCharacterLabel=Label(screenRoot,"LOOPER / UNLOCKED",660,461,270,23,17,Cream,TextAnchor.MiddleRight);
-   Label(screenRoot,"v"+Application.version,806,497,123,22,14,Cyan,TextAnchor.MiddleRight);
   }
  }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace ArtificialNegligence {
     public static class CityRoute {
-        public const int Stages=30;public const float UplinkGpuGap=180;
+        public const int Stages=30;public const int DuctClearance=21;public const float UplinkGpuGap=180;
         public static readonly string[] Areas={"STREET SETTLEMENT","MARKET ROOFTOPS","TRANSIT WORKS","DATA GARDENS","CORPORATE SPIRE"};
         static readonly string[] Routes={"Salvage streets","Rooftop sprint","Swarm crossing","Skyline ascent","Armored perimeter","Boss uplink"};
         public static int Area(int stage){return (stage%Stages)/6;}
@@ -16,8 +16,12 @@ namespace ArtificialNegligence {
             for(int i=0;i<count;i++){
                 int width=rng.Next(motif==1?245:270,motif==0?371:341),roofWidth=rng.Next(motif==1?64:80,motif==4?150:132),roofX=rng.Next(34,65),roofY=rng.Next(motif==3?172:motif==1?174:178,motif==4?195:190);
                 if(i==count-1)width=380;
+                // Keep a crossing rooftop out of the duct's full-height opening.
+                if(i%3==1&&roofX+roofWidth>width-90)
+                    roofY=Math.Min(roofY,218-DuctClearance-9);
                 add("platform",cursor,218,width,40);
                 add("platform",cursor+roofX,roofY,roofWidth,9);
+                if(stage%3==0&&i%3==0)add("ladder",cursor+roofX+10,roofY-12,10,230-roofY);
                 // Upper roofs overlap the first landing and remain within a base jump's vertical reach.
                 int upperX=roofX+roofWidth-rng.Next(30,48),upperY=roofY-rng.Next(25,39);
                 int upperWidth=rng.Next(60,96);add("platform",cursor+upperX,upperY,upperWidth,motif==2?13:9);
@@ -25,7 +29,7 @@ namespace ArtificialNegligence {
                 add("gpu",cursor+roofX+roofWidth/2-6,roofY-27,0,0);
                 add("gpu",cursor+upperX+38,upperY-47,0,0);
                 add("gpu",cursor+width-(i%3==1?140:55),i%2==0?169:193,0,0);
-                if(i%3==1){add("crawl",cursor+width-90,188,64,18);add("gpu",cursor+width-64,207,0,1);}
+                if(i%3==1){const int ductThickness=16;add("crawl",cursor+width-90,218-DuctClearance-ductThickness,64,ductThickness);add("gpu",cursor+width-64,207,0,1);}
                 add("box",cursor+(i==0?100:24),200,0,0);if(motif==0||i%2==0)add("box",cursor+width-90,200,0,0);
                 int enemy=motif==2?(i%2==0?4:0):motif==4?(i%3==0?3:2):motif==3?(i%2==0?5:1):(i+stage/6)%Math.Min(6,3+stage);
                 if(i>0&&(i+stage)%3==1)enemy=9+(stage+i-1)%3;

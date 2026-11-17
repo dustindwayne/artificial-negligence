@@ -1,14 +1,14 @@
 using UnityEngine;
 namespace ArtificialNegligence {
  public partial class GameController {
+  static readonly Color[] PlatformColors={new Color(.065f,.12f,.14f),new Color(.14f,.09f,.15f),new Color(.09f,.13f,.17f),new Color(.08f,.15f,.13f),new Color(.16f,.13f,.08f)};
   readonly Sprite[] platformStyles=new Sprite[5];
   Sprite PlatformStyle(float x){
    int style=(CityRoute.Area(level)+Mathf.Abs(Mathf.FloorToInt(x*PPU/90)))%5;
    if(platformStyles[style])return platformStyles[style];
    var texture=new Texture2D(48,48,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
-   Color[] bases={new Color(.065f,.12f,.14f),new Color(.14f,.09f,.15f),new Color(.09f,.13f,.17f),new Color(.08f,.15f,.13f),new Color(.16f,.13f,.08f)};
    for(int highY=0;highY<48;highY++)for(int highX=0;highX<48;highX++){int y=highY/2,px=highX/2;
-    Color c=bases[style];bool seam=false,detail=false;
+    Color c=PlatformColors[style];bool seam=false,detail=false;
     if(style==0){seam=y%8==0||(px+(y/8%2)*12)%24==0;detail=(px==3||px==20)&&(y==3||y==20);}
     else if(style==1){seam=px%6==0||y%12==0;detail=px%6==3&&y%12==6;}
     else if(style==2){seam=y%6==0||px%6==0;detail=(px+y)%12==0;}

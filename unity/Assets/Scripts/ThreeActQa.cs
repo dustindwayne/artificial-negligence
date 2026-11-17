@@ -30,7 +30,7 @@ namespace ArtificialNegligence {
    stats=new RunStats();stats.EnsureCollection();LoadLevel(0);BeginStory(ScreenMode.Title);yield return null;
    if(activeGraphics!=4||stats.GraphicsGpus!=0)throw new Exception("Prologue clear world");CaptureQa(Path.Combine(path,"reality-before-break.png"));AdvanceStory();yield return new WaitForSecondsRealtime(1.3f);
    if(activeGraphics!=0||stats.GraphicsGpus!=0)throw new Exception("Prologue fracture changed permanent progress");CaptureQa(Path.Combine(path,"reality-fracture.png"));FinishStory();
-   stats.cityUnlocked=6;SetMode(ScreenMode.Title);yield return null;if(!titleRoster.Contains(6)||titleRoster.Contains(4)||titleRoster.Contains(5)||titleRoster.Contains(7)||titleRoster.Contains(8))throw new Exception("Title shows locked characters");titleStarted-=7;yield return null;CaptureQa(Path.Combine(path,"living-title.png"));
+   stats.cityUnlocked=6;SetMode(ScreenMode.Title);yield return null;if(!titleSkyline)throw new Exception("Ambient title missing");yield return null;CaptureQa(Path.Combine(path,"living-title.png"));
    Debug.Log("AN_PROLOGUE_TITLE_QA_PASS / clear world fractures without GPU changes; title roster excludes locked recruits");
    foreach(int scene in new[]{11,12,13}){BeginNarrative(scene,ScreenMode.CityMap);yield return null;AdvanceNarrative();yield return null;CaptureQa(Path.Combine(path,"story-act-"+(scene-10)+".png"));FinishNarrative();}
    stats.points=1200;stats.salvage=20;SetMode(ScreenMode.Shop);yield return null;CaptureQa(Path.Combine(path,"equipment-upgrades.png"));

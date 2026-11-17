@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.0
+
+- Simplify the HUD, keep checkpoint notices within it, and show working movement and action icons on desktop.
+- Keep proportions in crouch and slide poses, and increase duct clearance while keeping crouching necessary.
+- Add the walking district map and layered story scenes with fixed dialogue.
+- Refresh the title screen, equipment screens, settings, and campaign interface.
+- Start a new campaign once on first launch while retaining player settings.
+
 ## 2.4.11
 
 - Add a Linux x64 Mono desktop package. Linux runtime compatibility remains untested.

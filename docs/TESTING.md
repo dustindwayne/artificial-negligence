@@ -1,6 +1,10 @@
 # Testing and compatibility
 
-## Release 2.4.11
+## Release 2.5.0
+
+The Windows preview checks cover entering a duct, releasing crouch under its roof, and standing after the exit. The HUD audit checks standard and widescreen layouts, including a simulated phone notch. Unity Physics2D checks pickups and terrain across all 90 generated routes. [2.5.0 package and test report](release-validation-v253.json).
+
+## Historical 2.4.11 checks
 
 Build and validation results are recorded in [the release report](release-validation-v251.json). Editor validation covers 90 generated routes using Unity Physics2D, supply-box and GPU pickup reachability, ground gaps, a 180-pixel GPU exclusion before uplinks, 1,800 puzzle solutions and 124 isolated atlas frames.
 

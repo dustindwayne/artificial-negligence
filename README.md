@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="docs/cast-banner-v250.png" width="1100" alt="Artificial Negligence — Looper, Ai Wrath, Davey Goats, Brad Jammin’, Mikey O’Redd and Prison Mike. Promotional artwork.">
+  <img src="docs/title-art-v250.webp" width="1100" alt="Artificial Negligence title over the city at night.">
 </p>
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
 <p align="center">A story-driven 2D pixel platformer for Android, Windows, Linux and your browser.</p>
 <p align="center">Find Android, Windows, Linux and WebGL downloads on the <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest">latest release page</a>.</p>
 <p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a></p>
-<p align="center">v2.4.11 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
+<p align="center">v2.5.0 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
 
 ## The world broke. Take it back.
 
@@ -14,17 +14,15 @@ The AI boom opened new possibilities. Then reality fractured into crude pixels. 
 
 You are **Looper**. Cross the city, find allies and equipment, and sharpen the world one core at a time. Follow the signal—but question who owns the picture. Short artwork scenes and radio dialogue carry a three-act story about freedom, deception and restoring humanity.
 
-## New in this build
+## New in 2.5.0
 
-- **Linux desktop build:** a native x64 player alongside Windows, Android and web.
+- **Simpler HUD.** Pixel hearts, large counters, grouped controls, and checkpoint messages inside the top bar. The control icons are visible on desktop as well as Android.
+- **Roomier low passages.** The original crouch and slide poses keep their proportions. Looper and the other runners can move under ducts and stand once clear.
+- **Walking district map.** Choose a destination, watch your runner walk there, and confirm when ready to play.
+- **Story scenes with motion.** Characters and layered environments move in short scenes with fixed dialogue captions.
+- **Revised menus.** Inventory, character selection, upgrades, and settings use the current pixel interface.
 
-- **Three acts:** 90 generated stages, a city-reset reveal, the Unknown alliance and a restoration finale.
-- **The Founder:** a new story portrait and leader of the Unknown. Every playable character has a role in the story.
-- **Virtual-world recruits:** defeat Mikey O’Redd and Davey Goats to free them and make them playable.
-- **Individual equipment levels:** improve found items with points and salvage. Rarity stays fixed; equip finds manually.
-- **Excellent-clear loot:** a qualifying clear rolls 5% Ultra, 10% Legend and 85% Rare.
-- **A visible beginning:** see the clear world fracture; the live title scene rotates through your unlocked cast.
-- **Pickup placement:** generated routes check boxes and GPU reachability, with a GPU-free approach to each uplink.
+**Campaign restart:** The first launch of this update starts a fresh campaign. It resets story progress, inventory, upgrades, and unlocks once. Settings are kept, and new progress saves normally.
 
 ## Meet the resistance
 
@@ -37,27 +35,23 @@ You are **Looper**. Cross the city, find allies and equipment, and sharpen the w
 | **Ai Wrath** | Defeat his third encounter in stage 13, following encounters in stages 6 and 12 |
 | **Mikey O’Redd** | Defeat his virtual-world encounter in stage 9 |
 
-Locked characters appear as silhouettes. Characters share progress, inventory and combat systems; distinct signature powers remain a future goal. Existing earned unlocks are preserved.
+Locked characters appear as silhouettes. Characters share progress, inventory and combat systems; distinct signature powers remain a future goal.
 
 ## See the game
 
-The banner is AI-generated promotional art. These are actual Windows captures from **2.4.11**.
+The banner is captured from the title screen with the menu buttons hidden. The images below are from the Windows build of **2.5.0**.
 
-| Platforming at HD Pixel detail | Current character and loadout screen |
+| Platforming and the new HUD | Walking district map |
 | --- | --- |
-| ![Current platforming HUD](docs/gameplay-v251.png) | ![Prison Mike in the six-character roster](docs/characters-v251.png) |
+| ![Current platforming HUD](docs/gameplay-v250.webp) | ![District map with level entrances](docs/map-v250.webp) |
 
-| Found-item inventory | Story scene |
+| Character and loadout | Story dialogue |
 | --- | --- |
-| ![Individual found weapons and armor](docs/inventory-v251.png) | ![Current story dialogue artwork](docs/story-v251.png) |
+| ![Current character selection](docs/characters-v250.webp) | ![Layered story scene with dialogue](docs/story-v250.webp) |
 
-| Animated start screen | Intellect terminal |
+| Main menu | Intellect terminal |
 | --- | --- |
-| ![Current start screen](docs/title-v251.png) | ![Changing logic puzzle](docs/puzzle-v251.png) |
-
-| Before the fracture | Item upgrade workshop |
-| --- | --- |
-| ![Clear-world opening](docs/prologue-v251.png) | ![Item levels and salvage workshop](docs/upgrades-v251.png) |
+| ![Main menu with the Start and Settings buttons](docs/title-v250.webp) | ![Current logic terminal](docs/puzzle-v250.webp) |
 
 ## Play your way
 
@@ -122,7 +116,7 @@ Windows supports Xbox/XInput-compatible controllers; Linux supports Unity Input 
 
 ### Updates
 
-Android: **Settings → Check for Updates**. Downloads reuse matching installed/cached regions where possible and verify the completed APK before handing installation to Android. Windows uses the latest ZIP; browser updates arrive when the hosting files are replaced. [Update details](docs/UPDATES.md).
+Android: **Settings → Check for Updates**. Downloads reuse matching installed/cached regions where possible and verify the completed APK before handing installation to Android. Download the current package for Windows or Linux. Browser updates arrive when the hosting files are replaced. [Update details](docs/UPDATES.md).
 
 ## Creative direction and AI disclosure
 
@@ -130,10 +124,10 @@ Android: **Settings → Check for Updates**. Downloads reuse matching installed/
 
 **AI was used to build this game.** Codex/ChatGPT assisted with programming, generated artwork, implementation, integration and testing. This is an AI-assisted playtest build. The art roadmap moves toward creator-drawn characters and key poses, with AI assisting frames under creator review.
 
-[Credits](CREDITS.md) · [Art roadmap](ROADMAP.md) · [Current banner generation record](docs/cast-banner-generation-v250.md)
+[Credits](CREDITS.md) · [Art roadmap](ROADMAP.md)
 
 ## Development and testing
 
-Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Windows, Linux Mono, Android and WebGL modules. Build methods validate puzzles, equipment rules, sprite gutters and generated routes before packaging. Automated route checks cover **90 generated routes, 2,945 GPUs and 666 ground gaps, with supply-box reachability and a 180-pixel GPU exclusion before uplinks**. Automated checks do not replace human balance testing; physical controller compatibility and in-app Android installation remain to be tested.
+Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Windows, Linux Mono, Android and WebGL modules. Build methods validate puzzles, equipment rules, sprite gutters and generated routes before packaging. Automated route checks cover all **90 generated routes**, including GPUs, supply boxes, and ground gaps. Uplink approaches reserve a 180-pixel GPU-free zone. Automated checks do not replace human balance testing; physical controller compatibility and in-app Android installation remain to be tested.
 
 [Testing and compatibility](docs/TESTING.md) · [Changelog](CHANGELOG.md) · [Story](STORY.md) · [Report a problem](https://github.com/dustindwayne/artificial-negligence/issues)

@@ -1,4 +1,4 @@
-# Linux — 2.4.11
+# Linux — 2.5.0
 
 [Download Linux x64](https://github.com/dustindwayne/artificial-negligence/releases/latest/download/ArtificialNegligence-Linux.tar.gz).
 

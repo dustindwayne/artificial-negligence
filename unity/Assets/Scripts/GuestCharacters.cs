@@ -19,7 +19,7 @@ namespace ArtificialNegligence {
   }
   void ApplyGuestUnlocks(){stats.daveyGoatsUnlocked|=daveyAccountUnlocked;stats.bradJamminUnlocked|=bradAccountUnlocked;stats.mikeyReddUnlocked|=mikeyAccountUnlocked;stats.prisonMikeUnlocked|=prisonMikeAccountUnlocked;}
   bool RedeemCharacterCode(string code,out string message){
-   bool ok=SubmitWonderCode(code);message=ok?(stats.CharacterUnlocked(4)?"WONDER WRATH UNLOCKED / CHARACTER LOADOUT":"OUTFIT UNLOCKED / FREE AI WRATH TO WEAR IT"):"SIGNAL NOT RECOGNIZED";return ok;
+   message="SIGNAL NOT RECOGNIZED";return false;
   }
   IEnumerator GuestsQa(){
    yield return null;var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-qaOutput");string path=at>=0?args[at+1]:Application.persistentDataPath;Directory.CreateDirectory(path);

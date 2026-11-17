@@ -111,4 +111,3 @@ namespace ArtificialNegligence {
         void OnDisable(){changed?.Invoke(false);}
     }
 }
-

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ArtificialNegligence {
  public partial class GameController {
+  float narrativeShotStarted;
   int narrativeId,narrativeLine,radioStage=-1;ScreenMode narrativeReturn;
   readonly Dictionary<string,Sprite> storyPortraits=new Dictionary<string,Sprite>();
   static readonly string[] SceneTitles={"STREET SIGNAL","THE LOCKOUT","STOLEN COMPUTE","THE CONTROL LAYER","DO NOT CONNECT","A MISNAMED ENFORCER","AN ORDER THAT WAS NOT HIS","FIRST CRACK","FAULT IN THE PROGRAM","SECOND ENGAGEMENT","ONE LAST ORDER","THE CITY RESETS","THE FALSE SAVIORS","HUMAN ONCE MORE","ACT II / THE UNKNOWN","THE ACCOUNTANT OPENS THE BOOKS","BEFORE THE BOOM","BEHIND THE MASKS","MAKE THE EVIDENCE PUBLIC","ACT III / RESTORE THE HUMAN","A BODY IS NOT A LICENSE","CUT THE CONVERSION CHAIN","NO ONE GETS ERASED","THE LAST REPAIR","BRAD JOINS THE NOISE","PRISON MIKE CLOCKS OUT","THROWN INTO THE GOLD LOOP","MIKEY BREAKS THE LOOP","THROWN INTO THE MIRROR WORLD","DAVEY CHOOSES THE EXIT"};
@@ -41,10 +42,10 @@ namespace ArtificialNegligence {
   };
   void BeginNarrative(int id,ScreenMode destination){
    stats.EnsureCollection();if(stats.seenStoryScenes.Contains(id))return;
-   narrativeId=id;narrativeLine=0;narrativeReturn=destination;SetMode(ScreenMode.Narrative);
+   narrativeShotStarted=Time.unscaledTime;narrativeId=id;narrativeLine=0;narrativeReturn=destination;SetMode(ScreenMode.Narrative);
   }
   void AdvanceNarrative(){if(++narrativeLine>=SceneLines[narrativeId].Length)FinishNarrative();else BuildScreen();}
-  void FinishNarrative(){if(!stats.seenStoryScenes.Contains(narrativeId))stats.seenStoryScenes.Add(narrativeId);SaveProgress();SetMode(narrativeReturn);if(narrativeReturn==ScreenMode.CityMap)StoryCatchup(ScreenMode.CityMap);}
+  void FinishNarrative(){int finished=narrativeId;if(!stats.seenStoryScenes.Contains(finished))stats.seenStoryScenes.Add(finished);SaveProgress();SetMode(narrativeReturn);if(narrativeReturn==ScreenMode.CityMap)StoryCatchup(ScreenMode.CityMap);else if(narrativeReturn==ScreenMode.Play&&finished>=11&&finished<=13)ShowStageStory(level);}
   bool TickNarrativeEncounter(){
    int scene=stats.wrathEncounters==0?5:stats.wrathEncounters==1?9:10;
    if(!stats.seenStoryScenes.Contains(scene)&&enemies.Any(e=>e&&e.type==12&&e.hp>0&&Mathf.Abs(e.transform.position.x-playerBody.position.x)<12)){
@@ -67,18 +68,26 @@ namespace ArtificialNegligence {
    var sprite=Sprite.Create(tex,new Rect(0,0,b.width,b.height),Vector2.one*.5f,100);storyPortraits[name]=sprite;return sprite;
   }
   Sprite StoryPortrait(bool wrath){return ArtPortrait(wrath?"ai-wrath":"looper");}
+  string SceneCharacterAsset(string speaker){return speaker=="THE FOUNDER"?"the-founder":speaker=="MIKEY O'REDD"?"mikey-redd":speaker=="DAVEY GOATS"?"davey-goats":speaker=="PRISON MIKE"?"prison-mike":speaker=="BRAD JAMMIN'"?"brad-jammin":speaker=="AI WRATH"?"ai-wrath":"looper";}
   void BuildNarrative(){
-   Image(screenRoot,"Cinematic shade",0,0,960,540,new Color(.002f,.012f,.022f,.94f));
-   Label(screenRoot,SceneTitles[narrativeId],38,20,880,40,28,Gold);
-   var parts=SceneLines[narrativeId][narrativeLine].Split('|');string speaker=parts[0];
-   string portrait=speaker=="THE FOUNDER"?"the-founder":speaker=="MIKEY O'REDD"?"mikey-redd":speaker=="DAVEY GOATS"?"davey-goats":speaker=="PRISON MIKE"?"prison-mike":speaker=="BRAD JAMMIN'"?"brad-jammin":speaker=="AI WRATH"?"ai-wrath":"looper";
-   Image(screenRoot,"Original character artwork",35,72,360,440,Color.white,ArtPortrait(portrait)).preserveAspect=true;
-   var panel=Panel(screenRoot,"Story dialogue",420,120,505,290,Cyan,.96f);
-   Label(panel,speaker,24,15,455,40,25,Gold);
-   var text=Label(panel,parts[1],24,65,455,204,26,Cream);text.resizeTextForBestFit=true;text.resizeTextMinSize=20;text.resizeTextMaxSize=26;
-   int count=SceneLines[narrativeId].Length;Label(screenRoot,(narrativeLine+1)+" / "+count,428,418,100,30,18,Cyan);
-   Button(screenRoot,"SKIP",558,462,130,44,Cyan,FinishNarrative);
-   Button(screenRoot,narrativeLine==count-1?"CONTINUE":"NEXT",705,462,220,44,Gold,AdvanceNarrative);
+   float stageWidth=Mathf.Max(960,ScreenUiWidth);var stage=Rect(screenRoot,"Layered cinematic stage",(960-stageWidth)*.5f-uiRoot.anchoredPosition.x,0,stageWidth,540);stage.gameObject.AddComponent<UnityEngine.UI.RectMask2D>();
+   string background=DirectedBackground();
+   var texture=Resources.Load<Texture2D>("Art/"+background);var backdrop=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),Vector2.one*.5f,100);
+   float backdropWidth=Mathf.Max(stageWidth+120,588*texture.width/texture.height),backdropHeight=backdropWidth*texture.height/texture.width;var far=Image(stage,"Distant city layer",(stageWidth-backdropWidth)*.5f,(540-backdropHeight)*.5f,backdropWidth,backdropHeight,new Color(.75f,.73f,.68f),backdrop);far.gameObject.AddComponent<CutsceneLayerMotion>().Configure(narrativeShotStarted,.3f,Vector2.zero,StoryCameraTravel);
+   for(int layer=0;layer<2;layer++){var haze=Image(stage,"Midground smoke layer",-100+layer*510,220+layer*80,650,120,new Color(.7f,.67f,.6f,.13f),glowSprite);haze.gameObject.AddComponent<CutsceneLayerMotion>().Configure(narrativeShotStarted,.65f,new Vector2(40+layer*15,0),StoryCameraTravel);}
+   Image(stage,"Cinematic shade",0,0,stageWidth,540,new Color(.02f,.018f,.015f,.22f));
+   var deck=Image(stage,"Scene foreground ledge",-30,348,stageWidth+60,30,new Color(.3f,.28f,.23f),platformSprite);deck.type=UnityEngine.UI.Image.Type.Tiled;deck.gameObject.AddComponent<CutsceneLayerMotion>().Configure(narrativeShotStarted,1,Vector2.zero,StoryCameraTravel);
+   StageStoryProps(stage,stageWidth);
+   var lines=DirectedSceneLines();var parts=lines[narrativeLine].Split('|');string speaker=parts[0];
+   var cast=lines.Select(line=>line.Split('|')[0]).Where(name=>name!="PUBLIC SIGNAL"&&name!="LOOPER").Distinct().ToList();cast.Insert(0,"LOOPER");
+   for(int i=0;i<cast.Count;i++){float x=cast.Count==1?480:Mathf.Lerp(175,785,i/(float)(cast.Count-1));x+=(stageWidth-960)*.5f+uiRoot.anchoredPosition.x;float height=cast[i]=="AI WRATH"?254:230;var actor=Image(stage,"Scene actor / "+cast[i],x,348-height,cast.Count>3?150:180,height,cast[i]==speaker?Color.white:new Color(.8f,.79f,.75f),ArtPortrait(SceneCharacterAsset(cast[i])));actor.preserveAspect=true;actor.gameObject.AddComponent<CinematicActorMotion>().Configure(narrativeShotStarted,new Vector2(i==0?-100:stageWidth+100+i*120,348-height),new Vector2(x,348-height),i==0?1:-1,StoryCameraTravel);}
+   var heading=Panel(screenRoot,"Scene heading",26,16,620,44,Accent);Label(heading,SceneTitles[narrativeId],18,8,584,28,19,Gold);
+   var panel=Panel(screenRoot,"Story dialogue",28,352,904,180,Accent);
+   Label(panel,speaker,32,18,840,22,18,Gold);
+   var text=Label(panel,parts[1],32,48,840,70,20,Cream);
+   int count=SceneLines[narrativeId].Length;Label(panel,(narrativeLine+1)+" / "+count,32,132,110,28,16,Accent);
+   Button(panel,"SKIP",544,132,130,34,Accent,FinishNarrative).GetComponentInChildren<UnityEngine.UI.Text>().fontSize=16;
+   Button(panel,narrativeLine==count-1?"CONTINUE":"NEXT",692,132,190,34,Gold,AdvanceNarrative).GetComponentInChildren<UnityEngine.UI.Text>().fontSize=16;
   }
  }
 }

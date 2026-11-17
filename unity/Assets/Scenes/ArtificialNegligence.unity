@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1015855404
+--- !u!1 &279606190
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1015855406}
-  - component: {fileID: 1015855405}
+  - component: {fileID: 279606192}
+  - component: {fileID: 279606191}
   m_Layer: 0
   m_Name: Artificial Negligence
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1015855405
+--- !u!114 &279606191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015855404}
+  m_GameObject: {fileID: 279606190}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1f4e8197fedd684a8d6b904028e2fdf, type: 3}
@@ -194,6 +194,8 @@ MonoBehaviour:
     suit: 0
     module: 0
     district: 0
+    mapEntrance: -1
+    discoveredSecretRoutes: []
   mode: 0
   level: 0
   collected: 0
@@ -220,13 +222,13 @@ MonoBehaviour:
   haptics: 0
   qaMode: 0
   updater: {fileID: 0}
---- !u!4 &1015855406
+--- !u!4 &279606192
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015855404}
+  m_GameObject: {fileID: 279606190}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -239,4 +241,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1015855406}
+  - {fileID: 279606192}

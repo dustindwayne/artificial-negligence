@@ -11,7 +11,7 @@ namespace ArtificialNegligence {
         public static readonly int[] ActiveCharacters={0,4,5,6,7,8};
         public static readonly string[] Outfits={"ORIGINAL","CYAN THREAD","GOLD THREAD","VIOLET THREAD"};
         public bool CharacterUnlocked(int id){return id==0||id==4&&wrathFreed||id==5&&(daveyGoatsUnlocked||daveyVirtualFreed)||id==6&&(bradJamminUnlocked||cityUnlocked>=6)||id==7&&(mikeyReddUnlocked||mikeyVirtualFreed)||id==8&&(prisonMikeUnlocked||cityUnlocked>=12);}
-        public bool OutfitUnlocked(int id){return id==0||id==1&&rank>=3||id==2&&GraphicsGpus>=75||id==3&&cityUnlocked>=12||id==4&&wrathFreed;}
+        public bool OutfitUnlocked(int id){return id==0||id==1&&rank>=3||id==2&&GraphicsGpus>=75||id==3&&cityUnlocked>=12;}
         [Serializable] public class EquipmentItem {public int id,slot,family,tier,level=1;public int MaxLevel=>tier==5?10:4+tier;public string Name {get{return (slot==1?Weapons[family]:Suits[family]+" ARMOR")+" #"+id.ToString("000");}}}
         public System.Collections.Generic.List<EquipmentItem> inventory=new System.Collections.Generic.List<EquipmentItem>();
         public int weaponItemId,armorItemId,nextEquipmentId=1;

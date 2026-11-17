@@ -1,4 +1,4 @@
-# Web build and FTP hosting — 2.4.11
+# Web build and FTP hosting — 2.5.0
 
 The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL build. It contains a `play/` folder and upload instructions. No database or server application is required.
 
@@ -11,7 +11,7 @@ The release includes **ArtificialNegligence-Web-FTP.zip**, a static Unity WebGL 
 
 The release provides static files for self-hosting.
 
-The supplied full HTML embeds the page CSS. The versioned `hero-*.png` cover and the complete `Build/` directory must remain beside `index.html`. A separate CSS version is also kept in the source under `web/`. Do not open the game via `file://`; serve it through HTTP/HTTPS.
+The supplied full HTML embeds the page CSS. The versioned `hero-*.webp` cover and the complete `Build/` directory must remain beside `index.html`. A separate CSS version is also kept in the source under `web/`. Do not open the game via `file://`; serve it through HTTP/HTTPS.
 
 ## Hosting settings
 
@@ -23,9 +23,9 @@ Desktop browsers with WebGL 2 and a keyboard are the primary target. Standard-ma
 
 ## Page and attribution
 
-The page uses the game's public-resistance terminal theme, Looper/Ai Wrath banner, mission briefing, field controls and direct native downloads. An optional [Ko-fi support link](https://ko-fi.com/stonerautist) opens only when selected. No advertising or analytics scripts are added. Normal web-host access logs and the destination payment provider are separate from the game page; this is not a promise that those services collect no data.
+The page uses the game's public-resistance terminal theme, button-free title-screen banner, mission briefing, field controls and direct native downloads. An optional [Ko-fi support link](https://ko-fi.com/stonerautist) opens only when selected. No advertising or analytics scripts are added. Normal web-host access logs and the destination payment provider are separate from the game page; this is not a promise that those services collect no data.
 
-The promotional banner is AI-generated; gameplay captures are actual game output. Creator and AI-assistance credits appear on the page.
+The banner and screenshots are captured from the game. Creator and AI-assistance credits appear on the page.
 
 ## Build
 

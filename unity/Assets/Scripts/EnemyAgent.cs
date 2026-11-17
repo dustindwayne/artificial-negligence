@@ -20,7 +20,7 @@ namespace ArtificialNegligence {
   void Update(){
    if(!game||game.mode!=ScreenMode.Play||hp<=0)return;TickCombatTimers(Time.deltaTime);if(IsHuman){TickHuman(Time.deltaTime);return;}float dt=Time.deltaTime;cooldown=Mathf.Max(0,cooldown-dt*Mathf.Lerp(1,game.EncounterDifficulty,.65f));stun=Mathf.Max(0,stun-dt);warning.enabled=Mathf.Abs(transform.position.x-game.gameCamera.transform.position.x)<17;
    Vector2 delta=game.playerBody.position-(Vector2)transform.position;bool sight=Mathf.Abs(delta.x)<(IsBoss?15:11)&&Mathf.Abs(delta.y)<4&&!Physics2D.Linecast(transform.position,game.playerBody.position,1<<8).collider;
-   bool enraged=IsBoss&&hp<=maxHp/2;float movement=0;Color tint=type==3||type==6?GameController.Cyan:type==4?new Color(.6f,1,.3f):type==5?new Color(.8f,.4f,1):IsBoss?GameController.Gold:Color.white;
+   bool enraged=IsBoss&&hp<=maxHp/2;float movement=0;Color tint=type==3||type==6?GameController.Accent:type==4?new Color(.6f,1,.3f):type==5?new Color(.8f,.4f,1):IsBoss?GameController.Gold:Color.white;
    warning.color=tint;warning.intensity=windup>0?1:.1f;visual.color=stun>0?GameController.Cream:windup>0?GameController.Pink:Color.white;
    if(bar){bar.color=enraged?GameController.Pink:GameController.Gold;bar.transform.localScale=new Vector3((IsBoss?2.4f:1.1f)*Mathf.Max(0,hp)/maxHp,.08f,1);bar.enabled=warning.enabled;}
    if(stun>0&&!IsBoss)return;
@@ -43,7 +43,7 @@ namespace ArtificialNegligence {
    if(hp<=0)return;if(weaponKind<0)weaponKind=game.stats.HasWeapon?game.stats.weapon:-1;
    if(IsHuman)humanAlert=12;damage=MitigateHit(damage,weaponKind);if(damage<=0)return;hp-=damage;
    if(staggerGate<=0){stun=IsBoss?0:IsHuman?.08f:.1f;staggerGate=.6f;}CheckWrathPhase();
-   if(hp<=0){if(humanBody)humanBody.simulated=false;game.EnemyDown(this);game.Burst(transform.position,GameController.Gold,IsBoss?32:10);visual.enabled=false;warning.enabled=false;if(humanLaser)humanLaser.enabled=false;if(humanOrb)humanOrb.enabled=false;if(bar)bar.enabled=false;enabled=false;}else game.Burst(transform.position,GameController.Cyan,4);
+   if(hp<=0){if(humanBody)humanBody.simulated=false;game.EnemyDown(this);game.Burst(transform.position,GameController.Gold,IsBoss?32:10);visual.enabled=false;warning.enabled=false;if(humanLaser)humanLaser.enabled=false;if(humanOrb)humanOrb.enabled=false;if(bar)bar.enabled=false;enabled=false;}else game.Burst(transform.position,GameController.Accent,4);
   }
  }
 }

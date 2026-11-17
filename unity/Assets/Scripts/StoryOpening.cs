@@ -6,24 +6,23 @@ namespace ArtificialNegligence {
   int storyPage;ScreenMode storyReturn=ScreenMode.CityMap;
   static readonly string[] StoryHeadings={"THE MOMENT BEFORE","REALITY FRACTURES","FOLLOW THE SIGNAL","YOU ARE LOOPER"};
   static readonly string[] StoryPages={
-   "The AI boom opened the world. Knowledge, tools, and possibility reached ordinary people.\n\nThen, in the middle of an ordinary day, the picture began to tear.",
-   "Buildings shuddered. Faces lost detail. The city collapsed into crude pixels.\n\nNobody knew who had broken reality, or what was hiding behind it.",
-   "The Public Signal blamed masked enemies. Outsiders called them Sinister.\n\nIts broadcasts promised that recovering the GPUs would restore the world and return AI to everyone.",
-   "You are Looper. Follow the signal across the city.\n\nFind allies and equipment. Every recovered GPU sharpens the world.\n\nA clearer picture is not always the truth."};
+   "Yesterday, anyone could use AI. We finally had the tools to build something of our own. Wait... what is happening to the street?",
+   "The buildings. My hands. Everything is losing detail. Who did this?",
+   "Masked saboteurs have fractured your city. Recover the GPUs. Bring them to our uplinks. Together we can restore reality.",
+   "They call the masked ones Sinister. All I know is people need help. I will find those GPUs... and some answers."};
+  static readonly string[] StorySpeakers={"LOOPER","LOOPER","PUBLIC SIGNAL","LOOPER"};
+  void TickOpeningCamera(){float age=Time.unscaledTime-storyFractureStarted;float progress=1-Mathf.Exp(-age/5);float pan=storyPage==0?1.8f:storyPage==1?-.8f:1.1f;gameCamera.transform.position=new Vector3(15+pan*progress,-8.4375f+.18f*progress,-20);}
   void BeginStory(ScreenMode destination){storyPage=0;storyReturn=destination;storyFractureStarted=Time.unscaledTime;SetMode(ScreenMode.Story);RefreshGraphics(true);}
   void AdvanceStory(){if(++storyPage>=StoryPages.Length)FinishStory();else {storyFractureStarted=Time.unscaledTime;BuildScreen();RefreshGraphics(true);}}
   void FinishStory(){if(storyReturn==ScreenMode.CityMap){stats.storySeen=true;SaveProgress();}SetMode(storyReturn);}
   void BuildStory(){
-   Image(screenRoot,"Story shade",0,0,960,540,new Color(.002f,.018f,.025f,.38f));
-   Label(screenRoot,"ARTIFICIAL NEGLIGENCE / ORIGIN",46,27,820,28,20,Cyan);
-   for(int i=0;i<4;i++)Image(screenRoot,"Chapter marker",48+i*217,76,203,3,i<=storyPage?Gold:new Color(.1f,.23f,.26f));
-   Label(screenRoot,StoryHeadings[storyPage],48,117,750,61,38,Cream);
-   Image(screenRoot,"Dialogue backing",40,184,665,212,new Color(.002f,.018f,.025f,.87f));
-   var text=Label(screenRoot,StoryPages[storyPage],50,196,645,188,27,Cream);text.resizeTextForBestFit=true;text.resizeTextMinSize=22;text.resizeTextMaxSize=27;
-   Image(screenRoot,"Looper",745,220,140,160,Color.white,looperFrames[storyPage==3?5:0]).preserveAspect=true;
-   Label(screenRoot,(storyPage+1)+" / 4",48,465,130,30,21,Cyan);
-   Button(screenRoot,"SKIP INTRO",446,453,193,47,Cyan,FinishStory);
-   Button(screenRoot,storyPage==3?"ENTER THE CITY >":"NEXT >",661,453,250,47,Gold,AdvanceStory);
+   var heading=Panel(screenRoot,"Opening heading",28,20,650,48,Accent);Label(heading,StoryHeadings[storyPage],22,9,606,30,24,Cream);
+   var panel=Panel(screenRoot,"Opening dialogue",28,352,904,180,Accent);
+   Label(panel,StorySpeakers[storyPage],32,18,840,22,18,Gold);
+   Label(panel,StoryPages[storyPage],32,48,840,70,20,Cream);
+   Label(panel,(storyPage+1)+" / 4",32,132,110,28,16,Accent);
+   Button(panel,"SKIP INTRO",480,132,180,34,Accent,FinishStory).GetComponentInChildren<UnityEngine.UI.Text>().fontSize=16;
+   Button(panel,storyPage==3?"ENTER THE CITY":"NEXT",678,132,202,34,Gold,AdvanceStory).GetComponentInChildren<UnityEngine.UI.Text>().fontSize=16;
   }
  }
 }

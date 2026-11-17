@@ -9,12 +9,12 @@ namespace ArtificialNegligence {
         class DepthObject {public Transform transform;public Vector3 start;public float parallax;}
         readonly List<DepthObject> depth=new List<DepthObject>();readonly List<SpriteRenderer> rain=new List<SpriteRenderer>();
         readonly List<SpriteRenderer> checkpoints=new List<SpriteRenderer>();readonly List<SpriteRenderer> hazards=new List<SpriteRenderer>();
-        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);ShowStageStory(index);}
-        public void Dash(){if(grounded&&(lowStance||duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow))){Slide();return;}if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Cyan,8);}
+        public void StartStage(int index){if(index>stats.cityUnlocked)return;stats.mapEntrance=index;stats.health=stats.maxHealth;LoadLevel(index);SaveProgress();SetMode(ScreenMode.Play);ShowStageStory(index);}
+        public void Dash(){if(isClimbing)return;if(grounded&&(lowStance||duckHeld||Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow))){Slide();return;}if(mode!=ScreenMode.Play||dashCooldown>0||dashUsed)return;dashTime=.14f;dashCooldown=1.1f;dashUsed=true;flash=.25f;Burst(playerBody.position,Accent,8);}
         public void BuildSceneDepth(){
             depth.Clear();rain.Clear();checkpoints.Clear();hazards.Clear();checkpointPosition=PixelCenter(30,201);dashTime=dashCooldown=followVelocity=0;dashUsed=false;wasGrounded=false;
             var random=new System.Random(814+level*127);int area=CityRoute.Area(level);
-            Color[] accents={Cyan,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};Color accent=Color.Lerp(accents[area],accents[(area+level%6)%5],(level%6)*.055f);background.color=Color.Lerp(Color.white,accent,.2f);
+            Color[] accents={Accent,new Color(.85f,.42f,.75f),Gold,new Color(.4f,.9f,.65f),new Color(.58f,.66f,1)};Color accent=Color.Lerp(accents[area],accents[(area+level%6)%5],(level%6)*.055f);background.color=Color.Lerp(Color.white,accent,.2f);
             for(int layer=0;layer<3;layer++)for(float x=-100;x<worldLength+200;x+=random.Next(100,170)){
                 float width=random.Next(42,94),height=random.Next(65,180);var building=SpriteObject("City depth / "+layer,white,PixelCenter(x+width/2,215-height/2),-95+layer*12,false);building.transform.localScale=new Vector3(width/PPU,height/PPU,1);building.color=new Color(.02f+layer*.008f,.075f+layer*.014f,.105f+layer*.015f,.35f+layer*.1f);
                 depth.Add(new DepthObject{transform=building.transform,start=building.transform.position,parallax=.12f+layer*.09f});
@@ -49,63 +49,35 @@ namespace ArtificialNegligence {
             RefreshGraphics(true);
         }
         void TickSceneDepth(){
-            if(!worldRoot||!gameCamera)return;float cameraX=gameCamera.transform.position.x;
-            foreach(var obj in depth)if(obj.transform)obj.transform.position=obj.start+Vector3.right*(cameraX-15)*obj.parallax;
+            if(!worldRoot||!gameCamera)return;TickDriftingMist();float cameraX=gameCamera.transform.position.x;
+            foreach(var obj in depth)if(obj.transform)obj.transform.position=obj.start+Vector3.right*((cameraX-15)+(mode==ScreenMode.Title?Mathf.Sin(Time.unscaledTime*.08f)*2:0))*obj.parallax;
             for(int i=0;i<rain.Count;i++){rain[i].transform.position=new Vector3(cameraX-16+(i*7.137f-Time.time*1.8f)%33,-2-(i*1.117f+Time.time*5)%12,0);}
             foreach(var hazard in hazards)if(hazard)hazard.color=(Time.time%3<1.1f)?new Color(Pink.r,Pink.g,Pink.b,.32f):Pink;
         }
         void TickPlatformer(float dt){
             dashTime=Mathf.Max(0,dashTime-dt);dashCooldown=Mathf.Max(0,dashCooldown-dt);
             landingTimer=Mathf.Max(0,landingTimer-dt);if(grounded){dashUsed=false;if(!wasGrounded){landingTimer=.14f;Burst(playerBody.position+Vector2.down*.65f,Cream,5);}}wasGrounded=grounded;
-            trailClock-=dt;if(dashTime>0&&trailClock<=0){Burst(playerBody.position,Cyan,2);trailClock=.04f;}
-            foreach(var cp in checkpoints){if(cp&&Mathf.Abs(cp.transform.position.x-playerBody.position.x)<.7f&&Mathf.Abs(cp.transform.position.y-playerBody.position.y)<1&&cp.color!=Cyan){checkpointPosition=new Vector2(cp.transform.position.x,-201/PPU);cp.color=Cyan;Toast("CHECKPOINT SYNCED");CheckpointDialogue();}}
+            trailClock-=dt;if(dashTime>0&&trailClock<=0){Burst(playerBody.position,Accent,2);trailClock=.04f;}
+            foreach(var cp in checkpoints){if(cp&&Mathf.Abs(cp.transform.position.x-playerBody.position.x)<.7f&&Mathf.Abs(cp.transform.position.y-playerBody.position.y)<1&&cp.color!=Accent){checkpointPosition=new Vector2(cp.transform.position.x,-201/PPU);cp.color=Accent;Toast("CHECKPOINT SYNCED");CheckpointDialogue();}}
             if(Time.time%3>=1.1f)foreach(var hazard in hazards)if(hazard&&Mathf.Abs(hazard.transform.position.x-playerBody.position.x)<.75f&&Mathf.Abs(hazard.transform.position.y-playerBody.position.y)<.8f)Damage(1,Mathf.Sign(playerBody.position.x-hazard.transform.position.x),true);
         }
-        void BuildCityMap(){
-            Image(screenRoot,"Dim city",0,0,960,540,new Color(.003f,.01f,.02f,.87f));var window=Panel(screenRoot,"City route",18,15,924,511,Cyan);
-            int page=stats.cityUnlocked/30,offset=page*30;
-            Label(window,ActTitle(stats.cityUnlocked),24,15,667,45,36,Cream);Button(window,"MENU",773,15,124,43,Cyan,()=>SetMode(ScreenMode.Title));
-            Label(window,StoryObjective(stats.cityUnlocked),24,65,865,29,19,Gold);
-            // Street blocks, a canal and a continuous winding route form an actual city overview.
-            Image(window,"Canal",620,104,21,305,new Color(.1f,.45f,.55f,.14f));
-            var mapRandom=new System.Random(741);for(int r=0;r<8;r++)for(int c=0;c<12;c++){
-                float bx=285+c*48,by=105+r*38;var block=Image(window,"City block",bx,by,36,25,new Color(.02f,.13f,.17f,.8f));
-                for(int w=0;w<3;w++)Image(window,"Block window",bx+5+w*9,by+6,3,3,new Color(.16f,.43f,.46f,mapRandom.Next(2)==0?.2f:.6f));
-            }
-            var nodes=new Vector2[30];for(int i=0;i<30;i++){int row=i/6,col=i%6;nodes[i]=new Vector2(305+(row%2==0?col:5-col)*96,126+row*57+(col%2==0?-6:6));}
-            for(int i=0;i<29;i++){var from=nodes[i]+new Vector2(31,20);var to=nodes[i+1]+new Vector2(31,20);Vector2 delta=to-from;
-                var road=Image(window,"Route connection",from.x,from.y,delta.magnitude,3,i+offset<stats.cityUnlocked?Cyan:new Color(.1f,.35f,.38f));road.rectTransform.pivot=new Vector2(0,.5f);road.rectTransform.localRotation=Quaternion.Euler(0,0,-Mathf.Atan2(delta.y,delta.x)*Mathf.Rad2Deg);
-            }
-            for(int row=0;row<5;row++){
-                Label(window,CityRoute.Areas[row],24,114+row*57,253,42,22,Cyan);
-                for(int col=0;col<6;col++){
-                    int n=row*6+col,index=offset+n;var node=nodes[n];bool open=index<=stats.cityUnlocked;
-                    Color accent=!open?(CityRoute.Boss(index)?new Color(.42f,.2f,.31f):new Color(.15f,.31f,.35f)):CityRoute.Boss(index)?Pink:index==stats.cityUnlocked?Gold:Cyan;
-                    var button=Button(window,IsVirtualStage(index)?"AI":CityRoute.Boss(index)?"BOSS":(index+1).ToString(),node.x,node.y,63,40,accent,()=>StartStage(index));button.GetComponentInChildren<Text>().fontSize=22;button.interactable=open;
-                    if(index==stats.cityUnlocked)Image(window,"Survivor on city route",node.x+18,node.y-27,28,28,Color.white,playerFrames[0]);
-                    if(stats.stageStars!=null&&stats.stageStars[index%30]>0)Label(window,new string('*',stats.stageStars[index%30]),node.x,node.y+39,63,16,16,Gold,TextAnchor.MiddleCenter);
-                }
-            }
-            Label(window,"UNLOCKED "+(stats.cityUnlocked+1)+" / LV "+stats.rank+" / "+stats.points+" POINTS",24,435,570,35,23,Cream);
-            Label(window,RendererProgress.Progress(stats)+" / ABSORB NEW CORES TO UPGRADE",24,472,690,25,20,Cyan);
-            Button(window,"SURVIVOR",24,391,218,38,Cyan,()=>{characterReturn=ScreenMode.CityMap;SetMode(ScreenMode.Characters);});Button(window,"CONTINUE",698,445,197,47,Gold,()=>StartStage(stats.cityUnlocked));
-        }
+        void BuildCityMap(){BuildScenicMap();}
         void BuildCircuit(RectTransform window){
             var puzzle=activeTerminal.data.puzzle;
             Label(window,"MATCH THE TARGET OUTPUTS",32,105,809,34,27,Cream);
             Label(window,"TARGET: "+PuzzleFactory.CircuitOutputs(puzzle.circuitTarget),32,147,809,37,29,Gold);
-            Label(window,"OUTPUT: "+PuzzleFactory.CircuitOutputs(puzzle.circuitInputs),32,189,809,37,29,Cyan);
-            for(int i=0;i<4;i++){int bit=i;bool on=(puzzle.circuitInputs&(1<<i))!=0;Button(window,((char)('A'+i))+" / "+(on?"ON":"OFF"),35+i*208,240,188,60,on?Gold:Cyan,()=>{puzzle.circuitInputs^=1<<bit;BuildScreen();});}
+            Label(window,"OUTPUT: "+PuzzleFactory.CircuitOutputs(puzzle.circuitInputs),32,189,809,37,29,Accent);
+            for(int i=0;i<4;i++){int bit=i;bool on=(puzzle.circuitInputs&(1<<i))!=0;Button(window,((char)('A'+i))+" / "+(on?"ON":"OFF"),35+i*208,240,188,60,on?Gold:Accent,()=>{puzzle.circuitInputs^=1<<bit;BuildScreen();});}
             Label(window,"1 = A     2 = A XOR B     3 = B XOR C     4 = C XOR D",35,314,811,42,24,Cream);
-            Label(window,"XOR lights up when its two inputs differ. One submission.",35,357,811,36,22,Cyan);
-            Button(window,"SUBMIT CIRCUIT",240,414,396,44,Gold,()=>AnswerPuzzle(puzzle.circuitInputs));
+            Label(window,"XOR lights up when its two inputs differ. One submission.",35,357,811,36,22,Accent);
+            Button(window,"SUBMIT CIRCUIT",240,406,396,42,Gold,()=>AnswerPuzzle(puzzle.circuitInputs));
         }
         void BuildPuzzleResult(RectTransform window){
             var data=activeTerminal.data;var puzzle=data.puzzle;
             Label(window,data.solved?"CIRCUIT RESTORED / POWERUP GRANTED":"ACCESS DENIED / NO POWERUP",35,111,806,60,31,data.solved?Gold:Pink,TextAnchor.MiddleCenter);
             Label(window,puzzle.circuit?"Correct outputs: "+PuzzleFactory.CircuitOutputs(puzzle.circuitTarget):"Answer: "+puzzle.answer,35,181,806,59,28,Cream,TextAnchor.MiddleCenter);
-            Label(window,puzzle.explanation,70,260,736,101,27,Cyan,TextAnchor.MiddleCenter);
-            Button(window,"BACK TO THE CITY",238,407,400,51,Cyan,()=>SetMode(ScreenMode.Play));
+            Label(window,puzzle.explanation,70,260,736,101,27,Accent,TextAnchor.MiddleCenter);
+            Button(window,"BACK TO THE CITY",238,402,400,46,Accent,()=>SetMode(ScreenMode.Play));
         }
     }
     public class MaintenanceLift:MonoBehaviour {
