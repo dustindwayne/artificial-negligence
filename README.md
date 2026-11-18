@@ -120,7 +120,7 @@ Android: **Settings → Check for Updates**. Downloads reuse matching installed/
 
 ## Creator
 
-**Creator and creative director: Dustin Wann (dustindwayne).** The original concept, world, gameplay vision, art direction, music selection and character ideas are his direction.
+**Creator and creative director: Dustin (dustindwayne).** The original concept, world, gameplay vision, art direction, music selection and character ideas are his direction.
 
 
 [Credits](CREDITS.md) · [Art roadmap](ROADMAP.md)
