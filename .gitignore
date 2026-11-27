@@ -15,3 +15,6 @@ __pycache__/
 
 /ArtificialNegligence-Web/
 /ArtificialNegligence-Web-FTP.zip
+
+# Local release tooling
+/tools/*.py

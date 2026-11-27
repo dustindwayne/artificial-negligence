@@ -26,11 +26,3 @@ Desktop browsers with WebGL 2 and a keyboard are the primary target. Standard-ma
 The page uses the game's public-resistance terminal theme, button-free title-screen banner, mission briefing, field controls and direct native downloads. An optional [Ko-fi support link](https://ko-fi.com/stonerautist) opens only when selected. No advertising or analytics scripts are added. Normal web-host access logs and the destination payment provider are separate from the game page; this is not a promise that those services collect no data.
 
 The banner and screenshots are captured from the game. Creator credits appear on the page.
-
-## Build
-
-Open the Unity project with Web Build Support for 6000.6.5f1. `BuildWeb.Build` builds the WebGL player with Web audio import settings, a 512 MiB initial heap, gzip fallback and hashed filenames. `tools/package_web.py` restores the themed page around the generated filenames and creates the FTP archive. The initial download is roughly 40 MB; size changes with each build. Web audio uses compressed-in-memory imports because browser builds do not use the native streaming path.
-
-## Updating an existing host
-
-`tools/deploy_web.py` uploads a generated web directory over verified FTPS. Credentials are read from environment variables; keep them outside source control. Pass the host, existing target folder and public URL explicitly. Assets are verified before the entry page is replaced. The target folder receives the contents of the packaged `play/` directory, preserving its internal paths.
