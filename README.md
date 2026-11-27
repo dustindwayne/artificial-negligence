@@ -114,13 +114,6 @@ Windows supports Xbox/XInput-compatible controllers; Linux supports Unity Input 
 
 Android: **Settings → Check for Updates**. Downloads reuse matching installed/cached regions where possible and verify the completed APK before handing installation to Android. Download the current package for Windows or Linux. Browser updates arrive when the hosting files are replaced. [Update details](docs/UPDATES.md).
 
-## Creator
-
-**Creator and creative director: Dustin (dustindwayne).** The original concept, world, gameplay vision, art direction, music selection and character ideas are his direction.
-
-
-[Credits](CREDITS.md) · [Art roadmap](ROADMAP.md)
-
 ## Development and testing
 
 Open [`unity/`](unity/) in **Unity 6000.6.5f1** with Windows, Linux Mono, Android and WebGL modules. Build methods validate puzzles, equipment rules, sprite gutters and generated routes before packaging. Automated route checks cover all **90 generated routes**, including GPUs, supply boxes, and ground gaps. Uplink approaches reserve a 180-pixel GPU-free zone. Automated checks do not replace human balance testing; physical controller compatibility and in-app Android installation remain to be tested.
