@@ -4,7 +4,7 @@
 
 <h3 align="center">Restore reality. Keep AI public.</h3>
 <p align="center">A story-driven 2D pixel platformer for Android, Windows, Linux and your browser.</p>
-<p align="center">Find Android, Windows, Linux and WebGL downloads on the <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest">latest release page</a>.</p>
+<p align="center">Find Android, Windows and Linux downloads on the <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest">latest release page</a>.</p>
 <p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a></p>
 <p align="center">v2.5.1 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
 
@@ -88,7 +88,7 @@ Choose **Relaxed, Standard, Hard or Adaptive**. Adaptive adjusts pressure betwee
 
 ## Download and play
 
-Find **Android, Windows, Linux and WebGL** downloads, installation details and release notes on the **[latest release page](https://github.com/dustindwayne/artificial-negligence/releases/latest)**.
+Find **Android, Windows and Linux** downloads, installation details and release notes on the **[latest release page](https://github.com/dustindwayne/artificial-negligence/releases/latest)**.
 
 You can also **[play in your browser](https://dustinwann.com/apps/artificial-negligence/)**.
 
