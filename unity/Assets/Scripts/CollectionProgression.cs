@@ -49,8 +49,8 @@ namespace ArtificialNegligence {
         public void UpgradeEquippedItem(int slot){var item=inventory.FirstOrDefault(i=>i.id==(slot==1?weaponItemId:armorItemId));if(item!=null)item.level=Math.Min(item.MaxLevel,item.level+1);EnsureCollection();}
         public string Discover(int slot,int family,int tier){
             EnsureCollection();if(slot!=1&&slot!=2||family<0||family>3||tier<1||tier>5)throw new ArgumentOutOfRangeException();
-            var item=new EquipmentItem{id=nextEquipmentId++,slot=slot,family=family,tier=tier};inventory.Add(item);salvage+=1;EnsureCollection();
-            return Tiers[tier]+" "+item.Name+" FOUND / OPEN INVENTORY TO EQUIP";
+            var item=new EquipmentItem{id=nextEquipmentId++,slot=slot,family=family,tier=tier};inventory.Add(item);salvage+=1;EquipItem(item.id);
+            return Tiers[tier]+" "+item.Name+" EQUIPPED";
         }
     }
 }

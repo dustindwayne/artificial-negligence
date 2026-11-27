@@ -13,6 +13,7 @@ namespace ArtificialNegligence {
    difficultyMode=Mathf.Clamp(PlayerPrefs.GetInt("difficulty-mode",1),0,3);
    adaptivePressure=Mathf.Clamp(PlayerPrefs.GetFloat("adaptive-pressure",0),-.3f,.45f);
    EncounterDifficulty=difficultyMode==0?.8f:difficultyMode==2?1.3f:difficultyMode==3?1+adaptivePressure:1;
+   EncounterDifficulty *= Mathf.Lerp(.55f, 1f, level / 5f);
    stageHits=stageKills=0;difficultyResultRecorded=false;
   }
   void RecordDifficultyResult(bool died){

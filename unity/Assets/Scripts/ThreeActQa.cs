@@ -10,7 +10,7 @@ namespace ArtificialNegligence {
    stats=new RunStats();stats.EnsureCollection();
    int[] counts=new int[6];for(int roll=0;roll<100;roll++)counts[RunStats.ExcellentClearTier(roll)]++;
    if(counts[5]!=5||counts[4]!=10||counts[2]!=85||!RunStats.ExcellentClear(19,20,0)||RunStats.ExcellentClear(18,20,0)||RunStats.ExcellentClear(20,20,1))throw new Exception("Excellent-clear distribution/qualification");
-   level=0;collected=totalGpus=20;stageHits=0;AwardExcellentClear();int items=stats.inventory.Count;AwardExcellentClear();if(items!=1||stats.inventory.Count!=items||stats.HasWeapon||stats.HasArmor)throw new Exception("Reward repeats or auto equips");
+   level=0;collected=totalGpus=20;stageHits=0;AwardExcellentClear();int items=stats.inventory.Count;AwardExcellentClear();if(items!=1||stats.inventory.Count!=items||(!stats.HasWeapon&&!stats.HasArmor))throw new Exception("Reward repeats or auto equips");
    stats.Discover(1,0,2);var weapon=stats.inventory.Last();stats.EquipItem(weapon.id);stats.points=10000;stats.salvage=100;int rarity=weapon.tier;stats.Upgrade(1);
    if(weapon.level!=2||weapon.tier!=rarity||stats.SalvageItem(weapon.id))throw new Exception("Item level/rarity/equipped salvage");
    stats.Discover(1,0,2);var spare=stats.inventory.Last();if(spare.level!=1||!stats.SalvageItem(spare.id)||weapon.level!=2)throw new Exception("Independent item/salvage");
@@ -38,3 +38,5 @@ namespace ArtificialNegligence {
   }
  }
 }
+
+

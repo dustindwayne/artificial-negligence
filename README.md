@@ -6,7 +6,7 @@
 <p align="center">A story-driven 2D pixel platformer for Android, Windows, Linux and your browser.</p>
 <p align="center">Find Android, Windows, Linux and WebGL downloads on the <a href="https://github.com/dustindwayne/artificial-negligence/releases/latest">latest release page</a>.</p>
 <p align="center"><a href="https://dustinwann.com/apps/artificial-negligence/">Play in your browser</a></p>
-<p align="center">v2.5.0 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
+<p align="center">v2.5.1 · Playtest build · Android 8+ ARM64 · Windows x64 · Linux x64</p>
 
 ## The world broke. Take it back.
 
@@ -14,15 +14,11 @@ The AI boom opened new possibilities. Then reality fractured into crude pixels. 
 
 You are **Looper**. Cross the city, find allies and equipment, and sharpen the world one core at a time. Follow the signal—but question who owns the picture. Short artwork scenes and radio dialogue carry a three-act story about freedom, deception and restoring humanity.
 
-## New in 2.5.0
+## New in 2.5.1
 
-- **Simpler HUD.** Pixel hearts, large counters, grouped controls, and checkpoint messages inside the top bar. The control icons are visible on desktop as well as Android.
-- **Roomier low passages.** The original crouch and slide poses keep their proportions. Looper and the other runners can move under ducts and stand once clear.
-- **Walking district map.** Choose a destination, watch your runner walk there, and confirm when ready to play.
-- **Story scenes with motion.** Characters and layered environments move in short scenes with fixed dialogue captions.
-- **Revised menus.** Inventory, character selection, upgrades, and settings use the current pixel interface.
-
-**Campaign restart:** The first launch of this update starts a fresh campaign. It resets story progress, inventory, upgrades, and unlocks once. Settings are kept, and new progress saves normally.
+- The first supply box gives you a weapon and the second gives you armor. Each new find equips immediately. Open **Gear** on the HUD to switch back to a previous item or **Upgrades** to improve your equipment.
+- The first three stages have fewer regular enemies. Enemy difficulty ramps up through stage six.
+- Click an unlocked map entrance to walk there and start playing. The Enter Level button and controller confirmation are also available.
 
 ## Meet the resistance
 
@@ -67,7 +63,7 @@ GPUs also fill a separate compute bank. Earn momentum through combat and close c
 
 ### Find your equipment
 
-**You start unarmed and unarmored.** Find equipment in supply boxes, keep individual copies and equip them deliberately from the inventory. Items do not auto-equip; XP does not grant weapons or armor.
+**You start unarmed and unarmored.** Find equipment in supply boxes, equip each pickup immediately, and keep earlier finds in your inventory.
 
 | Weapon | Role | Tradeoff |
 | --- | --- | --- |
@@ -82,7 +78,7 @@ Balanced, Kinetic, Insulated and Light armor offer different protection and move
 
 Upgrade individual found items with **points and salvage**. Rarity never changes through upgrades. Item level caps are Common 5, Rare 6, Epic 7, Legend 8 and Ultra 10. Salvage spare unequipped items; equipped items are protected.
 
-**Ultra has a 0.5% supply-box chance.** An excellent clear also awards one equipment item: **5% Ultra / 10% Legend / 85% Rare**. Collect at least 95% of the stage’s GPUs, take no hits or falls, and defeat any required boss. Each distinct stage grants this bonus once. Rewards enter inventory without auto-equipping.
+**Ultra has a 0.5% supply-box chance.** An excellent clear also awards one equipment item: **5% Ultra / 10% Legend / 85% Rare**. Collect at least 95% of the stage’s GPUs, take no hits or falls, and defeat any required boss. Each distinct stage grants this bonus once. The reward equips immediately.
 
 ### Survive the city
 
@@ -105,7 +101,7 @@ Progress saves locally on each platform; saves do not sync between devices or th
 | Move | A / D or arrows | Left / right |
 | Jump | Space, W or Up | Jump |
 | Duck / moving slide | S / Down · Ctrl | Hold Down / press while moving |
-| Equipped weapon fire | J / F | Fire, after equipping a find |
+| Equipped weapon fire | J / F | Fire, after finding a weapon |
 | Dash | Shift / K | Dash |
 | Earned AI help / type | R / Q | AI Help / Menu → AI Type |
 | Terminal | E | Nearby Interact |

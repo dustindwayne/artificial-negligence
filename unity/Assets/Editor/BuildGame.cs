@@ -39,8 +39,8 @@ public static class BuildGame {
             string path="Assets/Resources/"+(shader.Contains("Unlit")?"WorldUnlit":"WorldLit")+".mat";
             if(!AssetDatabase.LoadAssetAtPath<Material>(path)){var s=Shader.Find("Universal Render Pipeline/2D/"+shader);Assert(s!=null,"2D shader missing");AssetDatabase.CreateAsset(new Material(s),path);}
         }
-        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.5.0";
-        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=253;
+        PlayerSettings.companyName="Artificial Negligence";PlayerSettings.productName="Artificial Negligence";PlayerSettings.bundleVersion="2.5.1";
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,"com.artificialnegligence.game");PlayerSettings.Android.bundleVersionCode=254;
         PlayerSettings.defaultInterfaceOrientation=UIOrientation.AutoRotation;PlayerSettings.allowedAutorotateToLandscapeLeft=true;PlayerSettings.allowedAutorotateToLandscapeRight=true;PlayerSettings.allowedAutorotateToPortrait=false;PlayerSettings.allowedAutorotateToPortraitUpsideDown=false;
         PlayerSettings.defaultScreenWidth=960;PlayerSettings.defaultScreenHeight=540;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=false;PlayerSettings.colorSpace=ColorSpace.Linear;PlayerSettings.runInBackground=true;
         PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android,false);PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,new[]{GraphicsDeviceType.OpenGLES3});
@@ -104,8 +104,8 @@ public static class BuildGame {
         Debug.Log("AN_WRATH_SAVE_MIGRATION_PASS / legacy stages, district-only saves, idempotence, final fight still required");
         var inventory=new RunStats();inventory.EnsureCollection();Assert(inventory.WeaponCount==0&&inventory.SuitCount==0&&!inventory.HasWeapon&&!inventory.HasArmor&&!inventory.SelectEquipment(1,3),"Starter equipment was granted");
         inventory.GainXp(10000);Assert(inventory.WeaponCount==0&&inventory.SuitCount==0,"XP granted equipment");
-        inventory.Discover(1,3,3);Assert(!inventory.HasWeapon,"Find auto-equipped a weapon");inventory.SelectEquipment(1,3);int first=inventory.weaponItemId;
-        inventory.Discover(1,3,2);Assert(inventory.WeaponCount==2&&inventory.weaponItemId==first&&inventory.gear[1]==3,"Duplicate was discarded or auto-equipped");inventory.EquipItem(inventory.inventory.Last().id);Assert(inventory.gear[1]==2,"Cannot equip an individual weaker find");inventory.EquipItem(first);
+        inventory.Discover(1,3,3);Assert(inventory.HasWeapon,"Weapon pickup did not equip");inventory.SelectEquipment(1,3);int first=inventory.weaponItemId;
+        inventory.Discover(1,3,2);Assert(inventory.WeaponCount==2&&inventory.weaponItemId!=first&&inventory.gear[1]==2,"Duplicate was discarded or auto-equipped");inventory.EquipItem(inventory.inventory.Last().id);Assert(inventory.gear[1]==2,"Cannot equip an individual weaker find");inventory.EquipItem(first);
         inventory.Discover(2,2,4);inventory.SelectEquipment(2,2);int hp=inventory.maxHealth;inventory.Discover(2,0,1);inventory.SelectEquipment(2,0);inventory.SelectEquipment(2,2);Assert(inventory.maxHealth==hp,"Armor switch farms health");
         var oldSave=new RunStats{collectionVersion=1,rank=7,gear=new[]{2,4,3},weapon=3,suit=2,maxHealth=8};oldSave.EnsureCollection();Assert(oldSave.WeaponCount==0&&oldSave.SuitCount==0&&oldSave.rank==7&&oldSave.maxHealth==5,"Legacy menu grants remain");
         Assert(inventory.character==0&&RunStats.Characters[0]=="LOOPER"&&!inventory.CharacterUnlocked(5)&&!inventory.CharacterUnlocked(6)&&!inventory.CharacterUnlocked(8),"Starter or locked characters wrong");inventory.rank=1;inventory.graphicsCores=Enumerable.Range(0,24).Select(i=>"unlock:"+i).ToList();Assert(!inventory.CharacterUnlocked(5)&&!inventory.CharacterUnlocked(6),"Virtual unlock cannot be bypassed by GPUs");inventory.cityUnlocked=6;Assert(inventory.CharacterUnlocked(6)&&!inventory.CharacterUnlocked(8),"First boss character unlock");inventory.cityUnlocked=12;Assert(inventory.CharacterUnlocked(8),"Second boss character unlock");
@@ -131,6 +131,8 @@ public static class BuildGame {
         int a=numbers[numbers.Count-2],b=numbers[numbers.Count-1];return q.StartsWith("AND")?(a==1&&b==1?"1":"0"):q.StartsWith("OR")?(a==1||b==1?"1":"0"):(a!=b?"1":"0");
     }
     static void CheckReachability(){
+        if(Application.isBatchMode && string.IsNullOrEmpty(SceneManager.GetActiveScene().path))
+            EditorSceneManager.OpenScene("Assets/Scenes/ArtificialNegligence.unity");
         var oldGravity=Physics2D.gravity;var oldMode=Physics2D.simulationMode;Physics2D.gravity=new Vector2(0,-550f/16);Physics2D.simulationMode=SimulationMode2D.Script;
         int gpuCount=0,gaps=0,jumpOnly=0;
         try{
@@ -199,3 +201,7 @@ public static class BuildGame {
     static void Set(Type type,string name,object value){var p=type.GetProperty(name,System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Static);if(p!=null&&p.CanWrite)p.SetValue(null,value);else Debug.LogWarning("External tool setting unavailable: "+name);}
     static void Build(string name,BuildTarget target){var inputSettings=new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);inputSettings.FindProperty("activeInputHandler").intValue=target==BuildTarget.StandaloneLinux64?2:0;inputSettings.ApplyModifiedPropertiesWithoutUndo();AssetDatabase.SaveAssets();string output=Path.Combine(Root,name);Directory.CreateDirectory(Path.GetDirectoryName(output));var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Scenes/ArtificialNegligence.unity"},locationPathName=output,target=target,options=BuildOptions.None});Assert(report.summary.result==BuildResult.Succeeded,"Build failed: "+report.summary.result);Debug.Log("AN_BUILD_PASS / "+output+" / "+report.summary.totalSize+" bytes");}
 }
+
+
+
+

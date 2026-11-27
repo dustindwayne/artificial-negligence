@@ -87,6 +87,10 @@ namespace ArtificialNegligence {
             objectiveFill=null;
             bossHealthHud=null;
 
+            var gearButton=Button(hudTop,"GEAR",244,9,86,34,HudText,()=>SetMode(ScreenMode.Gear));
+            SkinHudButton(gearButton);
+            var upgradeButton=Button(hudTop,"UPGRADES",336,9,112,34,HudText,()=>SetMode(ScreenMode.Shop));
+            SkinHudButton(upgradeButton);
             var pause=Button(hudPauseCell,"",0,0,56,34,HudText,Pause);
             SkinHudButton(pause);
             Image(pause.transform,"Pause bar left",21,9,4,16,HudText);
@@ -95,7 +99,7 @@ namespace ArtificialNegligence {
             buffPanel=hudBoostCell.gameObject;
             buffLabel=Label(buffPanel.transform,"",0,0,102,32,12,HudMuted);
             float noticeWidth=Mathf.Min(320,UiWidth-700);
-            toastPanel=Rect(hudTop,"Notification",(UiWidth-noticeWidth)*.5f,8,noticeWidth,34).gameObject;
+            toastPanel=Rect(hudTop,"Notification",(UiWidth-noticeWidth)*.5f,55,noticeWidth,34).gameObject;
             Image(toastPanel.transform,"Recessed face",0,0,noticeWidth,34,hudTrayFace);
             Image(toastPanel.transform,"Upper lip",6,0,noticeWidth-12,1,hudRailColor);
             Image(toastPanel.transform,"Lower lip",6,33,noticeWidth-12,1,hudRailColor);
@@ -123,6 +127,7 @@ namespace ArtificialNegligence {
         }
 
         void UpdateHudNotice(){
+            hudRightGrid.GetChild(1).GetComponent<Button>().interactable=stats.HasWeapon;
             toastPanel.SetActive(toastTime>0);
             if(toastTime<=0)return;
 
@@ -242,3 +247,4 @@ namespace ArtificialNegligence {
         }
     }
 }
+
